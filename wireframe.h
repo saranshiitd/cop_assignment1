@@ -1,7 +1,6 @@
 #ifndef WIREFRAME_H
 #define WIREFRAME_H
 #include "structs.h"
-using namespace std;
 
 class WireFrame
 {
