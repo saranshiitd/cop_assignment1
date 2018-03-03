@@ -4,6 +4,8 @@
 #include "generalMethods.h"
 #include "Plane.h"
 #include "VertexList2D.h"
+#include "basicLoopEdgeSet.h"
+#include "bodyLoop.h"
 
 int main(){
 
