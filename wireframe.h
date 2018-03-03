@@ -12,8 +12,11 @@ public:
 	
 	// add vertex and edge to wireframe
 	void addVertex(vertex3D v);
-	void addEdge(vertex3D v1, vertex3D v2);
+	void addEdge(vertex3D v1, vertex3D v2); // it could be just an edge
 
+
+	void deleteVertex(vertex3D v);
+	void addEdge(edge3D e) ; // apply process PEVR at the end of it 
 
 	// perform provedure RER as in paper
 	void resolveOverlap() ;
