@@ -1,6 +1,6 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
-
+#include <vector>
 using namespace std;
 // defnition of a 2D vertex
 struct vertex2D{
@@ -44,7 +44,7 @@ struct edge3D{
 struct vertexEdgeList
 {
 	vertex3D v;
-	std::vector<edge3D> e;
+	vector<edge3D> e;
 };
 
 struct plane

@@ -35,11 +35,11 @@ namespace generalMethods{
 	float findDistanceOfEdgeFromPlane (plane p, edge3D e);
 
 	// takes a plane and e_list and returns the list of edges on that plane
-	edgesOnPlane findEdgesOnPlane (plane p, std::vector<edge3D> eList);
+	std::vector<edge3D> findEdgesOnPlane (plane p, std::vector<edge3D> eList);
 
-	// takes a plane all edges on a plane (found using findEdgesOnPlane) 
+	// takes a plane and all edges on a plane (found using findEdgesOnPlane) 
 	// and returns all the vertices on that plane 
-	std::vector<vertex3D> findVerticesOnPlane (plane p, edgesOnPlane eop);	
+	std::vector<vertex3D> findVerticesOnPlane (plane p, std::vector<edge3D> eop);	
 
 	// check if plane hides an edge from direction
 	bool checkHidden(plane p , edge3D e , edge3D direction) ; // still trying to formulate the probelem

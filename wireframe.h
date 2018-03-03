@@ -1,14 +1,15 @@
 #ifndef WIREFRAME_H
 #define WIREFRAME_H
 #include "structs.h"
-
+#include<vector>
+using namespace std;
 class WireFrame
 {
 public:
 
 
-	std::vector<vertex3D> vertexList;
-	std::vector<edge3D> edgeList;
+	vector<vertex3D> vertexList;
+	vector<edge3D> edgeList;
 	
 	// add vertex and edge to wireframe
 	void addVertex(vertex3D v);
@@ -44,7 +45,7 @@ public:
 	bool checkCoplanar(edge3D e1, edge3D e2 , edge3D e3) ; 
 
 	// this method will generate all possible planes with given edges
-	std::vector<plane> generatePlanes() ; 
+	vector<plane> generatePlanes() ; 
 
 
 
