@@ -17,12 +17,12 @@ class Plane
 		std::vector<edge3D> eList;
 
 		// list of vetex-edgesOnVertex for all vertices on the plane
-		std::vector<vertexEdgeList> veList;
+		std::vector<vertexEdgeList> veListList;
 
 		// applies the method sortEdgesOnVertex on each vertex of a plane
 		// just modifies the "std::vector<vertexEdgeList> veList" with edges sorted on 
 		// each vertex
-		void sortEdgesOnVertices (vector<vertex3D> vList, edgesOnPlane eop);
+		void sortEdgesOnVertices();
 
 	private:
 
