@@ -7,12 +7,14 @@ class WireFrame
 {
 public:
 
+
 	std::vector<vertex3D> vertexList;
 	std::vector<edge3D> edgeList;
 	
 	// add vertex and edge to wireframe
 	void addVertex(vertex3D v);
 	void addEdge(vertex3D v1, vertex3D v2);
+
 
 	// perform provedure RER as in paper
 	void resolveOverlap() ;
