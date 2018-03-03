@@ -25,6 +25,9 @@ namespace generalMethods{
 	plane makePlane (edge3D e1, edge3D e2);
 	// use this to make all possible planes and then remove the duplicate ones
 
+	// removes duplicate planes
+	std::vector<plane> removeDuplicate(std::vector<plane> v);
+	
 	// returns distance between two planes
 	float findDistanceBetweenPlanes (plane p, plane q);
 
