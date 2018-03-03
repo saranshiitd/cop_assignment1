@@ -1,6 +1,6 @@
 #ifndef BASICLOOPEDGESET_H
 #define BASICLOOPEDGESET_H
-##include "structs.h"
+#include "structs.h"
 #include <vector>
 
 // this class contains all the edges in a basic loop
