@@ -55,4 +55,12 @@ struct plane
 	int d;	
 };
 
+struct direction
+{	
+	float x;
+	float y;
+	float z;
+
+};
+
 #endif

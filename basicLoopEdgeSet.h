@@ -12,6 +12,7 @@ class basicLoopEdgeSet{
 	// methods to add and remove edge from basic loop
 	void addEdge(edge3D e);
 	void removeEdge(edge3D e);
+	void sort() ; 
 
 };
 
