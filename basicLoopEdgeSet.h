@@ -3,13 +3,20 @@
 #include "structs.h"
 #include <vector>
 
-// this class contains all the edges in a basic loop 
+
+/*****
+* this class contains all the edges in a basic loop 
+*****/
 class basicLoopEdgeSet{
 
-	// all the edges in a basic loop 
-	std::vector<edge3D> eList;
+	/*****
+	* all the edges in a basic loop 
+	*****/
+	std::vector<edges3D> eList;
 
-	// methods to add and remove edge from basic loop
+	/*****
+	* methods to add and remove edge from basic loop 
+	*****/
 	void addEdge(edge3D e);
 	void removeEdge(edge3D e);
 	void sort() ; 
