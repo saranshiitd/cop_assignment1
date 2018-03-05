@@ -3,7 +3,7 @@
 
 #include <vector>
 #include "structs.h"
-
+#include "faceLoop.h"
 
 class bodyLoop{
 
