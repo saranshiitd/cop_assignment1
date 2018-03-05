@@ -18,7 +18,8 @@ class bodyLoop{
 
 	// does bodyLoop contain a faceLoop
 	bool containsLoop (faceLoop loop);
-	
+	// returns whether bodyloop is legal
+	bool legal() ;
 };
 
 #endif

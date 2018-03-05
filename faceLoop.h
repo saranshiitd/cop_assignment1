@@ -11,13 +11,14 @@
 class faceLoop{
 
 	std::vector<basicLoopEdgeSet> faceLoop;
-	float[] normal ; 
+	direction normal ;
 	// add loop to face loop
 	void addLoop(basicLoopEdgeSet loop);
 
 	void removeLoop(basicLoopEdgeSet loop);
 
 	void arrange(); // will arrange all the basicLoopEdgeSet such that their direction is same as that of normal 
+
 
 };
 

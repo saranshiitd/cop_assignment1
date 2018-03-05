@@ -1,6 +1,8 @@
 #ifndef GENERALMETHODS_H
 #define GENERALMETHODS_H
 #include "structs.h"
+#include "basicLoopEdgeSet.h"
+#include "faceloop.h"
 
 namespace generalMethods{
 	//-----------------methods of vertices--------------------------
@@ -16,8 +18,11 @@ namespace generalMethods{
 
 	// check whether two edges coplanar
 	bool checkCoplanar(edge3D e1, edge3D e2 , edge3D e3) ;
-		
-
+	
+	//  take dot procuct
+	direction dotProduct(direction v1, direction v2) ;
+	// take cross product
+	direction crossProduct(direction v1, direction v2) ;
 
 	//-----------------methods of planes----------------------------
 
@@ -56,6 +61,13 @@ namespace generalMethods{
 	// take an obnoxiously large coordinate in the direction you want to see like if you are observing from +y direction put (0,INF,0) where INF is large number
 	// take a point and return if substitution product less than 0
 
+	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2) ; // returns 1 if fl1 contains fl2 -1 if vice versa and 0 otherwise
+
+	// returns alpha as described in paper and whether to select +Fs or -Fs
+	std::vector<float> getAlphaAndDirection(bodyLoop b1, bodyLoop b2, direction d);
+
+	// to determine whether the bodyloop is outer or inner by the method described in paper
+	bool getIfOuter(bodyLoop b) ;
 
 }
 
