@@ -6,13 +6,13 @@ using namespace std;
 class EdgeList2D{
 	public :
 
-		/* a edge list containing all the edges */
+		//! a edge list containing all the edges 
 		vector<edge2D> edgeList;
 
-		/* add a edge to edgeList */
+		//! add a edge to edgeList 
 		void addEdge (edge2D e);
 
-		/* remove a edge from a edgeList */
+		//! remove a edge from a edgeList 
 		void removeEdge (edge2D e);
 
 };
