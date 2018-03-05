@@ -2,7 +2,8 @@
 #define GENERALMETHODS_H
 #include "structs.h"
 #include "basicLoopEdgeSet.h"
-#include "faceloop.h"
+#include "faceLoop.h"
+#include "bodyLoop.h"
 
 namespace generalMethods{
 	//-----------------methods of vertices--------------------------
