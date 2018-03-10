@@ -3,7 +3,7 @@
 #include <vector>
 #include <algorithm>
 
-VertexList2D::addVertex(vertex2D v){
+void VertexList2D::addVertex(vertex2D v){
 	/**
 	* add a vertex to vertexList
 	*/
@@ -13,7 +13,7 @@ VertexList2D::addVertex(vertex2D v){
   		vertexList.push_back(v);
 }
 
-VertexList2D::removeVertex(vertex2D v){
+void VertexList2D::removeVertex(vertex2D v){
 	/**
 	* removes a vertex to vertexList
 	*/
