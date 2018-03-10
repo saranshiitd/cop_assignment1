@@ -24,6 +24,7 @@ int main(){
 	tempVertex.a = 1; tempVertex.b = 1;
 	frontProjVertex.addVertex(tempVertex);
 
+	frontProjVertex.printVertices();
 
 	return 0;
 }

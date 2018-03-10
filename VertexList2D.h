@@ -17,7 +17,8 @@ class VertexList2D{
 		*/
 		void removeVertex (vertex2D v);
 		
-		
+		void printVertices ();
+
 };
 
 #endif

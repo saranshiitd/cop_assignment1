@@ -9,11 +9,15 @@ struct vertex2D{
 	/**
 	* end point 1 
 	*/
-	int a;
+	float a;
 	/**
 	* end point 2 
 	*/
-	int b;
+	float b;
+	bool operator==(const vertex2D& n)
+	{
+	    return (a == n.a) && (b == n.b);
+	}
 };
 
 /**
@@ -38,15 +42,15 @@ struct vertex3D{
 	/**
 	* end point 1 
 	*/
-	int a;
+	float a;
 	/**
 	 end point 2 
 	*/
-	int b;
+	float b;
 	/**
 	* end point 3 
 	*/
- 	int c;
+ 	float c;
 };
 
 /**
