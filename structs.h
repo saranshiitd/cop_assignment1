@@ -5,6 +5,9 @@ using namespace std;
 /*
 * defnition of a 2D vertex 
 */
+// tolerance for error in floats
+float epsilon ; 
+
 struct vertex2D{
 	/**
 	* end point 1 
@@ -18,7 +21,7 @@ struct vertex2D{
 	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
 	{
-	    return (a == n.a) && (b == n.b);
+	    return (a - n.a < epsilon) && (b - n.b < epsilon);
 	}
 };
 
@@ -63,7 +66,7 @@ struct vertex3D{
  	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
 	{
-	    return (a == n.a) && (b == n.b) && (c == n.c);
+	    return (a - n.a < epsilon) && (b - n.b < epsilon) && (c - n.c < epsilon);
 	}
 };
 
@@ -105,7 +108,6 @@ struct plane
 	float b;
 	float c;
 	float d;	
-	float epsilon ; 
 	bool operator==(const direction& rhs )
 	{	
 		// float scalarProduct = dotProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
@@ -121,7 +123,6 @@ struct direction
 	float x;
 	float y;
 	float z;
-	float epsilon ; 
 	bool operator==(const direction& rhs )
 	{
 		float scalarProduct = dotProduct([x,y,z],[rhs.x,rhs.y,rhs.z]) ; 
