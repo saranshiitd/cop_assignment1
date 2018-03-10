@@ -14,6 +14,8 @@ struct vertex2D{
 	* end point 2 
 	*/
 	float b;
+
+	// equality for two vertecies (method overloading)
 	bool operator==(const vertex2D& n)
 	{
 	    return (a == n.a) && (b == n.b);
