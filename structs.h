@@ -9,17 +9,11 @@ struct vertex2D{
 	/**
 	* end point 1 
 	*/
-	float a;
+	int a;
 	/**
 	* end point 2 
 	*/
-	float b;
-
-	// equality for two vertecies (method overloading)
-	bool operator==(const vertex2D& n)
-	{
-	    return (a == n.a) && (b == n.b);
-	}
+	int b;
 };
 
 /**
@@ -50,15 +44,15 @@ struct vertex3D{
 	/**
 	* end point 1 
 	*/
-	float a;
+	int a;
 	/**
 	 end point 2 
 	*/
-	float b;
+	int b;
 	/**
 	* end point 3 
 	*/
- 	float c;
+ 	int c;
 
  	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
@@ -108,7 +102,10 @@ struct plane
 	float epsilon ; 
 	bool operator==(const direction& rhs )
 	{	
-		
+		// float scalarProduct = dotProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
+		float[] vectorProduct = crossProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
+		float crossMagnitude = magnitude(vectorProduct) ; 
+		return (crossMagnitude < epsilon)  &&  (abs(a*rhs.d - d*rhs.a)< epsilon) &&  (abs(b*rhs.d - d*rhs.b)< epsilon) &&  (abs(c*rhs.d - d*rhs.c)< epsilon) ;
 	}
 
 };
@@ -121,7 +118,10 @@ struct direction
 	float epsilon ; 
 	bool operator==(const direction& rhs )
 	{
-		
+		float scalarProduct = dotProduct([x,y,z],[rhs.x,rhs.y,rhs.z]) ; 
+		float[] vectorProduct = crossProduct([x,y,z],[rhs.x,rhs.y,rhs.z]) ; 
+		float crossMagnitude = magnitude(vectorProduct) ; 
+		return (crossMagnitude < epsilon) && (scalarProduct > 0 ) ; 
 	}
 
 };
@@ -138,6 +138,8 @@ float[] crossProduct(float vector1[] , float vector2[]) {
 	return product ; 
 }
 
-float magnitude(floa)
+float magnitude(float vector1[]) {
+	return vector1[0]*vector1[0] + vector1[1]*vector1[1] + vector1[2]*vector1[2] ;  
+}
 
 #endif
