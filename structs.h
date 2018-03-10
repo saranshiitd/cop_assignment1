@@ -1,6 +1,7 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 #include <vector>
+#include <stdlib.h>
 using namespace std;
 /*
 * defnition of a 2D vertex 
@@ -19,7 +20,7 @@ struct vertex2D{
 	float b;
 
 	// equality for two 3D vertices (method overloading)
-	bool operator==(const vertex3D& n)
+	bool operator==(const vertex2D& n)
 	{
 	    return (a - n.a < epsilon) && (b - n.b < epsilon);
 	}
@@ -84,7 +85,7 @@ struct edge3D{
 	vertex3D v2;
 
 	// equality for two vertecies (method overloading)
-	bool operator==(const vertex2D& n)
+	bool operator==(const edge3D& n)
 	{
 	    return (v1 == n.v1) && (v2 == n.v2);
 	}
@@ -102,16 +103,40 @@ struct vertexEdgeList
 	vector<edge3D> e;
 };
 
+/**
+* helping methods
+*/
+
+float dotProduct(float vector1[] , float vector2[] ) {
+	return vector1[0]*vector2[0] + vector1[1]*vector2[1] + vector1[2]*vector2[2] ; 
+}
+
+float *crossProduct(float vector1[] , float vector2[]) {
+	float *product = new float[3] ;
+	product[0] = vector1[1]*vector2[2] - vector1[2]*vector2[1] ; 
+	product[1] = vector1[2]*vector2[0] - vector1[0]*vector2[2] ; 
+	product[2] = vector1[0]*vector2[1] - vector1[1]*vector2[0] ; 
+	return product ; 
+}
+
+float magnitude(float vector1[]) {
+	return vector1[0]*vector1[0] + vector1[1]*vector1[1] + vector1[2]*vector1[2] ;  
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 struct plane
 {
 	float a;
 	float b;
 	float c;
 	float d;	
-	bool operator==(const direction& rhs )
+	bool operator==(const plane& rhs )
 	{	
 		// float scalarProduct = dotProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
-		float[] vectorProduct = crossProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
+		float v1[] = {a, b, c};
+		float v2[] = {rhs.a,rhs.b,rhs.c} ; 
+		float vectorProduct[] = crossProduct(v1, v2); 
 		float crossMagnitude = magnitude(vectorProduct) ; 
 		return (crossMagnitude < epsilon)  &&  (abs(a*rhs.d - d*rhs.a)< epsilon) &&  (abs(b*rhs.d - d*rhs.b)< epsilon) &&  (abs(c*rhs.d - d*rhs.c)< epsilon) ;
 	}
@@ -125,28 +150,15 @@ struct direction
 	float z;
 	bool operator==(const direction& rhs )
 	{
-		float scalarProduct = dotProduct([x,y,z],[rhs.x,rhs.y,rhs.z]) ; 
-		float[] vectorProduct = crossProduct([x,y,z],[rhs.x,rhs.y,rhs.z]) ; 
+		float v1[] = {x, y, z};
+		float v2[] = {rhs.x,rhs.y,rhs.z} ;
+		float scalarProduct = dotProduct(v1, v2) ; 
+		float vectorProduct[] = crossProduct(v1, v2) ; 
 		float crossMagnitude = magnitude(vectorProduct) ; 
 		return (crossMagnitude < epsilon) && (scalarProduct > 0 ) ; 
 	}
 
 };
 
-float dotProduct(float vector1[] , float vector2[] ) {
-	return vector1[0]*vector2[0] + vector1[1]*vector2[1] + vector1[2]*vector2[2] ; 
-}
-
-float[] crossProduct(float vector1[] , float vector2[]) {
-	float product[3] ;
-	product[0] = vector1[1]*vector2[2] - vector1[2]*vector2[1] ; 
-	product[1] = vector1[2]*vector2[0] - vector1[0]*vector2[2] ; 
-	product[2] = vector1[0]*vector2[1] - vector1[1]*vector2[0] ; 
-	return product ; 
-}
-
-float magnitude(float vector1[]) {
-	return vector1[0]*vector1[0] + vector1[1]*vector1[1] + vector1[2]*vector1[2] ;  
-}
 
 #endif
