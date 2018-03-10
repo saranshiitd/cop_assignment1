@@ -12,7 +12,7 @@ class basicLoopEdgeSet{
 	/**
 	* all the edges in a basic loop 
 	*/
-	std::vector<edges3D> eList;
+	std::vector<edge3D> eList;
 
 	/**
 	* methods to add and remove edge from basic loop 

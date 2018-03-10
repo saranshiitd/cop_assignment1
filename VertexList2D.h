@@ -16,7 +16,8 @@ class VertexList2D{
 		* remove a vertex from a vertex lit 
 		*/
 		void removeVertex (vertex2D v);
-	
+		
+		
 };
 
 #endif

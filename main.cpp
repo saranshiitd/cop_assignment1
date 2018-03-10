@@ -12,16 +12,16 @@ int main(){
 	VertexList2D frontProjVertex;
 	vertex2D tempVertex;
 
-	tempVertex = {0, 0};
+	tempVertex.a = 0; tempVertex.b = 0;
 	frontProjVertex.addVertex(tempVertex);
 
-	tempVertex = {0, 1};
+	tempVertex.a = 0; tempVertex.b = 1;
 	frontProjVertex.addVertex(tempVertex);
 
-	tempVertex = {1, 0};
+	tempVertex.a = 1; tempVertex.b = 0;
 	frontProjVertex.addVertex(tempVertex);
 
-	tempVertex = {1, 1};
+	tempVertex.a = 1; tempVertex.b = 1;
 	frontProjVertex.addVertex(tempVertex);
 
 

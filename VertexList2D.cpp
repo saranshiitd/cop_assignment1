@@ -7,16 +7,18 @@ VertexList2D::addVertex(vertex2D v){
 	/**
 	* add a vertex to vertexList
 	*/
-
 	if (std::find(vertexList.begin(), vertexList.end(), v) != vertexList.end() )
-  	 	vertexList.push_back(v);
+  	 	printf("%s\n", "Vertex Already Exists");
 	else
-  	
+  		vertexList.push_back(v);
 }
 
-VertexList2D::addVertex(vertex2D v){
+VertexList2D::removeVertex(vertex2D v){
 	/**
-	* add a vertex to vertexList
+	* removes a vertex to vertexList
 	*/
-	VertexList2D::vertexList.push_back(v)	
+	if (std::find(vertexList.begin(), vertexList.end(), v) != vertexList.end() )
+  	 	vertexList.erase(std::remove(vertexList.begin(), vertexList.end(), v), vertexList.end());
+	else
+  		printf("%s\n", "Vertex does not exist!");	
 }
