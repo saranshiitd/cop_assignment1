@@ -1,7 +1,7 @@
 #ifndef STRUCTS_H
 #define STRUCTS_H
 #include <vector>
-#include <stdlib.h>
+#include <cmath> 
 using namespace std;
 /*
 * defnition of a 2D vertex 
@@ -136,7 +136,7 @@ struct plane
 		// float scalarProduct = dotProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
 		float v1[] = {a, b, c};
 		float v2[] = {rhs.a,rhs.b,rhs.c} ; 
-		float vectorProduct[] = crossProduct(v1, v2); 
+		float* vectorProduct = crossProduct(v1, v2); 
 		float crossMagnitude = magnitude(vectorProduct) ; 
 		return (crossMagnitude < epsilon)  &&  (abs(a*rhs.d - d*rhs.a)< epsilon) &&  (abs(b*rhs.d - d*rhs.b)< epsilon) &&  (abs(c*rhs.d - d*rhs.c)< epsilon) ;
 	}
@@ -153,7 +153,7 @@ struct direction
 		float v1[] = {x, y, z};
 		float v2[] = {rhs.x,rhs.y,rhs.z} ;
 		float scalarProduct = dotProduct(v1, v2) ; 
-		float vectorProduct[] = crossProduct(v1, v2) ; 
+		float* vectorProduct = crossProduct(v1, v2) ; 
 		float crossMagnitude = magnitude(vectorProduct) ; 
 		return (crossMagnitude < epsilon) && (scalarProduct > 0 ) ; 
 	}
