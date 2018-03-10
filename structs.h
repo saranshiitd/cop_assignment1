@@ -7,7 +7,7 @@ using namespace std;
 * defnition of a 2D vertex 
 */
 // tolerance for error in floats
-float epsilon ; 
+float epsilon = 0.01; 
 
 struct vertex2D{
 	/**
@@ -22,7 +22,7 @@ struct vertex2D{
 	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex2D& n)
 	{
-	    return (a - n.a < epsilon) && (b - n.b < epsilon);
+	    return (abs(a - n.a) < epsilon) && (abs(b - n.b) < epsilon);
 	}
 };
 
@@ -67,7 +67,7 @@ struct vertex3D{
  	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
 	{
-	    return (a - n.a < epsilon) && (b - n.b < epsilon) && (c - n.c < epsilon);
+	    return (abs(a - n.a) < epsilon) && (abs(b - n.b) < epsilon) && (abs(c - n.c) < epsilon);
 	}
 };
 

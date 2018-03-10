@@ -3,7 +3,7 @@
 #include "structs.h"
 #include<vector>
 using namespace std;
-class WireFrame
+class wireFrame
 {
 public:
 
