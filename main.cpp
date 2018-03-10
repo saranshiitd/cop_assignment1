@@ -9,9 +9,20 @@
 
 int main(){
 
+	VertexList2D frontProjVertex;
+	vertex2D tempVertex;
 
+	tempVertex = {0, 0};
+	frontProjVertex.addVertex(tempVertex);
 
+	tempVertex = {0, 1};
+	frontProjVertex.addVertex(tempVertex);
 
+	tempVertex = {1, 0};
+	frontProjVertex.addVertex(tempVertex);
+
+	tempVertex = {1, 1};
+	frontProjVertex.addVertex(tempVertex);
 
 
 	return 0;
