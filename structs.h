@@ -35,6 +35,12 @@ struct edge2D{
 	*/
 	vertex2D v2;
 	bool hidden;
+
+	// equality for two 2D edges  (method overloading)
+	bool operator==(const edge2D& n)
+	{
+	    return (v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden);
+	}
 };
 
 /**
@@ -53,6 +59,12 @@ struct vertex3D{
 	* end point 3 
 	*/
  	float c;
+
+ 	// equality for two 3D vertices (method overloading)
+	bool operator==(const vertex3D& n)
+	{
+	    return (a == n.a) && (b == n.b) && (c == n.c);
+	}
 };
 
 /**
@@ -67,6 +79,12 @@ struct edge3D{
 	* end point 2 
 	*/
 	vertex3D v2;
+
+	// equality for two vertecies (method overloading)
+	bool operator==(const vertex2D& n)
+	{
+	    return (v1 == n.v1) && (v2 == n.v2);
+	}
 };
 
 /**

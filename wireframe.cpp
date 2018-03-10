@@ -21,6 +21,9 @@ using namespace std;
 
 	void addEdge(vertex3D v1, vertex3D v2){
 		// return true if vertex is in vertexList
+		// make a new 3D edge and check if it already exists
+		edge3D tempEdge = {v1, v2};
+		
 		if (std::find(vertexList.begin(), vertexList.end(), v) != vertexList.end() )
 	  	 	printf("%s\n", "Vertex Already Exists");
 		else
