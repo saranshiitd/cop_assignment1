@@ -7,7 +7,7 @@ using namespace std;
 * defnition of a 2D vertex 
 */
 
-float epsilon = 0.01;
+#define epsilon 0.01
 
 struct vertex2D{
 	/**
@@ -43,7 +43,7 @@ struct edge2D{
 	// equality for two 2D edges  (method overloading)
 	bool operator==(const edge2D& n)
 	{
-	    return ((v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden)) || (v1 == n.v2) && (v2 == n.v1) && ( hidden == n.hidden);
+	    return ((v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden)) || ((v1 == n.v2) && (v2 == n.v1) && ( hidden == n.hidden));
 	}
 };
 
