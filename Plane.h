@@ -37,6 +37,9 @@ class Plane
 		//! angle with respect to a edge e (can be any edge on that vertex)
 		//! takes a vertex and edges on that vertex i.e a vertexEdgeList
 		vertexEdgeList sortEdgesOnVertex (vertexEdgeList veList);
+
+		bool compareTriplets(edgeVertexTriplet t1 , edgeVertexTriplet t2) ; 
+
 };
 
 
