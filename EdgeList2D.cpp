@@ -22,8 +22,13 @@ void EdgeList2D::removeEdge(edge2D e) {
 bool EdgeList2D::containsEdge (edge2D e){
 	if (find(edgeList.begin(), edgeList.end(), e) != edgeList.end() )
 		return true;
-	else
-		return false;	
+	else{
+		// elsif they are same vertices --> there exists a edge
+		if (e.v1 == e.v2)
+			return true;
+		else
+			return false;
+	}	
 }
 
 

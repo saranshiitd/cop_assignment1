@@ -34,7 +34,12 @@ int main(){
 	tempVertex2D.a = 1; tempVertex2D.b = 1;
 	frontProjVertex.addVertex(tempVertex2D);
 
-	frontProjVertex.printVertices();
+	EdgeList2D frontProjEdges;
+	edge2D tempEdge2D;
+
 	
+
+	frontProjVertex.printVertices();
+
 	return 0;
 }
