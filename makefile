@@ -32,4 +32,3 @@ generalMethods.o: generalMethods.h structs.h basicLoopEdgeSet.h faceLoop.h bodyL
 
 structs.o: structs.cpp structs.h
 	$(CXX) $(CXXFLAGS) -c structs.cpp
-

@@ -92,11 +92,20 @@ int main(){
 	wireframe.printVertices();
 	wireframe.printEdges();
 
-	vector<vertex3D> vL = {{0,0,0}, {1,1,1}};
-	vector<vertexEdgeList> eL = wireframe.adjEdgesAtVertexList(vL);
-	cout << "Adjacent Edges at verteices:" << "\n";
-	for (vector<vertexEdgeList>::iterator i = eL.begin(); i != eL.end(); ++i){
-		generalMethods::printEdgeList(i->e); cout << "\n"; 
-	}
+	vector<plane> tempPlanes = wireframe.generatePlanes();
+	cout << "Planes initially: \n";
+	cout << tempPlanes.size() << "\n";
+	generalMethods::printPlanes(tempPlanes);
+
+	cout << "Planes Finally: \n";
+	generalMethods::removeDuplicate(tempPlanes);
+	cout << tempPlanes.size() << "\n";
+	generalMethods::printPlanes(tempPlanes);
+
+
+	plane p1 = {1,2,3,4};
+	plane p2 = {2,4,6,7};
+
+	cout << (p1 == p2);
 	return 0;
 }
