@@ -22,6 +22,15 @@ struct vertex2D{
 	*/
 	float b;
 
+	vertex2D(){
+		a = b = 0;
+	}
+
+	vertex2D(float m, float n){
+		a = m;
+		b = n;
+	}
+
 	// float epsilon = 0.01 ;
 
 	// equality for two 3D vertices (method overloading)
@@ -43,7 +52,18 @@ struct edge2D{
 	* end point 2 
 	*/
 	vertex2D v2;
-	bool hidden;
+
+	edge2D(){
+
+	}
+	edge2D(vertex2D m, vertex2D n){
+		v1.a = m.a;
+		v1.b = m.b;
+		v2.a = n.a;
+		v2.b = n.b;
+	}
+
+	bool hidden = false;
 
 	// float epsilon = 0.01 ;
 
@@ -71,6 +91,16 @@ struct vertex3D{
 	*/
  	float c;
 
+ 	vertex3D(){
+ 		a = b = c = 0;
+ 	}
+
+ 	vertex3D(float m, float n, float o){
+		a = m;
+		b = n;
+		c = o;
+	}
+
  	// float epsilon = 0.01 ;
 
  	// equality for two 3D vertices (method overloading)
@@ -92,6 +122,15 @@ struct edge3D{
 	* end point 2 
 	*/
 	vertex3D v2;
+
+	edge3D(){
+
+	}
+
+	edge3D(vertex3D m, vertex3D n){
+		v1 = {m.a, m.b, m.c};
+		v2 = {n.a, n.b, n.c};
+	}
 
 	// equality for two vertecies (method overloading)
 	bool operator==(const edge3D& n)

@@ -3,6 +3,8 @@
 
 #include<vector>
 #include "structs.h"
+#include "VertexList2D.h"
+#include "EdgeList2D.h"
 
 using namespace std;
 class wireFrame
@@ -15,10 +17,11 @@ public:
 	
 	//! generate wireframe form 3 vertices list --> front, top, side
 	//! and from three edges list --> front, top side
-	void generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
-			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS );
+	void generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
+			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS );
 
 	//! print function for wireframe
+	void printVertex (vertex3D i);
 	void printVertices();
 	void printEdges();
 	/**
@@ -31,7 +34,7 @@ public:
 	void addEdge(vertex3D v1, vertex3D v2);
 	void addEdge(edge3D e) ; 
 	void removeEdge (edge3D e); 
-
+	void removeEdges (vector<edge3D> eList);
 
 	/**
 	* it could be just an edge 
@@ -48,9 +51,9 @@ public:
 	void resolveOverlap() ;
 
 	/**
-	* sort the vertices of this wireframe with respect to the give edge (helper function for resolveOverlap) 
+	* sort the vertices of a list with respect to the give edge (helper function for resolveOverlap) 
 	*/
-	void sortVertice(edge3D e) ; 
+	void sortVertices (vector<vertex3D> vList, edge3D e) ; 
 
 	/**
 	* returns the number of edges shared at vertex v 

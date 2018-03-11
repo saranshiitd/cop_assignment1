@@ -2,7 +2,9 @@
 #include<algorithm>
 #include<iostream>
 #include "wireframe.h"
-
+#include "VertexList2D.h"
+#include "EdgeList2D.h"
+#include "structs.h"
 using namespace std;
 
 //! data structures inside wireframe class
@@ -15,8 +17,8 @@ using namespace std;
 * side ->. (x, 0, z)
 */
 
-void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
-			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS ){
+void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
+			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS ){
 
 	/**
 	* choose a vertex from each projection and match its coordinates
@@ -25,14 +27,14 @@ void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_l
 
 // generate all the 3D vertices
 	// travese the front-vertices list
-	for (vector<vertex2D>::const_iterator i = v_listT.begin(); i != v_listT.end(); ++i){
+	for (vector<vertex2D>::const_iterator i = v_listT.vertexList.begin(); i != v_listT.vertexList.end(); ++i){
 		// traverse the top-vertices list
-		for (vector<vertex2D>::const_iterator j = v_listF.begin(); j != v_listF.end(); ++j){
+		for (vector<vertex2D>::const_iterator j = v_listF.vertexList.begin(); j != v_listF.vertexList.end(); ++j){
 			// traverse the side vertices list
-			for (vector<vertex2D>::const_iterator k = v_listS.begin(); k != v_listS.end(); ++k){
+			for (vector<vertex2D>::const_iterator k = v_listS.vertexList.begin(); k != v_listS.vertexList.end(); ++k){
 				// == operator is overloaded in structs
-				if (( i->v1 == k->v1 ) && ( i->v2 == j->v2 ) && ( j->v2 == k->v2 ) ){
-					vertex3D tempVertex = {i->v1, i->v2, j->v2};
+				if (( i->a == k->a ) && ( i->b == j->a ) && ( j->b == k->b ) ){
+					vertex3D tempVertex = {i->a, i->b, j->b};
 					wireFrame::addVertex(tempVertex);
 				}
 
@@ -40,11 +42,25 @@ void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_l
 		}
 	}
 
+// generate all the 3D edges
+	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
+		for (vector<vertex3D>::const_iterator j = vertexList.begin(); j != vertexList.end(); ++j){
+			// edges between different vertices
+			if (!(i == j)){
+				// make 3 temp edges to check if they exist in real projections
+				edge2D topTempEdge =    { { i->a, i->b } , { j->a, j->b } };
+				edge2D frontTempEdge =  { { i->b, i->c } , { j->b, j->c } };
+				edge2D sideTempEdge =   { { i->a, i->c } , { j->a, j->c } };
 
-
+				if( e_listT.containsEdge(topTempEdge) && e_listF.containsEdge(frontTempEdge) && e_listS.containsEdge(sideTempEdge)){
+					wireFrame::addEdge (*i, *j);
+				}
+			}
+		}
+	}
 }
 
-void printVertex(vertex3D i){
+void wireFrame::printVertex(vertex3D i){
 	std::cout<<i.a<<" "<<i.b<<" "<<i.c ;
 }
 
@@ -119,4 +135,75 @@ void wireFrame::removeEdge (edge3D e){
   	 	edgeList.erase(std::remove(edgeList.begin(), edgeList.end(), e), edgeList.end());
 	else
   		printf("%s\n", "Edge does not exist in the wireframe!");	
+}
+
+
+void wireFrame::removeEdges (vector<edge3D> eList){
+	/**
+	* removes edges from edgeList
+	*/
+	// return true if edge is in edgeList
+
+	for (vector<edge3D>::const_iterator i = eList.begin(); i != eList.end(); ++i){
+		if (find(edgeList.begin(), edgeList.end(), *i) != edgeList.end() )
+	  	 	edgeList.erase(std::remove(edgeList.begin(), edgeList.end(), *i), edgeList.end());
+		else
+	  		printf("%s\n", "Edge does not exist in the wireframe!");	
+	}	
+}
+
+// takes a edgesList and edges to be removed and removes them from that edgesList
+void removeEdgesFromEdgeList (vector<edge3D> EdgeList, vector<edge3D> eList){
+	/**
+	* removes edges from EdgeList
+	*/
+	// return true if edge is in edgeList
+
+	for (vector<edge3D>::const_iterator i = eList.begin(); i != eList.end(); ++i){
+		if (find(EdgeList.begin(), EdgeList.end(), *i) != EdgeList.end() )
+	  	 	EdgeList.erase(std::remove(EdgeList.begin(), EdgeList.end(), *i), EdgeList.end());
+		else
+	  		printf("%s\n", "Edge does not exist in the EdgeList!");	
+	}	
+}
+
+//! remove all overlapping edges and insert non-overlapping edges in place of them
+void wireFrame::resolveOverlap(){
+
+	vector<edge3D> unexaminedEdges = edgeList;
+
+	vector<edge3D> E;
+
+	// until there is some unexamined edge
+	while(unexaminedEdges.size()!=0){
+
+
+
+	}
+
+}
+
+// returns the number of edges shared at vertex v 
+int wireFrame::numberOfEdgesAtVertex( vertex3D v){
+	int count = 0;
+	// loop over the edgeList
+	for (vector<edge3D>::iterator i = edgeList.begin(); i != edgeList.end(); ++i){
+		if( i->v1 == v || i->v2 == v){
+			count++;
+		}
+	}
+	return count;
+}
+
+
+vertexEdgeList wireFrame::adjEdgesAtVertex (vertex3D v){
+	vertexEdgeList tempList;
+	tempList.v = v;
+
+	for (vector<edge3D>::iterator i = edgeList.begin(); i != edgeList.end(); ++i){
+		if( i->v1 == v || i->v2 == v){
+			tempList.e.push_back(*i);
+		}
+	}
+	return tempList;
 }
