@@ -33,11 +33,11 @@ namespace generalMethods{
 	/**
 	*take dot procuct 
 	*/
-	direction dotProduct(direction v1, direction v2) ;
+	//direction dotProduct(direction v1, direction v2) ;
 	/**
 	* take cross product 
 	*/
-	direction crossProduct(direction v1, direction v2) ;
+	//direction crossProduct(direction v1, direction v2) ;
 
 	/**
 	* -----------------methods of planes---------------------------- 

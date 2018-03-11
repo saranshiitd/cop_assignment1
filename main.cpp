@@ -1,4 +1,3 @@
-#include "structs.h"
 #include "wireframe.h"
 #include "EdgeList2D.h"
 #include "generalMethods.h"

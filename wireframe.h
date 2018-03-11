@@ -14,18 +14,22 @@ public:
 	vector<edge3D> edgeList;
 	
 	/**
-	* add vertex and edge to wireframe 
+	* add/remove vertex and edge to wireframe 
 	*/
 	void addVertex(vertex3D v);
+	void removeVertex(vertex3D v);
+
+
 	void addEdge(vertex3D v1, vertex3D v2);
+	void addEdge(edge3D e) ; 
 	void removeEdge (edge3D e); 
+
+
 	/**
 	* it could be just an edge 
 	*/
 
 
-	void removeVertex(vertex3D v);
-	void addEdge(edge3D e) ; 
 	/**
 	* apply process PEVR at the end of it 
 	*/
@@ -66,7 +70,7 @@ public:
 	bool checkOverlapCollinear(edge3D e1, edge3D e2) ;
 
 	/**
-	* check edges collinear 
+	* check edges coplanar 
 	*/
 	bool checkCoplanar(edge3D e1, edge3D e2 , edge3D e3) ; 
 
