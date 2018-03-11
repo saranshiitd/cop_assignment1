@@ -231,4 +231,17 @@ vector<plane> generatePlanes(){
 		tempVectorList.push_back(wireFrame::adjEdgesAtVertex(*i));
 	}
 
+	// over each vertex
+	for (vector<vertexEdgeList>::iterator i = tempvertexEdgeList.begin(); i != tempvertexEdgeList.end(); ++i){
+		// for evey edge pair
+		for (vector<edge3D>::iterator j = i.e.begin(); j != i.e.end(); ++j){
+			// for evey edge pair
+			for (vector<edge3D>::iterator k = i.e.begin(); k != i.e.end(); ++j){
+				// for every adjacent edge
+				if(!(j == k )){
+					tempPlanes.push_back(generalMethods::makePlane(j, k));
+				}
+			}
+		}
+	return tempPlanes;
 }
