@@ -2,6 +2,9 @@
 #include "basicLoopEdgeSet.h"
 #include "faceLoop.h"
 #include "bodyLoop.h"
+#include <math.h> 
+#include <cstdlib>
+#include <climits>
 
 namespace generalMethods{
 
@@ -79,5 +82,33 @@ namespace generalMethods{
 		return (magnitudeCross < epsilon) ;
 	}
 
+	plane makePlane (edge3D e1 , edge3D e2){
+
+		float vector1[] = {e1.v1.a-e1.v2.a,e1.v1.b-e1.v2.b,e1.v1.c-e1.v2.c} ;
+		float vector2[] = {e2.v1.a-e2.v2.a,e2.v1.b-e2.v2.b,e2.v1.c-e2.v2.c} ;
+		float* normal = crossProduct(vector1,vector2) ; 
+		float maxCoeffp = std::max((std::abs(normal[0])),(std::abs(normal[1]))) ; 
+		float maxCoeff = std::max(maxCoeffp,(std::abs(normal[2]))) ;
+		float coefficients[] = {normal[0]/maxCoeff , normal[1]/maxCoeff , normal[2]/maxCoeff} ; 
+		float intercept = coefficients[0]*(e1.v1.a) + coefficients[1]*(e1.v1.b) + coefficients[2]*(e1.v1.c) ;
+		plane thePlane = {coefficients[0],coefficients[1],coefficients[2],intercept} ;  
+		return thePlane ; 
+	}
+
+	bool planeEqual(plane p1 , plane p2) {
+		return p1 == p2 ;
+	}
+
+	void removeDuplicate(std::vector<plane> planes){
+
+		std::unique (planes.begin(), planes.end(), planeEqual); 
+
+	}  
+
+	float findDistanceBetweenPlanes(plane p, plane q) {
+
+		vectorMag1 = (p.a*p.a+p.b*p.b+p.c*p.c)		
+
+	}
 
 }
