@@ -11,7 +11,8 @@ class EdgeList2D{
 
 		//! add a edge to edgeList 
 		void addEdge (edge2D e);
-
+		void addEdge (vertex2D v1, vertex2D v2);
+		
 		//! remove a edge from a edgeList 
 		void removeEdge (edge2D e);
 

@@ -33,7 +33,7 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 			// traverse the side vertices list
 			for (vector<vertex2D>::const_iterator k = v_listS.vertexList.begin(); k != v_listS.vertexList.end(); ++k){
 				// == operator is overloaded in structs
-				if (( i->a == k->a ) && ( i->b == j->b ) && ( j->b == k->b ) ){
+				if (( i->a == k->a ) && ( i->b == j->a ) && ( j->b == k->b ) ){
 					vertex3D tempVertex = {i->a, i->b, j->b};
 					wireFrame::addVertex(tempVertex);
 				}
