@@ -170,7 +170,7 @@ namespace generalMethods{
 		return edgeList ;
 	}
 
-	std::vector<vertex3D> findEdgesOnPlane(plane p, std::vector<vertex3D> eop) {
+	std::vector<vertex3D> findVerticesOnPlane(plane p, std::vector<vertex3D> eop) {
 
 		std::vector<vertex3D> vertexList;
 		edge3D currentVertex ; 
@@ -182,7 +182,21 @@ namespace generalMethods{
 		return vertexList ;
 	}
 
+	bool checkHidden(plane p, edge3D e, float[] direction) {
+		float largeNumber = 100000.0f ; 
+		float[] farAwayVector = {direction[0]*largeNumber , direction[1]*largeNumber , direction[2]*largeNumber  }	;
+		vertex3D vertex1 =  e.v1 ; 
+		vertex3D vertex2 =  e.v2 ; 
+		float pv1 = vertex1.a*p.a + vertex1.b*p.b + vertex1.c*p.c - p.d ;
+		float pv2 = vertex2.a*p.a + vertex2.b*p.b + vertex2.c*p.c - p.d ;
+		if (pv1*pv2 < 0)
+		{
+			return false ;
+		}
 
-	
+		float pln = farAwayVector[0]*p.a + farAwayVector[1]*p.b + farAwayVector[2]*p.c  - p.d ;   
+		return ( pln*pv1 < 0 )  ;
+
+	}
 
 }
