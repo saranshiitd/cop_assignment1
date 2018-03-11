@@ -15,7 +15,7 @@ public:
 	
 	//! generate wireframe form 3 vertices list --> front, top, side
 	//! and from three edges list --> front, top side
-	generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
+	void generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
 			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS );
 
 	//! print function for wireframe
