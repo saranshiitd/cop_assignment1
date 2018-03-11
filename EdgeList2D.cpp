@@ -1,14 +1,13 @@
+#include <iostream>
 #include "structs.h"
 #include "EdgeList2D.h"
 using namespace std ;
 
 void EdgeList2D::addEdge(edge2D e) {
 
-	if (std::find(edgeList.begin(),edgeList.end(),e)==edgeList.end()) 
-		{
-			edgeList.push_back(e) ; 
-			/* code */
-		}	
+	if (std::find(edgeList.begin(),edgeList.end(),e)==edgeList.end()) {
+			edgeList.push_back(e) ;
+	}	
 }
 
 void EdgeList2D::removeEdge(edge2D e) {
