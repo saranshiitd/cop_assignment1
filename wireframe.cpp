@@ -9,6 +9,41 @@ using namespace std;
 // vector<vertex3D> vertexList;
 // vector<edge3D> edgeList;
 
+/** convention
+* top -->  (x, y, 0)
+* front -> (0, y, z)
+* side ->. (x, 0, z)
+*/
+
+void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
+			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS ){
+
+	/**
+	* choose a vertex from each projection and match its coordinates
+	* with those form other views --> if thet match --> a 3D vertex is found
+	*/
+
+// generate all the 3D vertices
+	// travese the front-vertices list
+	for (vector<vertex2D>::const_iterator i = v_listT.begin(); i != v_listT.end(); ++i){
+		// traverse the top-vertices list
+		for (vector<vertex2D>::const_iterator j = v_listF.begin(); j != v_listF.end(); ++j){
+			// traverse the side vertices list
+			for (vector<vertex2D>::const_iterator k = v_listS.begin(); k != v_listS.end(); ++k){
+				// == operator is overloaded in structs
+				if (( i->v1 == k->v1 ) && ( i->v2 == j->v2 ) && ( j->v2 == k->v2 ) ){
+					vertex3D tempVertex = {i->v1, i->v2, j->v2};
+					wireFrame::addVertex(tempVertex);
+				}
+
+			}
+		}
+	}
+
+
+
+}
+
 void printVertex(vertex3D i){
 	std::cout<<i.a<<" "<<i.b<<" "<<i.c ;
 }

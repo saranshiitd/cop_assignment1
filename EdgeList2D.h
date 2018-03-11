@@ -15,6 +15,8 @@ class EdgeList2D{
 		//! remove a edge from a edgeList 
 		void removeEdge (edge2D e);
 
+		bool containsEdge (edge2D e);
+
 };
 
 #endif
