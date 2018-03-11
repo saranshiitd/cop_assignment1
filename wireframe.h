@@ -1,7 +1,9 @@
 #ifndef WIREFRAME_H
 #define WIREFRAME_H
-#include "structs.h"
+
 #include<vector>
+#include "structs.h"
+
 using namespace std;
 class wireFrame
 {

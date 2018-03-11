@@ -6,6 +6,7 @@ using namespace std;
 /*
 * defnition of a 2D vertex 
 */
+
 // tolerance for error in floats
 float epsilon = 0.01; 
 

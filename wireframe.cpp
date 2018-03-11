@@ -1,7 +1,7 @@
-#include "wireframe.h"
 #include<vector>
 #include<algorithm>
 #include<iostream>
+#include "wireframe.h"
 
 using namespace std;
 

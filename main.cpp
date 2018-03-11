@@ -7,6 +7,7 @@
 #include "basicLoopEdgeSet.h"
 #include "bodyLoop.h"
 
+
 int main(){
 
 	VertexList2D frontProjVertex;
