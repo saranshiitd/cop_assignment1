@@ -17,5 +17,5 @@ float *crossProduct(float vector1[] , float vector2[]) {
 }
 
 float magnitude(float vector1[]) {
-	return vector1[0]*vector1[0] + vector1[1]*vector1[1] + vector1[2]*vector1[2] ;  
+	return sqrt(vector1[0]*vector1[0] + vector1[1]*vector1[1] + vector1[2]*vector1[2]) ;  
 }

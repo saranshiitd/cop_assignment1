@@ -8,6 +8,7 @@ using namespace std;
 */
 
 // tolerance for error in floats
+
 #define epsilon 0.01
 
 
