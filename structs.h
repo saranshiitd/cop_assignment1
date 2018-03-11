@@ -53,7 +53,7 @@ struct edge2D{
 	vertex2D v2;
 
 	edge2D(){
-		
+
 	}
 	edge2D(vertex2D m, vertex2D n){
 		v1.a = m.a;

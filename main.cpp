@@ -5,7 +5,8 @@
 #include "VertexList2D.h"
 #include "basicLoopEdgeSet.h"
 #include "bodyLoop.h"
-
+#include <iostream>
+using namespace std;
 
 /*
 ╭━━━╮╭━━━╮╭━━━╮
@@ -90,5 +91,11 @@ int main(){
 
 	wireframe.printVertices();
 	wireframe.printEdges();
+
+	vector<edge3D> eL = wireframe.adjEdgesAtVertex({0,0,0}).e;
+	cout << "Adjacent Edges at vertex:" << "\n";
+	for (vector<edge3D>::const_iterator i = eL.begin(); i != eL.end(); ++i){
+		cout << "{"; wireframe.printVertex(i->v1); cout <<"} {"; wireframe.printVertex(i->v2); cout << "}" << "\n"; 
+	}
 	return 0;
 }

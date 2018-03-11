@@ -21,6 +21,7 @@ public:
 			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS );
 
 	//! print function for wireframe
+	void printVertex (vertex3D i);
 	void printVertices();
 	void printEdges();
 	/**
@@ -33,7 +34,7 @@ public:
 	void addEdge(vertex3D v1, vertex3D v2);
 	void addEdge(edge3D e) ; 
 	void removeEdge (edge3D e); 
-
+	void removeEdges (vector<edge3D> eList);
 
 	/**
 	* it could be just an edge 
@@ -50,9 +51,9 @@ public:
 	void resolveOverlap() ;
 
 	/**
-	* sort the vertices of this wireframe with respect to the give edge (helper function for resolveOverlap) 
+	* sort the vertices of a list with respect to the give edge (helper function for resolveOverlap) 
 	*/
-	void sortVertice(edge3D e) ; 
+	void sortVertices (vector<vertex3D> vList, edge3D e) ; 
 
 	/**
 	* returns the number of edges shared at vertex v 
