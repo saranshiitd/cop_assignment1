@@ -92,10 +92,11 @@ int main(){
 	wireframe.printVertices();
 	wireframe.printEdges();
 
-	vector<vertexEdgeList> eL = wireframe.adjEdgesAtVertexList({0,0,0},{1,1,1});
+	vector<vertex3D> vL = {{0,0,0}, {1,1,1}};
+	vector<vertexEdgeList> eL = wireframe.adjEdgesAtVertexList(vL);
 	cout << "Adjacent Edges at verteices:" << "\n";
-	for (vector<vertexEdgeList>::const_iterator i = eL.begin(); i != eL.end(); ++i){
-		cout << "{"; wireframe.printVertex(i->v1); cout <<"} {"; wireframe.printVertex(i->v2); cout << "}" << "\n"; 
+	for (vector<vertexEdgeList>::iterator i = eL.begin(); i != eL.end(); ++i){
+		generalMethods::printEdgeList(i->e); cout << "\n"; 
 	}
 	return 0;
 }

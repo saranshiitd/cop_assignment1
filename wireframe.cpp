@@ -212,7 +212,7 @@ vector<vertexEdgeList> wireFrame::adjEdgesAtVertexList (vector<vertex3D> vList){
 
 	vector<vertexEdgeList> tempVectorList;
 
-	for (vector<vector3D>::iterator i = vList.begin(); i != vList.end(); ++i){
+	for (vector<vertex3D>::iterator i = vList.begin(); i != vList.end(); ++i){
 		tempVectorList.push_back(wireFrame::adjEdgesAtVertex(*i));
 	}		
 
