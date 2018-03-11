@@ -34,3 +34,10 @@ structs.o: structs.cpp structs.h
 	$(CXX) $(CXXFLAGS) -c structs.cpp
 Plane.o: Plane.h structs.h
 	$(CXX) $(CXXFLAGS) -c Plane.cpp
+
+# To start over from scratch, type 'make clean'.  This
+# removes the executable file, as well as old .o object
+# files and *~ backup files:
+#
+clean: 
+	$(RM) main *.o *~
