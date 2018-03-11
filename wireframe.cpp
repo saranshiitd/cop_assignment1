@@ -60,5 +60,3 @@ void wireFrame::removeEdge (edge3D e){
 	else
   		printf("%s\n", "Edge does not exist in the wireframe!");	
 }
-
-
