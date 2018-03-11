@@ -6,7 +6,7 @@ using namespace std;
 
 #define PI 3.14159265
 
-float findAngle(edge3D refEdge, edge3D otherEdge, vertex3D refVertex) {
+float findAngle(edge3D refEdge, edge3D otherEdge, vertex3D refVertex,plane p) {
 	float normal[] = {p.a, p.b, p.c};
 	vertex3D v2ref = (refVertex==refEdge.v1) ? refEdge.v2 : refEdge.v1 ; 
 	vertex3D v2other = (refVertex==otherEdge.v1) ? otherEdge.v2 : otherEdge.v1 ; 
@@ -32,8 +32,8 @@ float findAngle(edge3D refEdge, edge3D otherEdge, vertex3D refVertex) {
 
 bool compareTriplets(edgeVertexTriplet t1 , edgeVertexTriplet t2) {
 
-	float angle1 = findAngle(t1.reference , t1.e , t1.v) ;
-	float angle2 = findAngle(t2.reference, t2.e, t2.v ) ; 
+	float angle1 = findAngle(t1.reference , t1.e , t1.v, t1.p) ;
+	float angle2 = findAngle(t2.reference, t2.e, t2.v , t2.p ) ; 
 	return (angle1 > angle2) ;	
 
 }
