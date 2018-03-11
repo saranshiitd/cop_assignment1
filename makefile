@@ -18,4 +18,7 @@ main.o: main.cpp structs.h wireframe.h EdgeList2D.h generalMethods.h Plane.h Ver
 	$(CXX) $(CXXFLAGS) -c main.cpp
 
 # make is smart to infer that .o file needs corrosponding .cpp file hence we may not write it explicitely
-VertexList2D.o: VertexList2D.h structs.h
+VertexList2D.o: VertexList2D.h structs.h	
+	$(CXX) $(CXXFLAGS) -c VertexList2D.cpp
+structs.h : structs.cpp 
+	$(CXX) $(CXXFLAGS) -c structs.cpp
