@@ -123,8 +123,9 @@ namespace generalMethods{
 	}
 
 	bool planeEqual(plane p1 , plane p2) {
-		float distancePl = findDistanceBetweenPlanes(p1,p2) ; 
-		return distancePl < epsilon ;
+		return (p1 == p2);
+		// float distancePl = findDistanceBetweenPlanes(p1,p2) ; 
+		// return distancePl < epsilon ;
 	}
 
 	void printPlanes ( vector<plane> p){
@@ -150,7 +151,7 @@ namespace generalMethods{
 	bool ifVertexOnPlane(plane p, vertex3D v) {
 		float magnitudeP = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;
 		float d = ( p.a*v.a+p.b*v.b + p.c*v.c - p.d ) / magnitudeP ;
-		return d< epsilon;
+		return abs(d)< epsilon;
 	}
 
 	bool ifEdgeOnPlane(plane p, edge3D e) {

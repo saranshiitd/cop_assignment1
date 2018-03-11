@@ -233,7 +233,7 @@ vector<plane> wireFrame::generatePlanes(){
 		// for evey edge pair
 		for (vector<edge3D>::iterator j = i->e.begin(); j != i->e.end(); ++j){
 			// for evey edge pair
-			for (vector<edge3D>::iterator k = i->e.begin(); k != i->e.end(); ++j){
+			for (vector<edge3D>::iterator k = i->e.begin(); k != i->e.end(); ++k){
 				// for every adjacent edge
 				if(!(j == k )){
 					tempPlanes.push_back(generalMethods::makePlane(*j, *k));
