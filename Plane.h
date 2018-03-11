@@ -27,7 +27,7 @@ class Plane
 	private:
 
 		//! finds clockwise angle between two edges with a common vertex wrt a plane normal
-		float findAngle(edge3D refEdge, edge3D otherEdge, vertex3D refVertex, float[] normal) ; 
+		float findAngle(edge3D refEdge, edge3D otherEdge, vertex3D refVertex, float normal[]) ; 
 		//! find by getting vectors witth initial vertex refVertex clockwise angle is found by getting dot product 
 		//! of the two vectors with normal vector if dot product greater than 0 then negative 
 		//! of angle found by cos inverse dot product and vice versa 
