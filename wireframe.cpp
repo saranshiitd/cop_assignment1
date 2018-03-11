@@ -218,3 +218,17 @@ vector<vertexEdgeList> wireFrame::adjEdgesAtVertexList (vector<vertex3D> vList){
 
 	return tempVectorList;
 }
+
+vector<plane> generatePlanes(){
+
+	vector<plane> tempPlanes;
+
+	vector<vertexEdgeList> tempvertexEdgeList;
+
+	tempvertexEdgeList = wireFrame::adjEdgesAtVertexList(vertexList);
+
+	for (vector<vertex3D>::iterator i = vList.begin(); i != vList.end(); ++i){
+		tempVectorList.push_back(wireFrame::adjEdgesAtVertex(*i));
+	}
+
+}
