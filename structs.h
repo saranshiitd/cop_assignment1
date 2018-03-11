@@ -211,13 +211,13 @@ struct vertexEdgePair
 
 };
 
-struct edgeVertexPair
+struct edgeVertexTriplet
 {
 	vertex3D v ;
 	edge3D e ;
 	edge3D reference ; 
 
-	edgeVertexPair(vertex3D vertex , edge3D edge, edge3D r) {
+	edgeVertexTriplet(vertex3D vertex , edge3D edge, edge3D r) {
 		v = vertex ; 
 		e = edge ;
 		reference = r ;
