@@ -9,6 +9,31 @@ using namespace std;
 // vector<vertex3D> vertexList;
 // vector<edge3D> edgeList;
 
+void printVertex(vertex3D i){
+	std::cout<<i.a<<" "<<i.b<<" "<<i.c ;
+}
+
+void wireFrame::printVertices(){
+	/**
+	* print the vertexList
+	*/
+	cout << "Vertices in wireFrame: "<< "\n";
+
+	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
+		printVertex(*i);
+		cout << "\n";
+	}
+}
+
+void wireFrame::printEdges(){
+	/**
+	* print the edgeList
+	*/
+	cout << "Edges in wireFrame:" << "\n";
+	for (vector<edge3D>::const_iterator i = edgeList.begin(); i != edgeList.end(); ++i){
+		cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << "\n"; 
+	}
+}
 
 void wireFrame::addVertex(vertex3D v){
 	// return true if vertex is in vertexList

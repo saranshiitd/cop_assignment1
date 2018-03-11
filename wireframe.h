@@ -13,6 +13,14 @@ public:
 	vector<vertex3D> vertexList;
 	vector<edge3D> edgeList;
 	
+	//! generate wireframe form 3 vertices list --> front, top, side
+	//! and from three edges list --> front, top side
+	generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
+			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS );
+
+	//! print function for wireframe
+	void printVertices();
+	void printEdges();
 	/**
 	* add/remove vertex and edge to wireframe 
 	*/
