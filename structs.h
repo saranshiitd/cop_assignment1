@@ -9,6 +9,8 @@ using namespace std;
 
 // tolerance for error in floats
 float epsilon ; 
+#define epsilon 0.01
+
 
 struct vertex2D{
 	/**
@@ -20,7 +22,7 @@ struct vertex2D{
 	*/
 	float b;
 
-	float epsilon = 0.01 ;
+	// float epsilon = 0.01 ;
 
 	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex2D& n)
@@ -43,12 +45,12 @@ struct edge2D{
 	vertex2D v2;
 	bool hidden;
 
-	float epsilon = 0.01 ;
+	// float epsilon = 0.01 ;
 
 	// equality for two 2D edges  (method overloading)
 	bool operator==(const edge2D& n)
 	{
-	    return (v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden);
+	    return ((v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden)) || ((v1 == n.v2) && (v2 == n.v1) && ( hidden == n.hidden));
 	}
 };
 
@@ -69,7 +71,7 @@ struct vertex3D{
 	*/
  	float c;
 
- 	float epsilon = 0.01 ;
+ 	// float epsilon = 0.01 ;
 
  	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
@@ -94,7 +96,7 @@ struct edge3D{
 	// equality for two vertecies (method overloading)
 	bool operator==(const edge3D& n)
 	{
-	    return (v1 == n.v1) && (v2 == n.v2);
+	    return ((v1 == n.v1) && (v2 == n.v2)) || ((v1 == n.v2) && (v2 == n.v1));
 	}
 };
 
@@ -127,7 +129,7 @@ struct plane
 	float b;
 	float c;
 	float d;	
-	float epsilon = 0.01 ;
+	// float epsilon = 0.01 ;
 	bool operator==(const plane& rhs )
 	{	
 		// float scalarProduct = dotProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
@@ -145,7 +147,7 @@ struct direction
 	float x;
 	float y;
 	float z;
-	float epsilon = 0.01 ;
+	// float epsilon = 0.01 ;
 	bool operator==(const direction& rhs )
 	{
 		float v1[] = {x, y, z};
