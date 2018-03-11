@@ -217,6 +217,7 @@ struct edgeVertexTriplet
 	edge3D e ;
 	edge3D reference ; 
 
+	edgeVertexTriplet(){}
 	edgeVertexTriplet(vertex3D vertex , edge3D edge, edge3D r) {
 		v = vertex ; 
 		e = edge ;
