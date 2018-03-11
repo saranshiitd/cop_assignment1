@@ -216,12 +216,13 @@ struct edgeVertexTriplet
 	vertex3D v ;
 	edge3D e ;
 	edge3D reference ; 
-
+	plane p ;
 	edgeVertexTriplet(){}
-	edgeVertexTriplet(vertex3D vertex , edge3D edge, edge3D r) {
+	edgeVertexTriplet(vertex3D vertex , edge3D edge, edge3D r, plane pln) {
 		v = vertex ; 
 		e = edge ;
 		reference = r ;
+		p = pln ;
 	}
 };
 
