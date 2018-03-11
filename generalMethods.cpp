@@ -86,7 +86,7 @@ namespace generalMethods{
 			bool e2v1Ine1 = ( e2v1e1 < 0 );
 			float e2v2e1v1[] = {e2.v2.a-e1.v1.a,e2.v2.b-e1.v1.b,e2.v2.c-e1.v1.c} ; // check whether vertex2 of edge2 is in edge1
 			float e2v2e1v2[] = {e2.v2.a-e1.v2.a,e2.v2.b-e1.v2.b,e2.v2.c-e1.v2.c} ;
-			float e2v2e1 = dotProduct(e2v2e1v1,e1v2e2v2) ; 
+			float e2v2e1 = dotProduct(e2v2e1v1,e2v2e1v2) ; 
 			bool e2v2Ine1 = ( e2v2e1 < 0 ) ;
 			
 			return e1v1Ine2 || e1v2Ine2 || e2v1Ine1 || e2v2Ine1 ;
@@ -184,7 +184,7 @@ namespace generalMethods{
 
 	bool checkHidden(plane p, edge3D e, float[] direction) {
 		float largeNumber = 100000.0f ; 
-		float[] farAwayVector = {direction[0]*largeNumber , direction[1]*largeNumber , direction[2]*largeNumber  }	;
+		float farAwayVector[] = {direction[0]*largeNumber , direction[1]*largeNumber , direction[2]*largeNumber  }	;
 		vertex3D vertex1 =  e.v1 ; 
 		vertex3D vertex2 =  e.v2 ; 
 		float pv1 = vertex1.a*p.a + vertex1.b*p.b + vertex1.c*p.c - p.d ;
