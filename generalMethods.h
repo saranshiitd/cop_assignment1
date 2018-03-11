@@ -58,7 +58,7 @@ namespace generalMethods{
 	/**
 	* removes duplicate planes 
 	*/
-	std::vector<plane> removeDuplicate(std::vector<plane> v);
+	void removeDuplicate(std::vector<plane> v);
 	
 	/**
 	* returns distance between two planes 
@@ -68,8 +68,9 @@ namespace generalMethods{
 	/**
 	* returns distance between a edge and a plane 
 	*/
-	float findDistanceOfEdgeFromPlane (plane p, edge3D e);
+	bool ifEdgeOnPlane (plane p, edge3D e);
 
+	bool ifVertexOnPlane(plane p,  vertex3D v ) ;
 	/**
 	* takes a plane and e_list and returns the list of edges on that plane 
 	*/
@@ -96,7 +97,7 @@ namespace generalMethods{
 	/**
 	* check if plane hides an edge from direction 
 	*/
-	bool checkHidden(plane p , edge3D e , edge3D direction) ; /* still trying to formulate the probelem */
+	bool checkHidden(plane p , edge3D e , float direction) ; /* still trying to formulate the probelem */
 	/**
 	* HOW TO CHECK HIDDEN : 
 	* first check both end points of edge lie on same side of plane substitute the take product and multiply result should be greater than 0
