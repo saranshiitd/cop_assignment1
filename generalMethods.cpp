@@ -2,6 +2,7 @@
 #include "basicLoopEdgeSet.h"
 #include "faceLoop.h"
 #include "bodyLoop.h"
+#include "generalMethods.h"
 #include <math.h> 
 #include <cstdlib>
 #include <climits>
@@ -125,6 +126,11 @@ namespace generalMethods{
 		return distancePl < epsilon ;
 	}
 
+	void printPlanes ( vector<plane> p){
+		for (vector<plane>::iterator i = p.begin(); i != p.end(); ++i){
+			cout<<i.a<<" "<<i.b<<" "<<i.c<<" "<<i.d<<"\n" ;
+		}
+	}
 	void removeDuplicate(std::vector<plane> planes){
 
 		std::unique (planes.begin(), planes.end(), planeEqual); 
