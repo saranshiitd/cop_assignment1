@@ -23,7 +23,7 @@ bool EdgeList2D::containsEdge (edge2D e){
 	if (find(edgeList.begin(), edgeList.end(), e) != edgeList.end() )
 		return true;
 	else
-		false;	
+		return false;	
 }
 
 

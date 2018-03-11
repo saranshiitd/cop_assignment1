@@ -42,7 +42,13 @@ struct edge2D{
 	* end point 2 
 	*/
 	vertex2D v2;
-	bool hidden;
+
+	edge2D(vertex2D m, vertex2D n){
+		v1 = m;
+		v2 = n;
+	}
+	
+	bool hidden = false;
 
 	// float epsilon = 0.01 ;
 

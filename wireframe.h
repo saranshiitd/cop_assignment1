@@ -3,6 +3,8 @@
 
 #include<vector>
 #include "structs.h"
+#include "VertexList2D.h"
+#include "EdgeList2D.h"
 
 using namespace std;
 class wireFrame
@@ -15,8 +17,8 @@ public:
 	
 	//! generate wireframe form 3 vertices list --> front, top, side
 	//! and from three edges list --> front, top side
-	void generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
-			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS );
+	void generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
+			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS );
 
 	//! print function for wireframe
 	void printVertices();

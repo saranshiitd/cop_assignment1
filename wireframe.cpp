@@ -2,7 +2,9 @@
 #include<algorithm>
 #include<iostream>
 #include "wireframe.h"
-
+#include "VertexList2D.h"
+#include "EdgeList2D.h"
+#include "structs.h"
 using namespace std;
 
 //! data structures inside wireframe class
@@ -15,8 +17,8 @@ using namespace std;
 * side ->. (x, 0, z)
 */
 
-void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_listT, vector<vertex2D> v_listS,
-			vector<edge2D> e_listF, vector<edge2D> e_listT, vector<edge2D> e_listS ){
+void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
+			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS ){
 
 	/**
 	* choose a vertex from each projection and match its coordinates
@@ -25,14 +27,14 @@ void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_l
 
 // generate all the 3D vertices
 	// travese the front-vertices list
-	for (vector<vertex2D>::const_iterator i = v_listT.begin(); i != v_listT.end(); ++i){
+	for (vector<vertex2D>::const_iterator i = v_listT.vertexList.begin(); i != v_listT.vertexList.end(); ++i){
 		// traverse the top-vertices list
-		for (vector<vertex2D>::const_iterator j = v_listF.begin(); j != v_listF.end(); ++j){
+		for (vector<vertex2D>::const_iterator j = v_listF.vertexList.begin(); j != v_listF.vertexList.end(); ++j){
 			// traverse the side vertices list
-			for (vector<vertex2D>::const_iterator k = v_listS.begin(); k != v_listS.end(); ++k){
+			for (vector<vertex2D>::const_iterator k = v_listS.vertexList.begin(); k != v_listS.vertexList.end(); ++k){
 				// == operator is overloaded in structs
-				if (( i->v1 == k->v1 ) && ( i->v2 == j->v2 ) && ( j->v2 == k->v2 ) ){
-					vertex3D tempVertex = {i->v1, i->v2, j->v2};
+				if (( i->a == k->a ) && ( i->b == j->b ) && ( j->b == k->b ) ){
+					vertex3D tempVertex = {i->a, i->b, j->b};
 					wireFrame::addVertex(tempVertex);
 				}
 
@@ -40,8 +42,22 @@ void wireFrame::generateWireFrame(vector<vertex2D> v_listF, vector<vertex2D> v_l
 		}
 	}
 
+// generate all the 3D edges
+	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
+		for (vector<vertex3D>::const_iterator j = vertexList.begin(); j != vertexList.end(); ++j){
+			// edges between different vertices
+			if (!(i == j)){
+				// make 3 temp edges to check if they exist in real projections
+				edge2D topTempEdge =    { { i->a, i->b } , { j->a, j->b } };
+				edge2D frontTempEdge =  { { i->b, i->c } , { j->b, j->c } };
+				edge2D sideTempEdge =   { { i->a, i->c } , { j->a, j->c } };
 
-
+				if( e_listT.containsEdge(topTempEdge) && e_listF.containsEdge(frontTempEdge) && e_listS.containsEdge(sideTempEdge)){
+					wireFrame::addEdge (*i, *j);
+				}
+			}
+		}
+	}
 }
 
 void printVertex(vertex3D i){
