@@ -183,24 +183,36 @@ vector<vertex3D> getVerticesFromEdges(vector<edge3D> e){
 	}
 }
 
+vector<edge3D> findAllCollinearOverlapingEdges(vector<edge3D> edgeList, vector<edge3D> E, edge3D ei){
+	for (vector<edge3D>::iterator i = edgeList.begin(); i != edgeList.end(); ++i){
+		if(!(*i == ei)){
+			for (vector<edge3D>::iterator j = E.begin(); j != E.end(); ++j){
+				if( generalMethods::checkOverlapCollinear(*i, *j)){
+					E.push_back(*i);
+					break;
+				}
+			}		
+		}
+	}
+	return E;
+}
+
 //! remove all overlapping edges and insert non-overlapping edges in place of them
 void wireFrame::resolveOverlap(){
 
 	vector<edge3D> unexaminedEdges = edgeList;
 
-	vector<edge3D> E;
-
 	// until there is some unexamined edge
 	while(unexaminedEdges.size()!=0){
+		vector<edge3D> E;
 		// put a element from unexamined edges in E ==>  E <- {e{i}}  
 		E.push_back(unexaminedEdges.at(0));
 
-		findAllCollinearOverlapingEdges(edgeList, E);
+		vector<edge3D> E = findAllCollinearOverlapingEdges(edgeList, E, E.at(0));
 
 		// if no edge is collinear and overlaping then mark that edge as examined
-		if(E.size()==1){
-		  	 	unexaminedEdges.erase(remove(unexaminedEdges.begin(), unexaminedEdges.end(), E.at(0)), unexaminedEdges.end());
-		}
+		if(E.size()==1)
+		  	 unexaminedEdges.erase(remove(unexaminedEdges.begin(), unexaminedEdges.end(), E.at(0)), unexaminedEdges.end());
 		else{
 			removeEdges(E);
 			removeEdgesFromEdgeList(unexaminedEdges, E);
@@ -210,8 +222,8 @@ void wireFrame::resolveOverlap(){
 			for(vector<vertex3D>::int i = 0; i != v.size()-1; i++) {
 			   	addEdge({sortedVertices.at(i), sortedVertices.at(1)});
 			}
+		}
 	}
-
 }
 
 // returns the number of edges shared at vertex v 
