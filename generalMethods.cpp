@@ -23,6 +23,36 @@ namespace generalMethods{
 	//     }
 	// };
 
+	bool comparePairs(vertexEdgePair pair1 , vertexEdgePair pair2 ) {
+		float vector1[] = {pair1.v.a-pair2.v.a,pair1.v.b-pair2.v.b,pair1.v.c-pair2.v.c} ;
+		float vector2[] = {pair2.e.v1.a-pair2.e.v2.a,pair2.e.v1.b-pair2.e.v2.b,pair2.e.v1.c-pair2.e.v2.c} ;
+		float scalarProduct = dotProduct(vector1,vector2) ; 
+
+		if(scalarProduct > 0) return true ;
+		else return false ;
+
+	}
+
+	std::vector<vertex3D> sortVertices(std::vector<vertex3D> vertices, edge3D e) {
+
+		std::vector<vertexEdgePair> pairList; 
+		for (int i = 0; i < vertices.size(); ++i)
+		{
+			pairList.push_back(vertices[i]) ;
+		}
+
+		std::sort(pairList.begin(),pairList.end(),comparePairs) ;
+
+		std::vector<vertex3D> sorted;
+
+		for (int i = 0; i < pairList.size(); ++i)
+		{
+			sorted.push_back(pairList[i].v) ;
+		}
+
+		return sorted ; 
+	}
+
 	void printVertex(vertex3D i){
 		cout<<i.a<<" "<<i.b<<" "<<i.c ;
 	}
@@ -49,15 +79,7 @@ namespace generalMethods{
 		}
 	}
 
-	bool compareVertices(vertex3D v1 , vertex3D v2 , edge3D e) {
-		float vector1[] = {v1.a-v2.a,v1.b-v2.b,v1.c-v2.c} ;
-		float vector2[] = {e.v1.a-e.v2.a,e.v1.b-e.v2.b,e.v1.c-e.v2.c} ;
-		float scalarProduct = dotProduct(vector1,vector2) ; 
-
-		if(scalarProduct > 0) return true ;
-		else return false ;
-
-	}
+	
 
 
 	bool checkOverlapCollinear(edge3D e1 , edge3D e2) {
