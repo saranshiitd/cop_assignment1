@@ -15,11 +15,15 @@ namespace generalMethods{
 	*/
 	std::vector<vertex2D> sortVertices(std::vector<vertex2D> V, edge2D e);
 
-
+	void printVertex(vertex3D i);
+	void printVerticesList (vector<vertex3D> v);
 
 	/**
 	* -----------------methods of edges----------------------------- 
 	*/
+
+	void printEdgeList (vector<edge3D> e);
+
 	/**
 	* check if edges overlap and collinear 
 	*/

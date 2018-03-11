@@ -5,7 +5,7 @@
 #include <math.h> 
 #include <cstdlib>
 #include <climits>
-
+#include <iostream>
 namespace generalMethods{
 
 	// class adder: public binary_function<vertex3D, vertex3D, edge3D> {
@@ -21,7 +21,32 @@ namespace generalMethods{
 	//     }
 	// };
 
-	
+	void printVertex(vertex3D i){
+		cout<<i.a<<" "<<i.b<<" "<<i.c ;
+	}
+
+	void printVerticesList (vector<vertex3D> v){
+			/**
+			* print the vertexList
+			*/
+			cout << "Vertices: "<< "\n";
+
+			for (vector<vertex3D>::const_iterator i = v.begin(); i != v.end(); ++i){
+				printVertex(*i);
+				cout << "\n";
+			}
+	}
+
+	void printEdgeList (vector<edge3D> e){
+			/**
+		* print the edgeList
+		*/
+		cout << "Edges:" << "\n";
+		for (vector<edge3D>::const_iterator i = e.begin(); i != e.end(); ++i){
+			cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << "\n"; 
+		}
+	}
+
 	bool compareVertices(vertex3D v1 , vertex3D v2 , edge3D e) {
 		float vector1[] = {v1.a-v2.a,v1.b-v2.b,v1.c-v2.c} ;
 		float vector2[] = {e.v1.a-e.v2.a,e.v1.b-e.v2.b,e.v1.c-e.v2.c} ;
