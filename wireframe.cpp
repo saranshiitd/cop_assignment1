@@ -174,13 +174,14 @@ vector<vertex3D> getVerticesFromEdges(vector<edge3D> e){
 
 	for (vector<edge3D>::iterator i = e.begin(); i != e.end(); ++i){
 		// if vector does not exist in list --> push it
-		if (find(tempList.begin(), tempList.end(), i->v1) == vertexList.end() ){
+		if (find(tempList.begin(), tempList.end(), i->v1) == tempList.end() ){
 			tempList.push_back(i->v1);
 		}
-		if (find(tempList.begin(), tempList.end(), i->v2) == vertexList.end() ){
+		if (find(tempList.begin(), tempList.end(), i->v2) == tempList.end() ){
 			tempList.push_back(i->v2);
 		}	
 	}
+	return tempList;
 }
 
 vector<edge3D> findAllCollinearOverlapingEdges(vector<edge3D> edgeList, vector<edge3D> E, edge3D ei){
@@ -208,7 +209,7 @@ void wireFrame::resolveOverlap(){
 		// put a element from unexamined edges in E ==>  E <- {e{i}}  
 		E.push_back(unexaminedEdges.at(0));
 
-		vector<edge3D> E = findAllCollinearOverlapingEdges(edgeList, E, E.at(0));
+		E = findAllCollinearOverlapingEdges(edgeList, E, E.at(0));
 
 		// if no edge is collinear and overlaping then mark that edge as examined
 		if(E.size()==1)
@@ -217,9 +218,8 @@ void wireFrame::resolveOverlap(){
 			removeEdges(E);
 			removeEdgesFromEdgeList(unexaminedEdges, E);
 			vector<vertex3D> collinearOverlappingVertices = getVerticesFromEdges(E);
-			edge3D edgeDirection = { E.at(0).a - E.at(1).a , E.at(0).b - E.at(1).b , E.at(0).c - E.at(1).c };
-			vector<vertex3D> sortedVertices = generalMethods::sortVertices(collinearOverlappingVertices, edgeDirection);
-			for(vector<vertex3D>::int i = 0; i != v.size()-1; i++) {
+			vector<vertex3D> sortedVertices = generalMethods::sortVertices(collinearOverlappingVertices, E.at(0));
+			for(vector<vertex3D>::size_type i = 0; i != sortedVertices.size()-1; i++) {
 			   	addEdge({sortedVertices.at(i), sortedVertices.at(1)});
 			}
 		}

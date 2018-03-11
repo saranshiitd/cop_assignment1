@@ -13,7 +13,7 @@ namespace generalMethods{
 	/**
 	* sort the vertices along a given edge 
 	*/
-	std::vector<vertex2D> sortVertices(std::vector<vertex2D> V, edge2D e);
+	std::vector<vertex3D> sortVertices(std::vector<vertex3D> V, edge3D e);
 
 	void printVertex(vertex3D i);
 	void printVerticesList (vector<vertex3D> v);
