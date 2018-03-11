@@ -122,7 +122,8 @@ namespace generalMethods{
 	}
 
 	bool planeEqual(plane p1 , plane p2) {
-		return p1 == p2 ;
+		float distancePl = findDistanceBetweenPlanes(p1,p2) ; 
+		return distancePl < epsilon ;
 	}
 
 	void printPlanes ( vector<plane> p){
@@ -138,8 +139,50 @@ namespace generalMethods{
 
 	float findDistanceBetweenPlanes(plane p, plane q) {
 
-		vectorMag1 = (p.a*p.a+p.b*p.b+p.c*p.c)		
-
+		vectorMag1 = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;		
+		vectorMag2 = sqrt(q.a*q.a+q.b*q.b+q.c*q.c) ;
+		float d1 = p.d/vectorMag1 ;		
+		float d2 = q.d/vectorMag2 ;		
+		return abs(d1-d2) ; 
 	}
+
+	bool ifVertexOnPlane(plane p, vertex3D v) {
+		float magnitudeP = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;
+		float d = ( p.a*v.a+p.b*v.b + p.c*v.c - p.d ) / magnitudeP ;
+		return d< epsilon;
+	}
+
+	bool ifEdgeOnPlane(plane p, edge3D e) {
+		bool checkV1 = ifVertexOnPlane(p,e.v1) ;
+		bool checkV2 = ifVertexOnPlane(p,e.v2) ;
+		return checkV1 && checkV2 ;
+	}
+
+	std::vector<edge3D> findEdgesOnPlane(plane p, std::vector<edge3D> eList) {
+
+		std::vector<edge3D> edgeList;
+		edge3D currentEdge ; 
+		for (int i = 0; i < eList.size(); i++)
+		{
+			currentEdge = eList[i] ; 
+			if(!(ifEdgeOnPlane(currentEdge))) edgeList.push_back(currentEdge) ;
+		}
+		return edgeList ;
+	}
+
+	std::vector<vertex3D> findEdgesOnPlane(plane p, std::vector<vertex3D> eop) {
+
+		std::vector<vertex3D> vertexList;
+		edge3D currentVertex ; 
+		for (int i = 0; i < eop.size(); i++)
+		{
+			currentVertex = eop[i] ; 
+			if(!(ifVertexOnPlane(currentVertex))) vertexList.push_back(currentVertex) ;
+		}
+		return vertexList ;
+	}
+
+
+	
 
 }
