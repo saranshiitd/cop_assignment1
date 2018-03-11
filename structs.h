@@ -199,5 +199,18 @@ struct direction
 
 };
 
+struct vertexEdgePair
+{
+	vertex3D v ;
+	edge3D e ;
+
+	vertexEdgePair(vertex3D vertex , edge3D  edge) {
+		v = vertex ;
+		e = edge ; 
+	}
+
+	
+
+};
 
 #endif
