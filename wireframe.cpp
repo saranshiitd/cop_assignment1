@@ -5,6 +5,7 @@
 #include "VertexList2D.h"
 #include "EdgeList2D.h"
 #include "structs.h"
+#include "generalMethods.h"
 using namespace std;
 
 //! data structures inside wireframe class
@@ -219,29 +220,26 @@ vector<vertexEdgeList> wireFrame::adjEdgesAtVertexList (vector<vertex3D> vList){
 	return tempVectorList;
 }
 
-vector<plane> generatePlanes(){
+vector<plane> wireFrame::generatePlanes(){
 
 	vector<plane> tempPlanes;
 
 	vector<vertexEdgeList> tempvertexEdgeList;
 
-	tempvertexEdgeList = wireFrame::adjEdgesAtVertexList(vertexList);
-
-	for (vector<vertex3D>::iterator i = vList.begin(); i != vList.end(); ++i){
-		tempVectorList.push_back(wireFrame::adjEdgesAtVertex(*i));
-	}
+	tempvertexEdgeList = adjEdgesAtVertexList(vertexList);
 
 	// over each vertex
 	for (vector<vertexEdgeList>::iterator i = tempvertexEdgeList.begin(); i != tempvertexEdgeList.end(); ++i){
 		// for evey edge pair
-		for (vector<edge3D>::iterator j = i.e.begin(); j != i.e.end(); ++j){
+		for (vector<edge3D>::iterator j = i->e.begin(); j != i->e.end(); ++j){
 			// for evey edge pair
-			for (vector<edge3D>::iterator k = i.e.begin(); k != i.e.end(); ++j){
+			for (vector<edge3D>::iterator k = i->e.begin(); k != i->e.end(); ++j){
 				// for every adjacent edge
 				if(!(j == k )){
-					tempPlanes.push_back(generalMethods::makePlane(j, k));
+					tempPlanes.push_back(generalMethods::makePlane(*j, *k));
 				}
 			}
 		}
+	}
 	return tempPlanes;
 }

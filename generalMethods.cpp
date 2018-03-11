@@ -7,6 +7,7 @@
 #include <cstdlib>
 #include <climits>
 #include <iostream>
+
 namespace generalMethods{
 
 	// class adder: public binary_function<vertex3D, vertex3D, edge3D> {
@@ -128,7 +129,7 @@ namespace generalMethods{
 
 	void printPlanes ( vector<plane> p){
 		for (vector<plane>::iterator i = p.begin(); i != p.end(); ++i){
-			cout<<i.a<<" "<<i.b<<" "<<i.c<<" "<<i.d<<"\n" ;
+			cout<<i->a<<" "<<i->b<<" "<<i->c<<" "<<i->d<<"\n" ;
 		}
 	}
 	void removeDuplicate(std::vector<plane> planes){
@@ -139,8 +140,8 @@ namespace generalMethods{
 
 	float findDistanceBetweenPlanes(plane p, plane q) {
 
-		vectorMag1 = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;		
-		vectorMag2 = sqrt(q.a*q.a+q.b*q.b+q.c*q.c) ;
+		float vectorMag1 = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;		
+		float vectorMag2 = sqrt(q.a*q.a+q.b*q.b+q.c*q.c) ;
 		float d1 = p.d/vectorMag1 ;		
 		float d2 = q.d/vectorMag2 ;		
 		return abs(d1-d2) ; 
@@ -165,7 +166,7 @@ namespace generalMethods{
 		for (int i = 0; i < eList.size(); i++)
 		{
 			currentEdge = eList[i] ; 
-			if(!(ifEdgeOnPlane(currentEdge))) edgeList.push_back(currentEdge) ;
+			if(!(generalMethods::ifEdgeOnPlane(p, currentEdge))) edgeList.push_back(currentEdge) ;
 		}
 		return edgeList ;
 	}
@@ -173,18 +174,18 @@ namespace generalMethods{
 	std::vector<vertex3D> findVerticesOnPlane(plane p, std::vector<vertex3D> eop) {
 
 		std::vector<vertex3D> vertexList;
-		edge3D currentVertex ; 
+		vertex3D currentVertex ; 
 		for (int i = 0; i < eop.size(); i++)
 		{
 			currentVertex = eop[i] ; 
-			if(!(ifVertexOnPlane(currentVertex))) vertexList.push_back(currentVertex) ;
+			if(!(ifVertexOnPlane(p, currentVertex))) vertexList.push_back(currentVertex) ;
 		}
 		return vertexList ;
 	}
 
-	bool checkHidden(plane p, edge3D e, float[] direction) {
+	bool checkHidden(plane p, edge3D e, float direction[]) {
 		float largeNumber = 100000.0f ; 
-		float[] farAwayVector = {direction[0]*largeNumber , direction[1]*largeNumber , direction[2]*largeNumber  }	;
+		float farAwayVector[] = {direction[0]*largeNumber , direction[1]*largeNumber , direction[2]*largeNumber  }	;
 		vertex3D vertex1 =  e.v1 ; 
 		vertex3D vertex2 =  e.v2 ; 
 		float pv1 = vertex1.a*p.a + vertex1.b*p.b + vertex1.c*p.c - p.d ;

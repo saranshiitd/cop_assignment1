@@ -21,7 +21,7 @@ main.o: wireframe.h EdgeList2D.h generalMethods.h Plane.h VertexList2D.h basicLo
 VertexList2D.o: VertexList2D.h structs.h	
 	$(CXX) $(CXXFLAGS) -c VertexList2D.cpp
 
-wireframe.o: wireframe.h structs.h EdgeList2D.h
+wireframe.o: wireframe.h structs.h EdgeList2D.h VertexList2D.h generalMethods.h
 	$(CXX) $(CXXFLAGS) -c wireframe.cpp
 
 EdgeList2D.o: EdgeList2D.h structs.h
