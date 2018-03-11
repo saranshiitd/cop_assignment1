@@ -38,7 +38,7 @@ namespace generalMethods{
 		std::vector<vertexEdgePair> pairList; 
 		for (int i = 0; i < vertices.size(); ++i)
 		{
-			pairList.push_back(vertices[i]) ;
+			pairList.push_back({vertices[i], e}) ;
 		}
 
 		std::sort(pairList.begin(),pairList.end(),comparePairs) ;
