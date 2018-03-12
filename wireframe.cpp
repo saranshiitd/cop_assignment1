@@ -354,6 +354,32 @@ edge3D findNextEdge(vector<edge3D> eList, edge3D e){
 	return eList.at(0);
 }
 
+// arrange the vertices in one direction -->   v1-->v2-->v3-->v4-->v1
+basicLoopEdgeSet arrangeVerticesInOneDirecton(basicLoopEdgeSet bles){
+
+	edge3D eTemp;
+	vector<edge3D> tempEList;
+	eTemp = {bles.eList.at(0).v2, bles.eList.at(0).v1};
+	tempEList.push_back(eTemp);
+	vertex3D vTemp = tempEList.at(0).v2;
+	for (int i = 0; i < bles.eList.size()-1; i++)
+	{
+		if(bles.eList.at(i+1).v1 == vTemp){
+			tempEList.push_back(bles.eList.at(i+1));
+			vTemp = tempEList.at(i+1).v2;
+		}
+		else{
+			eTemp = {bles.eList.at(i+1).v2, bles.eList.at(i+1).v1};
+			tempEList.push_back(eTemp);
+			vTemp = bles.eList.at(i+1).v1;
+		}
+	}
+
+	basicLoopEdgeSet b;
+	b.eList = tempEList;
+	return b;
+}
+
 // takes a plane vertex Edge List and returns all basic loops on that plane
 vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane){
 	
@@ -399,6 +425,7 @@ vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vec
 		}
 		//cout << "Anyone here"<<"\n";
 		// add this loop to set and remove all the edges of this loop
+		tempBasicLoop = arrangeVerticesInOneDirecton(tempBasicLoop);
 		basicLoopVectorToBeReturned.push_back(tempBasicLoop);
 		//cout << "Before: ";
 		//generalMethods::printEdgeList(tempEdgesOnPlane);cout << "\n";

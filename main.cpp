@@ -148,6 +148,7 @@ int main(){
 		tempBasicLoopEdgeSet = wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane);
 		for (int j = 0; j < tempBasicLoopEdgeSet.size(); j++)
 		{
+			//cout << tempBasicLoopEdgeSet.at(j).eList.size();
 			generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(j).eList);
 			cout << "\n";
 		}
