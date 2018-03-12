@@ -350,8 +350,8 @@ namespace generalMethods{
 
 	// assumes verices are in order 
 	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2,plane p){
-		std::vector<edge3D> edgesInFL1 = fl1.eList;
-		std::vector<edge3D> edgesInFL2 = fl2.eList ;
+		std::vector<edge3D> edgesFL1 = fl1.eList;
+		std::vector<edge3D> edgesFL2 = fl2.eList ;
 		std::vector<vertex3D> verticesFL1 ;
 		std::vector<vertex3D> verticesFL2 ;
 
@@ -368,7 +368,7 @@ namespace generalMethods{
 		bool fl1InFl2  ;
 		for (int i = 0; i < verticesFL1.size() ; ++i)
 		{
-			fl1InFl2 = isInside(verticesFL2 , verticesFL2.size() , verticesFL1[i] ,edgesInFl2[0] ,  p) ; 
+			fl1InFl2 = isInside(verticesFL2 , verticesFL2.size() , verticesFL1[i] ,edgesFl2[0] ,  p) ; 
 			if (!fl1InFl2)
 			{
 				break ;
@@ -382,7 +382,7 @@ namespace generalMethods{
 		bool fl2InFl1  ;
 		for (int i = 0; i < verticesFL2.size() ; ++i)
 		{
-			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , edgesInFl1[0] , p) ; 
+			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , edgesFl1[0] , p) ; 
 			if (!fl2InFl1)
 			{
 				break ;
