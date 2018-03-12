@@ -12,6 +12,7 @@ namespace generalMethods{
 	//! print methods
 	void printVertex(vertex3D i);
 	void printVerticesList (vector<vertex3D> v);
+	void printEdge (edge3D i);
 	void printEdgeList (vector<edge3D> e);
 	void printPlane (plane p);
 	void printPlanes (vector<plane> p);
@@ -65,9 +66,8 @@ namespace generalMethods{
 	* use this to make all possible planes and then remove the duplicate ones 
 	*/
 
-	/**
-	* removes duplicate planes 
-	*/
+
+	// remove duplicate planes
 	std::vector<plane> removeDuplicate(std::vector<plane> v);
 	
 	/**

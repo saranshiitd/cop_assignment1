@@ -30,18 +30,25 @@ namespace generalMethods{
 			}
 	}
 
+	void printEdge (edge3D i){
+			/**
+		* print the edgeList
+		*/
+		cout << " {"; printVertex(i.v1); cout <<"} {"; printVertex(i.v2); cout << "}" << " || "; 
+	}
+
 	void printEdgeList (vector<edge3D> e){
 			/**
 		* print the edgeList
 		*/
-		cout << "Edges || " << "\n";
+		cout << "Edges --> ";
 		for (vector<edge3D>::const_iterator i = e.begin(); i != e.end(); ++i){
-			cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << " || "; 
+			cout << " {"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << " || "; 
 		}
 	}
 
 	void printPlane (plane i){
-			cout<<i.a<<"x + "<<i.b<<"y + "<<i.c<<"z = "<<i.d<< " || " ;
+			cout<<i.a<<"x + "<<i.b<<"y + "<<i.c<<"z = "<<i.d<< "  " ;
 	}
 
 	void printPlanes ( vector<plane> p){
@@ -51,8 +58,9 @@ namespace generalMethods{
 	}
 
 	void printVEList (vertexEdgeList veList){
+		cout << "Vertex --> ";
 		printVertex(veList.v);
-		cout << " --> ";
+		cout << " || ";
 		printEdgeList(veList.e);
 		cout << "\n";
 	}
@@ -220,7 +228,7 @@ namespace generalMethods{
 		for (int i = 0; i < eList.size(); i++)
 		{
 			currentEdge = eList[i] ; 
-			if(!(generalMethods::ifEdgeOnPlane(p, currentEdge))) edgeList.push_back(currentEdge) ;
+			if((generalMethods::ifEdgeOnPlane(p, currentEdge))) edgeList.push_back(currentEdge) ;
 		}
 		return edgeList ;
 	}
@@ -232,7 +240,7 @@ namespace generalMethods{
 		for (int i = 0; i < eop.size(); i++)
 		{
 			currentVertex = eop[i] ; 
-			if(!(ifVertexOnPlane(p, currentVertex))) vertexList.push_back(currentVertex) ;
+			if(ifVertexOnPlane(p, currentVertex)) vertexList.push_back(currentVertex) ;
 		}
 		return vertexList ;
 	}
