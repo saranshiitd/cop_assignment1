@@ -94,7 +94,12 @@ public:
 	*/
 	vector<plane> generatePlanes() ; 
 
-	
+	/**
+	* removes redundent planes 
+	*/
+	std::vector<plane> removeRedundentPlanes(std::vector<plane> v);
+
+
 	// takes a plane vertex Edge List and returns all basic loops on that plane
 	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
 
