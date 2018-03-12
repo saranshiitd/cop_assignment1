@@ -5,6 +5,8 @@
 #include "faceLoop.h"
 #include "bodyLoop.h"
 
+#define INF 10000.0f
+
 namespace generalMethods{
 
 	//! print methods
@@ -112,6 +114,8 @@ namespace generalMethods{
 	* to determine whether the bodyloop is outer or inner by the method described in paper 
 	*/
 	bool getIfOuter(bodyLoop b) ;
+
+
 
 }
 
