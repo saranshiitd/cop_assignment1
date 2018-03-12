@@ -77,10 +77,9 @@ namespace generalMethods{
 	std::vector<edge3D> findEdgesOnPlane (plane p, std::vector<edge3D> eList);
 
 	/**
-	* takes a plane and all edges on a plane (found using findEdgesOnPlane) 
-	* and returns all the vertices on that plane 
+	* takes a plane and all vertices and returns all the vertices on that plane 
 	*/ 
-	std::vector<vertex3D> findVerticesOnPlane (plane p, std::vector<edge3D> eop);	
+	std::vector<vertex3D> findVerticesOnPlane (plane p, std::vector<vertex3D> eop);	
 
 
 	/**

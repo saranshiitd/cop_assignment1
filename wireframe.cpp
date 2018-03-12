@@ -285,3 +285,4 @@ vector<plane> wireFrame::generatePlanes(){
 	}
 	return tempPlanes;
 }
+
