@@ -265,13 +265,13 @@ namespace generalMethods{
 	bool onEdge(vertex3D v , edge3D edge){ // check if edge contains v
 		vertex3D v1 = edge.v1 ;
 		vertex3D v2 = edge.v2 ;
-		if (v.a <= std::max(v1.a,v2.a) && v.a => std::min(v1.a,v2.a) && v.b <= std::max(v1.b,v2.b) && v.b => std::min(v1.b,v2.b) && v.c <= std::max(v1.c,v2.c) && v.c => std::min(v1.c,v2.c)) return true ;
+		if (v.a <= std::max(v1.a,v2.a) && v.a >= std::min(v1.a,v2.a) && v.b <= std::max(v1.b,v2.b) && v.b >= std::min(v1.b,v2.b) && v.c <= std::max(v1.c,v2.c) && v.c >= std::min(v1.c,v2.c)) return true ;
 		return false ; 
 	}
 
 	// returns 0 if points collinear 
 	// returns 1 if points clockwise and 2 otherwise 
-	int orientation(Point p, Point q, Point r , plane p )
+	int orientation(vertex3D p, vertex3D q, vertex3D r , plane p )
 	{	
 		float normal[] = {p.a,p.b,p.c} ;
 		float vector1 = {r.a - q.a , r.b - q.b ,r.c - q.c} ; 
