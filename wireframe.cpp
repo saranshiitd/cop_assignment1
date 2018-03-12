@@ -6,7 +6,9 @@
 #include "EdgeList2D.h"
 #include "structs.h"
 #include "generalMethods.h"
+#include "Plane.h"
 using namespace std;
+
 
 //! data structures inside wireframe class
 // vector<vertex3D> vertexList;
@@ -251,6 +253,20 @@ vertexEdgeList wireFrame::adjEdgesAtVertex (vertex3D v){
 	return tempList;
 }
 
+
+// for gettind veList with edges on plane
+vertexEdgeList wireFrame::adjEdgesAtVertexPlane (vertex3D v , std::vector<edge3D> edges){
+	vertexEdgeList tempList;
+	tempList.v = v;
+
+	for (vector<edge3D>::iterator i = edges.begin(); i != edges.end(); ++i){
+		if( i->v1 == v || i->v2 == v){
+			tempList.e.push_back(*i);
+		}
+	}
+	return tempList;
+}
+
 vector<vertexEdgeList> wireFrame::adjEdgesAtVertexList (vector<vertex3D> vList){
 
 	vector<vertexEdgeList> tempVectorList;
@@ -286,8 +302,50 @@ vector<plane> wireFrame::generatePlanes(){
 	return tempPlanes;
 }
 
-planeVEL wireframe::getVEListOnPlane(plane p){
-
+vertexEdgeList wireFrame::sortVEList(vertexEdgeList veList , plane p) {
+	std::vector<edgeVertexTriplet> triplets ;
+	std::vector<edge3D> edgeList = veList.e ;
+	edgeVertexTriplet currentTriplet ;
+	edge3D ref = edgeList[0] ;
 	
+	for (int i = 0; i < edgeList.size(); i++)
+	{
+		currentTriplet = {veList.v , edgeList[i] , ref , p} ;
+		triplets.push_back(currentTriplet) ;
+
+	}
+
+	std::sort(triplets.begin(),triplets.end(), compareTriplets) ; 
+
+	std::vector<edge3D> sortedList;
+
+	for (int i = 0; i < triplets.size(); i++)
+	{
+		sortedList.push_back(triplets[i].e)  ;
+	}
+
+	vertexEdgeList sortedStruct = {veList.v , sortedList}  ;
+	return sortedStruct ;	
+}
+
+
+planeVEL wireFrame::getVEListOnPlane(plane p){
+
+		std::vector<edge3D> edgesOnPlane = generalMethods::findEdgesOnPlane(p , edgeList);
+		std::vector<vertex3D> verticesOnPlane = generalMethods::findVerticesOnPlane(p , vertexList);
+		std::vector<vertexEdgeList> velList ;
+		vertexEdgeList current_veList ; 
+		vertexEdgeList			 currentvel ;  ;
+		for (int i = 0; i < verticesOnPlane.size(); i++) 
+		{
+			 currentvel = adjEdgesAtVertexPlane(verticesOnPlane[i],edgesOnPlane) ;
+			 currentvel = sortVEList(currentvel , p) ;
+			 velList.push_back(currentvel)  ;
+		}
+
+		planeVEL toReturn = {p , velList} ;
+		return toReturn ; 
 
 }
+
+

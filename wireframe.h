@@ -75,6 +75,10 @@ public:
 	*/
 	void procedurePEVR() ;
 
+	vertexEdgeList adjEdgesAtVertexPlane (vertex3D v , std::vector<edge3D> edges) ; 
+
+
+	planeVEL getVEListOnPlane(plane p) ;
 	// /**
 	// * check if edges overlap and collinear 
 	// */
@@ -90,7 +94,7 @@ public:
 	*/
 	vector<plane> generatePlanes() ; 
 
-	planeVEL getVEListOnPlane(plane p); 
+	
 
 	
 

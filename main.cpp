@@ -107,5 +107,7 @@ int main(){
 	plane p2 = {2,4,6,7};
 
 	cout << (p1 == p2);
+
+	
 	return 0;
 }
