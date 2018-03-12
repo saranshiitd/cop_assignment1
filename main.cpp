@@ -98,14 +98,9 @@ int main(){
 	generalMethods::printPlanes(tempPlanes);
 
 	cout << "Planes Finally: \n";
-	generalMethods::removeDuplicate(tempPlanes);
+	tempPlanes = generalMethods::removeDuplicate(tempPlanes);
 	cout << tempPlanes.size() << "\n";
 	generalMethods::printPlanes(tempPlanes);
 
-
-	plane p1 = {1,2,3,4};
-	plane p2 = {2,4,6,7};
-
-	cout << (p1 == p2);
 	return 0;
 }

@@ -58,7 +58,7 @@ namespace generalMethods{
 	/**
 	* removes duplicate planes 
 	*/
-	void removeDuplicate(std::vector<plane> v);
+	std::vector<plane> removeDuplicate(std::vector<plane> v);
 	
 	/**
 	* returns distance between two planes 

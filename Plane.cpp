@@ -46,7 +46,7 @@ vertexEdgeList Plane::sortEdgesOnVertex (vertexEdgeList veList) {
 	
 	for (int i = 0; i < edgeList.size(); i++)
 	{
-		currentTriplet = {veList.v , edgeList[i] , ref } ;
+		currentTriplet = {veList.v , edgeList[i] , ref, p} ;
 		triplets.push_back(currentTriplet) ;
 
 	}

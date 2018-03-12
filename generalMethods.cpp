@@ -155,10 +155,15 @@ namespace generalMethods{
 			cout<<i->a<<" "<<i->b<<" "<<i->c<<" "<<i->d<<"\n" ;
 		}
 	}
-	void removeDuplicate(std::vector<plane> planes){
-
-		std::unique (planes.begin(), planes.end(), planeEqual); 
-
+	std::vector<plane> removeDuplicate(std::vector<plane> planes){
+		std::vector<plane> tempPlanes;
+		for (int i = 0; i < planes.size(); i++){
+			// return true if plane is in tempPlanes
+			if (find(tempPlanes.begin(), tempPlanes.end(), planes.at(i)) == tempPlanes.end() ){
+				tempPlanes.push_back(planes.at(i));
+			}
+		}
+		return tempPlanes;
 	}  
 
 	float findDistanceBetweenPlanes(plane p, plane q) {
