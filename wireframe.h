@@ -90,6 +90,8 @@ public:
 	*/
 	vector<plane> generatePlanes() ; 
 
+	planeVEL getVEListOnPlane(plane p); 
+
 	
 
 };

@@ -286,3 +286,8 @@ vector<plane> wireFrame::generatePlanes(){
 	return tempPlanes;
 }
 
+planeVEL wireframe::getVEListOnPlane(plane p){
+
+	
+
+}
