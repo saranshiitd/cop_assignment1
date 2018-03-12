@@ -363,7 +363,7 @@ namespace generalMethods{
 		bool fl1InFl2  ;
 		for (int i = 0; i < verticesFL1.size() ; ++i)
 		{
-			fl1InFl2 = isInside(verticesFL2 , verticesFL2.size() , verticesFL1[i] , p) ; 
+			fl1InFl2 = isInside(verticesFL2 , verticesFL2.size() , verticesFL1[i] ,edgesInFl2[0] ,  p) ; 
 			if (!fl1InFl2)
 			{
 				break ;
@@ -377,7 +377,7 @@ namespace generalMethods{
 		bool fl2InFl1  ;
 		for (int i = 0; i < verticesFL2.size() ; ++i)
 		{
-			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , p) ; 
+			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , edgesInFl2[0] , p) ; 
 			if (!fl2InFl1)
 			{
 				break ;
