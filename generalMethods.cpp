@@ -295,22 +295,24 @@ namespace generalMethods{
 		// source https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/
 		if(o1 != o2 && o3 != o4) return true ;
 		// Special Cases
+		edge3D edgep1q1 = {p1 , q1 };
+		edge3D edgep2q2 = {p1 , q1 }; 		 
 		// p1, q1 and p2 are colinear and p2 lies on segment p1q1
-		if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+		if (o1 == 0 && onSegment(p2, edgep1q1)) return true;
 
 		// p1, q1 and p2 are colinear and q2 lies on segment p1q1
-		if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+		if (o2 == 0 && onSegment(q2, edgep1q1)) return true;
 
 		// p2, q2 and p1 are colinear and p1 lies on segment p2q2
-		if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+		if (o3 == 0 && onSegment( p1  , edgep2q2) return true;
 
 		 // p2, q2 and q1 are colinear and q1 lies on segment p2q2
-		if (o4 == 0 && onSegment(p2, q1, q2)) return true;
+		if (o4 == 0 && onSegment(q1 , edgep2q2) return true;
 
 		return false; // Doesn't fall in any of the above cases
  	}
 
- 	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , float refDirection[], plane p )
+ 	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , float refDirection[], plane q )
 	{
 	// There must be at least 3 vertices in polygon[]
 		if (n < 3)  return false;
@@ -326,15 +328,18 @@ namespace generalMethods{
 
 		    // Check if the line segment from 'p' to 'extreme' intersects
 		    // with the line segment from 'polygon[i]' to 'polygon[next]'
-		    if (doIntersect(polygon[i], polygon[next], p, extreme,p))
+		    if (doIntersect(polygon[i], polygon[next], p, extreme,q))
 		    {
 		        // If the point 'p' is colinear with line segment 'i-next',
 		        // then check if it lies on segment. If it lies, return true,
 		        // otherwise false
-		        if (orientation(polygon[i], p, polygon[next],p) == 0)
-		           return onSegment(polygon[i], p, polygon[next],p);
+		        if (orientation(polygon[i], p, polygon[next],q) == 0)
+		        {	
+		        	edge3D tempEdge = {polygon[i] , polygon[next] } ;
+		            return onSegment(p ,  tempEdge) ;
+		        }
+		        	count++;
 
-		        count++;
 		    }
 		    i = next;
 		} while (i != 0);
@@ -346,7 +351,7 @@ namespace generalMethods{
 	// assumes verices are in order 
 	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2,plane p){
 		std::vector<edge3D> edgesFL1 = fl1.eList;
-		std::vector<edge3d> edgeFL2 = fl2.eList ;
+		std::vector<edge3D> edgesFL2 = fl2.eList ;
 		std::vector<vertex3D> verticesFL1 ;
 		std::vector<vertex3D> verticesFL2 ;
 
@@ -377,7 +382,7 @@ namespace generalMethods{
 		bool fl2InFl1  ;
 		for (int i = 0; i < verticesFL2.size() ; ++i)
 		{
-			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , edgesInFl2[0] , p) ; 
+			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , edgesInFl1[0] , p) ; 
 			if (!fl2InFl1)
 			{
 				break ;
