@@ -262,7 +262,7 @@ namespace generalMethods{
 
 	}
 
-	bool onEdge(vertex3D v , edge3D edge){ // check if edge contains v
+	bool onSegment(vertex3D v , edge3D edge){ // check if edge contains v
 		vertex3D v1 = edge.v1 ;
 		vertex3D v2 = edge.v2 ;
 		if (v.a <= std::max(v1.a,v2.a) && v.a >= std::min(v1.a,v2.a) && v.b <= std::max(v1.b,v2.b) && v.b >= std::min(v1.b,v2.b) && v.c <= std::max(v1.c,v2.c) && v.c >= std::min(v1.c,v2.c)) return true ;
