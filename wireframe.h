@@ -95,10 +95,12 @@ public:
 	vector<plane> generatePlanes() ; 
 
 	
-
-	
 	// takes a plane vertex Edge List and returns all basic loops on that plane
 	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
+
+private:
+		// sort all edges at a vertex in clockwise direction
+	vertexEdgeList sortVEList(vertexEdgeList veList , plane p);
 };
 
 

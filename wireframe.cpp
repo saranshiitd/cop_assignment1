@@ -321,8 +321,8 @@ vector<edge3D> findAdjacentEdgesAtVertexFromplaneVEL(planeVEL pvel, vertex3D ver
 }
 
 vertex3D otherVertexOfEdge(edge3D e, vertex3D v){
-	if (e.v1 == v) return v2;
-	else return v1;
+	if (e.v1 == v) return e.v2;
+	else return e.v1;
 }
 
 edge3D findNextEdge(vector<edge3D> eList, edge3D e){
@@ -337,9 +337,9 @@ edge3D findNextEdge(vector<edge3D> eList, edge3D e){
 
 	// should not happen
 	cout << "Could not find Next edge for edge: ";
-	printVertex(e.v1);
+	generalMethods::printVertex(e.v1);
 	cout << ", ";
-	printVertex(e.v2);
+	generalMethods::printVertex(e.v2);
 	cout<<"\n";
 	return eList.at(0);
 }
@@ -375,7 +375,7 @@ vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vec
 		// until vStart != vEnd go on to make the loop
 		while (!( vStart == vEnd )){
 			
-			tempEdgeList = wireFrame::findAdjacentEdgesAtVertexFromplaneVEL(pvel, vStart);
+			tempEdgeList = findAdjacentEdgesAtVertexFromplaneVEL(pvel, vStart);
 			// find next edge at vStart adjcacent to tempEdge
 			tempEdge = findNextEdge(tempEdgeList, tempEdge);
 			// vStart = other endPoint of edge
@@ -385,7 +385,7 @@ vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vec
 
 		// add this loop to set and remove all the edges of this loop
 		basicLoopVectorToBeReturned.push_back(tempBasicLoop);
-		wireFrame::removeEdgesFromEdgeList (tempEdgesOnPlane, tempBasicLoop.eList);
+		removeEdgesFromEdgeList (tempEdgesOnPlane, tempBasicLoop.eList);
 
 	}
 

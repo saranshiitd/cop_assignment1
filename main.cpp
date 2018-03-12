@@ -102,5 +102,12 @@ int main(){
 	cout << tempPlanes.size() << "\n";
 	generalMethods::printPlanes(tempPlanes);
 
+	planeVEL tempPlaneVEL;
+	for (int i = 0; i < tempPlanes.size(); i++)
+	{
+		tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(i));
+		generalMethods::printplaneVEL(tempPlaneVEL);
+	}
+
 	return 0;
 }

@@ -6,6 +6,17 @@
 #include "bodyLoop.h"
 
 namespace generalMethods{
+
+	//! print methods
+	void printVertex(vertex3D i);
+	void printVerticesList (vector<vertex3D> v);
+	void printEdgeList (vector<edge3D> e);
+	void printPlane (plane p);
+	void printPlanes (vector<plane> p);
+	void printVEList (vertexEdgeList veList);
+	void printplaneVEL (planeVEL p);
+
+
 	/**
 	* -----------------methods of vertices-------------------------- 
 	*/
@@ -15,14 +26,11 @@ namespace generalMethods{
 	*/
 	std::vector<vertex3D> sortVertices(std::vector<vertex3D> V, edge3D e);
 
-	void printVertex(vertex3D i);
-	void printVerticesList (vector<vertex3D> v);
 
 	/**
 	* -----------------methods of edges----------------------------- 
 	*/
 
-	void printEdgeList (vector<edge3D> e);
 
 	/**
 	* check if edges overlap and collinear 
@@ -54,8 +62,7 @@ namespace generalMethods{
 	/**
 	* use this to make all possible planes and then remove the duplicate ones 
 	*/
-	void printPlane (plane p);
-	void printPlanes (vector<plane> p);
+
 	/**
 	* removes duplicate planes 
 	*/
