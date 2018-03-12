@@ -271,11 +271,11 @@ namespace generalMethods{
 
 	// returns 0 if points collinear 
 	// returns 1 if points clockwise and 2 otherwise 
-	int orientation(vertex3D p, vertex3D q, vertex3D r , plane p )
+	int orientation(vertex3D p, vertex3D q, vertex3D r , plane s )
 	{	
-		float normal[] = {p.a,p.b,p.c} ;
-		float vector1 = {r.a - q.a , r.b - q.b ,r.c - q.c} ; 
-		float vector2 = {q.a - p.a , q.b - p.b ,q.c - p.c} ;
+		float normal[] = {s.a,s.b,s.c} ;
+		float vector1[] = {r.a - q.a , r.b - q.b ,r.c - q.c} ; 
+		float vector2[] = {q.a - p.a , q.b - p.b ,q.c - p.c} ;
 		float* crossv1v2 = crossProduct(vector1 , vector2) ;
 		float magnitudeCross = magnitude(crossv1v2) ;
 		if(magnitudeCross < epsilon ) return 0 ; 
@@ -304,10 +304,10 @@ namespace generalMethods{
 		if (o2 == 0 && onSegment(q2, edgep1q1)) return true;
 
 		// p2, q2 and p1 are colinear and p1 lies on segment p2q2
-		if (o3 == 0 && onSegment( p1  , edgep2q2) return true;
+		if (o3 == 0 && onSegment( p1  , edgep2q2)) return true;
 
 		 // p2, q2 and q1 are colinear and q1 lies on segment p2q2
-		if (o4 == 0 && onSegment(q1 , edgep2q2) return true;
+		if (o4 == 0 && onSegment(q1 , edgep2q2)) return true;
 
 		return false; // Doesn't fall in any of the above cases
  	}
@@ -350,8 +350,8 @@ namespace generalMethods{
 
 	// assumes verices are in order 
 	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2,plane p){
-		std::vector<edge3D> edgesFL1 = fl1.eList;
-		std::vector<edge3D> edgesFL2 = fl2.eList ;
+		std::vector<edge3D> edgesInFL1 = fl1.eList;
+		std::vector<edge3D> edgesInFL2 = fl2.eList ;
 		std::vector<vertex3D> verticesFL1 ;
 		std::vector<vertex3D> verticesFL2 ;
 
