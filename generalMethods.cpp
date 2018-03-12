@@ -312,12 +312,11 @@ namespace generalMethods{
 		return false; // Doesn't fall in any of the above cases
  	}
 
- 	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , float refDirection[], plane q )
+ 	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , edge3D refEdge, plane q )
 	{
 	// There must be at least 3 vertices in polygon[]
 		if (n < 3)  return false;
-
-		// Create a point for line segment from p to infinite
+		float refDirection[] = {refEdge.v1.a - refEdge.v2.a , refEdge.v1.a - refEdge.v2.a , refEdge.v1.a - refEdge.v2.a } ;		// Create a point for line segment from p to infinite
 		
 		vertex3D extreme  = {p.a + INF*refDirection[0] , p.b + INF*refDirection[1] , p.c + INF*refDirection[2]  } ;
 		// Count intersections of the above line with sides of polygon
