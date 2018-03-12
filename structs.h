@@ -8,10 +8,10 @@ using namespace std;
 */
 
 // tolerance for error in floats
-
-#define epsilon 0.01
-
-
+#ifndef EPSILON
+#define epsilon 0.01f
+#endif 
+ 
 struct vertex2D{
 	/**
 	* end point 1 

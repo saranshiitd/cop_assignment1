@@ -1,6 +1,7 @@
 #include <iostream>
 #include "structs.h"
 #include "EdgeList2D.h"
+#include <algorithm>
 using namespace std ;
 
 void EdgeList2D::addEdge(edge2D e) {
