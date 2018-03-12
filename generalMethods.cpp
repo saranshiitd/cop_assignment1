@@ -150,9 +150,13 @@ namespace generalMethods{
 		// return distancePl < epsilon ;
 	}
 
+	void printPlane (plane i){
+			cout<<i.a<<"x + "<<i.b<<"y + "<<i.c<<"z = "<<i.d<< "\n" ;
+	}
+
 	void printPlanes ( vector<plane> p){
 		for (vector<plane>::iterator i = p.begin(); i != p.end(); ++i){
-			cout<<i->a<<" "<<i->b<<" "<<i->c<<" "<<i->d<<"\n" ;
+			cout<<i->a<<"x + "<<i->b<<"y + "<<i->c<<"z = "<<i->d<< "\n" ;
 		}
 	}
 	std::vector<plane> removeDuplicate(std::vector<plane> planes){

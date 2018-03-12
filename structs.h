@@ -229,6 +229,8 @@ struct edgeVertexTriplet
 struct planeVEL{  // plane vertexEdgeList
 	plane  p ;
 	std::vector<vertexEdgeList> velList;
+
+	// costructors
 	planeVEL(){} 
 	planeVEL(plane pl , std::vector<vertexEdgeList> v) {
 		p = pl ;

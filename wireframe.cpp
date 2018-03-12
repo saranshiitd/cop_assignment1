@@ -6,6 +6,8 @@
 #include "EdgeList2D.h"
 #include "structs.h"
 #include "generalMethods.h"
+#include "basicLoopEdgeSet.h"
+
 using namespace std;
 
 //! data structures inside wireframe class
@@ -283,11 +285,97 @@ vector<plane> wireFrame::generatePlanes(){
 			}
 		}
 	}
+	generalMethods::printPlanes ( tempPlanes);
 	return tempPlanes;
 }
 
-planeVEL wireframe::getVEListOnPlane(plane p){
-
+planeVEL wireFrame::getVEListOnPlane(plane p){
 	
+}
 
+// used in F3.3
+vector<edge3D> findAdjacentEdgesAtVertexFromplaneVEL(planeVEL pvel, vertex3D vertex){
+	vector<vertexEdgeList> tempvelList = pvel.velList;
+
+	for (int i = 0; i < tempvelList.size(); i++)
+	{
+		if(tempvelList.at(i).v == vertex){
+			return tempvelList.at(i).e;
+		}
+	}
+	// should not happen
+	cout << "Could not find adjacent edgeList for this vertex";
+	return tempvelList.at(0).e; ;
+}
+
+vertex3D otherVertexOfEdge(edge3D e, vertex3D v){
+	if (e.v1 == v) return v2;
+	else return v1;
+}
+
+edge3D findNextEdge(vector<edge3D> eList, edge3D e){
+	int size = eList.size();
+
+	for (int i = 0; i < size; i++)
+	{
+		if(eList.at(i) == e){
+			return eList.at((i+1)%size);
+		}
+	}
+
+	// should not happen
+	cout << "Could not find Next edge for edge: ";
+	printVertex(e.v1);
+	cout << ", ";
+	printVertex(e.v2);
+	cout<<"\n";
+	return eList.at(0);
+}
+
+// takes a plane vertex Edge List and returns all basic loops on that plane
+vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane){
+	
+	cout << "Gererating basicLoops of plane: " ;
+	generalMethods::printPlane(pvel.p);
+
+	// vector of all basic loops on the plane	
+	vector<basicLoopEdgeSet> basicLoopVectorToBeReturned;
+
+	// to mark which edges are still present
+	vector<edge3D> tempEdgesOnPlane = edgesOnPlane;
+
+	// starting and ending vertex of loop
+	vertex3D vStart, vEnd;
+
+	vector<edge3D> tempEdgeList;
+	// until there is a remaining edge on plane do
+	while(tempEdgesOnPlane.size()!=0){
+		// a temp loop set to hold current loop
+		basicLoopEdgeSet tempBasicLoop;
+		// select a edge from edgesLeft
+		edge3D tempEdge = tempEdgesOnPlane.at(0);
+
+		vStart = tempEdge.v1;
+		vEnd   = tempEdge.v2;
+
+		tempBasicLoop.addEdge(tempEdge);
+
+		// until vStart != vEnd go on to make the loop
+		while (!( vStart == vEnd )){
+			
+			tempEdgeList = wireFrame::findAdjacentEdgesAtVertexFromplaneVEL(pvel, vStart);
+			// find next edge at vStart adjcacent to tempEdge
+			tempEdge = findNextEdge(tempEdgeList, tempEdge);
+			// vStart = other endPoint of edge
+			vStart = otherVertexOfEdge(tempEdge, vStart);
+			tempBasicLoop.addEdge(tempEdge);
+		}
+
+		// add this loop to set and remove all the edges of this loop
+		basicLoopVectorToBeReturned.push_back(tempBasicLoop);
+		wireFrame::removeEdgesFromEdgeList (tempEdgesOnPlane, tempBasicLoop.eList);
+
+	}
+
+	return basicLoopVectorToBeReturned;
 }

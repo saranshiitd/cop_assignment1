@@ -54,6 +54,7 @@ namespace generalMethods{
 	/**
 	* use this to make all possible planes and then remove the duplicate ones 
 	*/
+	void printPlane (plane p);
 	void printPlanes (vector<plane> p);
 	/**
 	* removes duplicate planes 

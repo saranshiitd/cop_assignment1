@@ -1,5 +1,7 @@
 #include "structs.h"
+#include "basicLoopEdgeSet.h"
 #include <vector>
+#include <iostream>
 
 void basicLoopEdgeSet::addEdge(edge3D e) {
 	if (find(eList.begin(),eList.end(),e)==eList.end()) {

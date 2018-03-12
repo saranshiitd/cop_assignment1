@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "VertexList2D.h"
 #include "EdgeList2D.h"
-
+#include "basicLoopEdgeSet.h"
 using namespace std;
 class wireFrame
 {
@@ -93,7 +93,8 @@ public:
 	planeVEL getVEListOnPlane(plane p); 
 
 	
-
+	// takes a plane vertex Edge List and returns all basic loops on that plane
+	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
 };
 
 
