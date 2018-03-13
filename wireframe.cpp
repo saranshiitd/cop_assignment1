@@ -8,6 +8,8 @@
 #include "generalMethods.h"
 #include "basicLoopEdgeSet.h"
 #include "Plane.h"
+#include "faceLoop.h"
+
 using namespace std;
 
 
@@ -62,6 +64,8 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 			}
 		}
 	}
+
+	planes = generatePlanes();
 }
 
 void wireFrame::printVertex(vertex3D i){
@@ -301,7 +305,7 @@ vector<plane> wireFrame::generatePlanes(){
 			}
 		}
 	}
-	return tempPlanes;
+	return removeRedundentPlanes(tempPlanes);
 }
 
 
