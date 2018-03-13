@@ -278,8 +278,12 @@ namespace generalMethods{
 		float vector2[] = {q.a - p.a , q.b - p.b ,q.c - p.c} ;
 		float* crossv1v2 = crossProduct(vector1 , vector2) ;
 		float magnitudeCross = magnitude(crossv1v2) ;
+		// cout<<"---------------------" ;
+		// cout<< magnitudeCross << '\n' ;
+		// cout<<crossv1v2[0]<<" "<<crossv1v2[1]<<" "<<crossv1v2[2]<<'\n' ;
 		if(magnitudeCross < epsilon ) return 0 ; 
-	    float val = dotProduct(crossv1v2 , normal) ;  // colinear
+	    float val = dotProduct(crossv1v2 , normal) ;
+	    // cout << val << '\n' ;  // colinear
 	    return (val > 0)? 1: 2 ; // clock or counterclock wise
 	}
 
@@ -296,7 +300,7 @@ namespace generalMethods{
 		if(o1 != o2 && o3 != o4) return true ;
 		// Special Cases
 		edge3D edgep1q1 = {p1 , q1 };
-		edge3D edgep2q2 = {p1 , q1 }; 		 
+		edge3D edgep2q2 = {p2 , q2 }; 		 
 		// p1, q1 and p2 are colinear and p2 lies on segment p1q1
 		if (o1 == 0 && onSegment(p2, edgep1q1)) return true;
 
@@ -312,13 +316,20 @@ namespace generalMethods{
 		return false; // Doesn't fall in any of the above cases
  	}
 
+ 	
  	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , edge3D refEdge, plane q )
 	{
+
+		cout<<"checking_vertex"<<'\n' ;
+		printVertex(p);
+		cout<<'\n' ;
 	// There must be at least 3 vertices in polygon[]
 		if (n < 3)  return false;
-		float refDirection[] = {refEdge.v1.a - refEdge.v2.a , refEdge.v1.a - refEdge.v2.a , refEdge.v1.a - refEdge.v2.a } ;		// Create a point for line segment from p to infinite
+		float refDirection[] = {refEdge.v1.a - refEdge.v2.a , refEdge.v1.b - refEdge.v2.b , refEdge.v1.c - refEdge.v2.c } ;		// Create a point for line segment from p to infinite
+		cout<<"refDirection is here"<<refDirection[0]<<" "<<refDirection[1]<<" "<<refDirection[2]<<" "<<'\n' ;  
 		
 		vertex3D extreme  = {p.a + INF*refDirection[0] , p.b + INF*refDirection[1] , p.c + INF*refDirection[2]  } ;
+		cout<<"extreme is here"<<extreme.a<<" "<<extreme.b<<" "<<extreme.c<<" "<<'\n' ;  
 		// Count intersections of the above line with sides of polygon
 		int count = 0, i = 0;
 		do
@@ -329,6 +340,8 @@ namespace generalMethods{
 		    // with the line segment from 'polygon[i]' to 'polygon[next]'
 		    if (doIntersect(polygon[i], polygon[next], p, extreme,q))
 		    {
+		    	cout<<"intersection here" <<  '\n' ;
+		    	printVertex(polygon[i]) ; printVertex(polygon[next]) ; printVertex(p) ; printVertex(extreme) ;
 		        // If the point 'p' is colinear with line segment 'i-next',
 		        // then check if it lies on segment. If it lies, return true,
 		        // otherwise false
@@ -342,9 +355,11 @@ namespace generalMethods{
 		    }
 		    i = next;
 		} while (i != 0);
-
+		cout<<"count is here :: "<<count << '\n';
 		// Return true if count is odd, false otherwise
+
 		return count&1;  // Same as (count%2 == 1)
+
 	}
 
 	// assumes verices are in order 
@@ -388,9 +403,9 @@ namespace generalMethods{
 			}
 		}
 
-		if (fl1InFl2)
+		if (fl2InFl1)
 		{
-			return -1 ;
+			return 1 ;
 		}
 
 		return 0 ;

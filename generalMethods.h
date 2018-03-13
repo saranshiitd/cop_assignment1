@@ -115,6 +115,13 @@ namespace generalMethods{
 	*/
 	bool getIfOuter(bodyLoop b) ;
 
+	bool onSegment(vertex3D v , edge3D edge) ; // check if edge contains v
+
+	int orientation(vertex3D p, vertex3D q, vertex3D r , plane s );
+
+ 	bool doIntersect(vertex3D p1 , vertex3D q1 , vertex3D p2 , vertex3D q2,plane p) ;
+
+ 	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , edge3D refEdge, plane q ) ;
 
 
 }

@@ -196,15 +196,15 @@ int main(){
 	}
 
 	// testing included function
-	vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(2), wireframe.edgeList);
-	tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(2));
+	vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(3), wireframe.edgeList);
+	tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(3));
 	tempBasicLoopEdgeSet = (wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane)); 
 
 	cout << "First LOOp:"<<"\n";
-	generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(0).eList);cout<<"\n";
-	cout << "Second LOOp:"<<"\n";
 	generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(1).eList);cout<<"\n";
-	int confi = generalMethods::checkConfinement(tempBasicLoopEdgeSet.at(0), tempBasicLoopEdgeSet.at(1), tempPlanes.at(2));
+	cout << "Second LOOp:"<<"\n";
+	generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(0).eList);cout<<"\n";
+	int confi = generalMethods::checkConfinement(tempBasicLoopEdgeSet.at(1), tempBasicLoopEdgeSet.at(0), tempPlanes.at(3));
 	cout << "Confi: " << confi << "\n";
 
 	return 0;
