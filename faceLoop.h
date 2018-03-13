@@ -3,6 +3,7 @@
 
 #include<vector>
 #include "structs.h"
+#include "basicLoopEdgeSet.h"
 
 /**    
 *  -------------- definition of face loop ---------------
@@ -12,7 +13,7 @@
 */
 class faceLoop{
 
-	std::vector<basicLoopEdgeSet> faceLoop;
+	std::vector<basicLoopEdgeSet> faceloop;
 	direction normal ;
 	/**
 	* add loop to face loop 

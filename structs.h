@@ -32,7 +32,7 @@ struct vertex2D{
 	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex2D& n)
 	{
-	    return (abs(a - n.a) < epsilon) && (abs(b - n.b) < epsilon);
+	    return ((abs(a - n.a) < epsilon) && (abs(b - n.b) < epsilon));
 	}
 };
 
