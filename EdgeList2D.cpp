@@ -6,7 +6,7 @@ using namespace std ;
 
 void EdgeList2D::addEdge(edge2D e) {
 
-	if (find(edgeList.begin(),edgeList.end(),e)==edgeList.end()) {
+	if (std::find(edgeList.begin(),edgeList.end(),e)==edgeList.end()) {
 			edgeList.push_back(e) ;
 	}	
 }
@@ -18,7 +18,7 @@ void EdgeList2D::addEdge (vertex2D v1, vertex2D v2){
 
 void EdgeList2D::removeEdge(edge2D e) {
 
-	if (find(edgeList.begin(),edgeList.end(),e)!=edgeList.end()){
+	if (std::find(edgeList.begin(),edgeList.end(),e)!=edgeList.end()){
 		edgeList.erase(remove(edgeList.begin(),edgeList.end(),e),edgeList.end());
 	}
 	else cout<<"Edge does not exits" ;	
@@ -26,7 +26,7 @@ void EdgeList2D::removeEdge(edge2D e) {
 }
 
 bool EdgeList2D::containsEdge (edge2D e){
-	if (find(edgeList.begin(), edgeList.end(), e) != edgeList.end() )
+	if (std::find(edgeList.begin(), edgeList.end(), e) != edgeList.end() )
 		return true;
 	else{
 		// elsif they have the same projection on a plane --> there exists a edge
