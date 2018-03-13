@@ -8,9 +8,7 @@ using namespace std;
 */
 
 // tolerance for error in floats
-#ifndef EPSILON
-#define epsilon 0.01f
-#endif 
+#define epsilon 0.01
  
 struct vertex2D{
 	/**
@@ -30,8 +28,6 @@ struct vertex2D{
 		a = m;
 		b = n;
 	}
-
-	// float epsilon = 0.01 ;
 
 	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex2D& n)
@@ -65,7 +61,6 @@ struct edge2D{
 
 	bool hidden = false;
 
-	// float epsilon = 0.01 ;
 
 	// equality for two 2D edges  (method overloading)
 	bool operator==(const edge2D& n)
@@ -101,7 +96,6 @@ struct vertex3D{
 		c = o;
 	}
 
- 	// float epsilon = 0.01 ;
 
  	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
@@ -168,7 +162,8 @@ struct plane
 	float b;
 	float c;
 	float d;	
-	// float epsilon = 0.01 ;
+
+
 	bool operator==(const plane& rhs )
 	{	
 		// float scalarProduct = dotProduct([a,b,c],[rhs.a,rhs.b,rhs.c]) ; 
@@ -186,7 +181,7 @@ struct direction
 	float x;
 	float y;
 	float z;
-	// float epsilon = 0.01 ;
+
 	bool operator==(const direction& rhs )
 	{
 		float v1[] = {x, y, z};

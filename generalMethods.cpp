@@ -212,7 +212,7 @@ namespace generalMethods{
 	bool ifVertexOnPlane(plane p, vertex3D v) {
 		float magnitudeP = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;
 		float d = ( p.a*v.a+p.b*v.b + p.c*v.c - p.d ) / magnitudeP ;
-		return abs(d)< epsilon;
+		return (abs(d)< epsilon);
 	}
 
 	bool ifEdgeOnPlane(plane p, edge3D e) {
@@ -395,6 +395,12 @@ namespace generalMethods{
 
 		return 0 ;
 	}
+
+	float *getAlphaAndDirection(faceLoop fl1 , faceLoop fl2, edge3D referenceEdge){
+
+
+	}
+
 
 }
 // condom condom condom condom 
