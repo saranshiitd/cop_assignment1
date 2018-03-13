@@ -15,7 +15,8 @@ class faceLoop{
 
 public:
 	vector<basicLoopEdgeSet> faceloop;
-	plane p ;
+	direction normal ;
+	plane p;
 	/**
 	* add loop to face loop 
 	*/
