@@ -71,42 +71,8 @@
 
 	wireframe.printVertices();
 	wireframe.printEdges();
-
-	vector<plane> tempPlanes = wireframe.generatePlanes();
-	//cout << "Planes initially: \n";
-	//cout << tempPlanes.size() << "\n";
-	//generalMethods::printPlanes(tempPlanes);
-
-	cout << "Planes Finally: \n";
-	tempPlanes = generalMethods::removeDuplicate(tempPlanes);
-	cout << tempPlanes.size() << "\n";
-	generalMethods::printPlanes(tempPlanes);
-	cout <<"\n";
-	planeVEL tempPlaneVEL;
-	//basic loops
-	vector<basicLoopEdgeSet> tempBasicLoopEdgeSet;
-	for (int i = 0; i < tempPlanes.size(); i++)
-	{
-		vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(i), wireframe.edgeList);
-		//cout << "Plane : ";
-		//generalMethods::printPlane(tempPlanes.at(i));
-		tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(i));
-		generalMethods::printplaneVEL(tempPlaneVEL);
-		cout << "Edges On Plane: "<< "\n";
-		generalMethods::printEdgeList(tempEdgesOnPlane);
-		cout << "\n" << "Loop Edge Set: " << "\n";
-		tempBasicLoopEdgeSet = wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane);
-		for (int j = 0; j < tempBasicLoopEdgeSet.size(); j++)
-		{
-			generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(j).eList);
-			cout << "\n";
-		}
-	}
-
-
-
-
-
+	wireframe.printPlanes();
+	wireframe.printFaceLoops();
 
 
 
@@ -197,51 +163,16 @@
 	sideProjEdges.addEdge (tempVertex2D1, tempVertex2D3);
 	//sideProjEdges.addEdge (tempVertex2D3, tempVertex2D4);
 /****************/
-
 	wireFrame wireframe;
 	wireframe.generateWireFrame(frontProjVertex, topProjVertex, sideProjVertex, 
 		frontProjEdges, topProjEdges, sideProjEdges );
 
 	wireframe.printVertices();
 	wireframe.printEdges();
+	wireframe.printPlanes();
+	wireframe.printFaceLoops();
 
-	vector<plane> tempPlanes = wireframe.generatePlanes();
-	//cout << "Planes initially: \n";
-	//cout << tempPlanes.size() << "\n";
-	//generalMethods::printPlanes(tempPlanes);
 
-	cout << "Planes Finally: \n";
-	tempPlanes = wireframe.removeRedundentPlanes(tempPlanes);
-	cout << tempPlanes.size() << "\n";
-	generalMethods::printPlanes(tempPlanes);
-	cout <<"\n";
-	planeVEL tempPlaneVEL;
-	// for (int i = 0; i < tempPlanes.size(); i++)
-	// {
-	// 	tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(i));
-	// 	generalMethods::printplaneVEL(tempPlaneVEL);
-	// }
-
-	//basic loops
-	vector<basicLoopEdgeSet> tempBasicLoopEdgeSet;
-	for (int i = 0; i < tempPlanes.size(); i++)
-	{
-		vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(i), wireframe.edgeList);
-		//cout << "Plane : ";
-		//generalMethods::printPlane(tempPlanes.at(i));
-		tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(i));
-		generalMethods::printplaneVEL(tempPlaneVEL);
-		cout << "Edges On Plane: "<< "\n";
-		generalMethods::printEdgeList(tempEdgesOnPlane);
-		cout << "\n" << "Loop Edge Set: " << "\n";
-		tempBasicLoopEdgeSet = wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane);
-		for (int j = 0; j < tempBasicLoopEdgeSet.size(); j++)
-		{
-			//cout << tempBasicLoopEdgeSet.at(j).eList.size();
-			generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(j).eList);
-			cout << "\n";
-		}
-	}	
 
 
 
@@ -386,34 +317,5 @@
 
 	wireframe.printVertices();
 	wireframe.printEdges();
-
-	vector<plane> tempPlanes = wireframe.generatePlanes();
-	//cout << "Planes initially: \n";
-	//cout << tempPlanes.size() << "\n";
-	//generalMethods::printPlanes(tempPlanes);
-
-	cout << "Planes Finally: \n";
-	tempPlanes = generalMethods::removeDuplicate(tempPlanes);
-	cout << tempPlanes.size() << "\n";
-	generalMethods::printPlanes(tempPlanes);
-	cout <<"\n";
-	planeVEL tempPlaneVEL;
-	//basic loops
-	vector<basicLoopEdgeSet> tempBasicLoopEdgeSet;
-	for (int i = 0; i < tempPlanes.size(); i++)
-	{
-		vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(i), wireframe.edgeList);
-		//cout << "Plane : ";
-		//generalMethods::printPlane(tempPlanes.at(i));
-		tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(i));
-		//generalMethods::printplaneVEL(tempPlaneVEL);
-		//cout << "Edges On Plane: "<< "\n";
-		//generalMethods::printEdgeList(tempEdgesOnPlane);
-		cout << "\n" << "Loop Edge Set: " << "\n";
-		tempBasicLoopEdgeSet = wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane); 
-		for (int j = 0; j < tempBasicLoopEdgeSet.size(); j++)
-		{
-			generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(j).eList);
-			cout << "\n";
-		}
-	}
+	wireframe.printPlanes();
+	wireframe.printFaceLoops();

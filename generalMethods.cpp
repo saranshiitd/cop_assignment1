@@ -41,10 +41,10 @@ namespace generalMethods{
 			/**
 		* print the edgeList
 		*/
-		cout << "Edges --> ";
 		for (vector<edge3D>::const_iterator i = e.begin(); i != e.end(); ++i){
 			cout << " {"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << " || "; 
 		}
+		cout << "\n";
 	}
 
 	void printPlane (plane i){
@@ -320,16 +320,16 @@ namespace generalMethods{
  	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , edge3D refEdge, plane q )
 	{
 
-		cout<<"checking_vertex"<<'\n' ;
-		printVertex(p);
-		cout<<'\n' ;
+		//cout<<"checking_vertex"<<'\n' ;
+		//printVertex(p);
+		//cout<<'\n' ;
 	// There must be at least 3 vertices in polygon[]
 		if (n < 3)  return false;
 		float refDirection[] = {refEdge.v1.a - refEdge.v2.a , refEdge.v1.b - refEdge.v2.b , refEdge.v1.c - refEdge.v2.c } ;		// Create a point for line segment from p to infinite
-		cout<<"refDirection is here"<<refDirection[0]<<" "<<refDirection[1]<<" "<<refDirection[2]<<" "<<'\n' ;  
+		//cout<<"refDirection is here"<<refDirection[0]<<" "<<refDirection[1]<<" "<<refDirection[2]<<" "<<'\n' ;  
 		
 		vertex3D extreme  = {p.a + INF*refDirection[0] , p.b + INF*refDirection[1] , p.c + INF*refDirection[2]  } ;
-		cout<<"extreme is here"<<extreme.a<<" "<<extreme.b<<" "<<extreme.c<<" "<<'\n' ;  
+		//cout<<"extreme is here"<<extreme.a<<" "<<extreme.b<<" "<<extreme.c<<" "<<'\n' ;  
 		// Count intersections of the above line with sides of polygon
 		int count = 0, i = 0;
 		do
@@ -340,8 +340,8 @@ namespace generalMethods{
 		    // with the line segment from 'polygon[i]' to 'polygon[next]'
 		    if (doIntersect(polygon[i], polygon[next], p, extreme,q))
 		    {
-		    	cout<<"intersection here" <<  '\n' ;
-		    	printVertex(polygon[i]) ; printVertex(polygon[next]) ; printVertex(p) ; printVertex(extreme) ;
+		    	//cout<<"intersection here" <<  '\n' ;
+		    	//printVertex(polygon[i]) ; printVertex(polygon[next]) ; printVertex(p) ; printVertex(extreme) ;
 		        // If the point 'p' is colinear with line segment 'i-next',
 		        // then check if it lies on segment. If it lies, return true,
 		        // otherwise false
@@ -355,7 +355,7 @@ namespace generalMethods{
 		    }
 		    i = next;
 		} while (i != 0);
-		cout<<"count is here :: "<<count << '\n';
+		//cout<<"count is here :: "<<count << '\n';
 		// Return true if count is odd, false otherwise
 
 		return count&1;  // Same as (count%2 == 1)

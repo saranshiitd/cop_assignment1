@@ -30,6 +30,8 @@ public:
 	void printVertex (vertex3D i);
 	void printVertices();
 	void printEdges();
+	void printPlanes ();
+	void printFaceLoops();
 	/**
 	* add/remove vertex and edge to wireframe 
 	*/
@@ -95,8 +97,8 @@ public:
 	// */
 	// bool checkCoplanar(edge3D e1, edge3D e2 , edge3D e3) ; 
 
-
-	vector<faceLoop> generateFaceLoops();
+	// generate face loops from the planes generated
+	void generateFaceLoops();
 
 	// takes a plane vertex Edge List and returns all basic loops on that plane
 	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);

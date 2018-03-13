@@ -66,6 +66,7 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 	}
 
 	planes = generatePlanes();
+	generateFaceLoops();
 }
 
 void wireFrame::printVertex(vertex3D i){
@@ -80,7 +81,7 @@ void wireFrame::printVertices(){
 
 	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
 		printVertex(*i);
-		cout << " || ";
+		cout << "\n";
 	}
 }
 
@@ -90,7 +91,27 @@ void wireFrame::printEdges(){
 	*/
 	cout << "Edges in wireFrame:" << "\n";
 	for (vector<edge3D>::const_iterator i = edgeList.begin(); i != edgeList.end(); ++i){
-		cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << " || "; 
+		cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << "\n"; 
+	}
+}
+
+void wireFrame::printPlanes (){
+	cout<<"Planes in wireFrame: "<<"\n";
+	for (vector<plane>::iterator i = planes.begin(); i != planes.end(); ++i){
+		cout<<i->a<<"x + "<<i->b<<"y + "<<i->c<<"z = "<<i->d<< "\n" ;
+	}
+}
+
+void wireFrame::printFaceLoops(){
+	for (int i = 0; i < faceloops.size(); i++){
+
+		cout << "FaceLoop for plane: ";
+		generalMethods::printPlane(faceloops.at(i).p); cout <<"\n";
+
+		for (int j = 0; j < faceloops.at(i).faceloop.size(); j++){
+			cout << j << "--> ";
+			generalMethods::printEdgeList(faceloops.at(i).faceloop.at(j).eList);
+		}
 	}
 }
 
@@ -385,8 +406,8 @@ basicLoopEdgeSet arrangeVerticesInOneDirecton(basicLoopEdgeSet bles){
 // takes a plane vertex Edge List and returns all basic loops on that plane
 vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane){
 	
-	cout << "Gererating basicLoops of plane: " ;
-	generalMethods::printPlane(pvel.p);cout <<"\n";
+	//cout << "Gererating basicLoops of plane: " ;
+	//generalMethods::printPlane(pvel.p);cout <<"\n";
 	// vector of all basic loops on the plane	
 	vector<basicLoopEdgeSet> basicLoopVectorToBeReturned;
 
@@ -504,4 +525,57 @@ std::vector<plane> wireFrame::removeRedundentPlanes(std::vector<plane> v){
 	return moreTempPlanes;
 }
 
+
+// generate all face loops from the planes generated
+void wireFrame::generateFaceLoops(){
+
+	vector<faceLoop> faceLoops;
+	planeVEL tempPlaneVEL;
+	faceLoop tempFaceLoop;
+	vector<basicLoopEdgeSet> tempBasicLoopEdgeSet;
+	for (int i = 0; i < planes.size(); i++)
+	{
+		// find all the edges on a plane
+		vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(planes.at(i), edgeList);
+		// generate plane-edge-vertex list
+		tempPlaneVEL = getVEListOnPlane(planes.at(i));
+		// 
+		tempBasicLoopEdgeSet = generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane); 
+		
+		int temp = tempBasicLoopEdgeSet.size();
+
+		int confinement[temp][temp];
+
+		for (int j = 0; j < temp; j++ ){
+			for (int k = 0; k < temp; k++){
+				confinement[j][k] = generalMethods::checkConfinement(tempBasicLoopEdgeSet.at(j), tempBasicLoopEdgeSet.at(k), planes.at(i) );
+			}
+		}
+
+		int flag = 0;
+		for (int j = 0; j < temp; j++ ){
+			vector<basicLoopEdgeSet> tempBaiscSet;
+			flag = 0;
+			for (int k = 0; k < temp; k++){
+				if(confinement[j][k]==-1 and j!=k)
+					flag = 1;
+			}
+			// if this loop is contained in other --> leave it --> it is useless
+			if(flag == 1) continue;
+
+			for (int k = 0; k < temp; k++){
+				if(confinement[j][k]==1 || (confinement[j][k]==-1 && j==k)){
+					tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
+				}
+			}
+
+			tempFaceLoop.faceloop = tempBaiscSet;
+			tempFaceLoop.p = planes.at(i);
+
+			faceLoops.push_back(tempFaceLoop);
+		}
+
+	}
+	wireFrame::faceloops = faceLoops;
+}
 
