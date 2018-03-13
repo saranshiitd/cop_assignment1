@@ -6,6 +6,8 @@
 #include "VertexList2D.h"
 #include "EdgeList2D.h"
 #include "basicLoopEdgeSet.h"
+#include "faceLoop.h"
+
 using namespace std;
 class wireFrame
 {
@@ -15,8 +17,12 @@ public:
 	vector<vertex3D> vertexList;
 	vector<edge3D> edgeList;
 	
+	vector<plane> planes;
+	vector<faceLoop> faceloops;
+
 	//! generate wireframe form 3 vertices list --> front, top, side
 	//! and from three edges list --> front, top side
+	//! gernerate vertices, edges, faces and faceLoops
 	void generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
 			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS );
 
@@ -89,6 +95,16 @@ public:
 	// */
 	// bool checkCoplanar(edge3D e1, edge3D e2 , edge3D e3) ; 
 
+
+	vector<faceLoop> generateFaceLoops();
+
+	// takes a plane vertex Edge List and returns all basic loops on that plane
+	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
+
+private:
+		// sort all edges at a vertex in clockwise direction
+	vertexEdgeList sortVEList(vertexEdgeList veList , plane p);
+
 	/**
 	* this method will generate all possible planes with given edges 
 	*/
@@ -99,13 +115,6 @@ public:
 	*/
 	std::vector<plane> removeRedundentPlanes(std::vector<plane> v);
 
-
-	// takes a plane vertex Edge List and returns all basic loops on that plane
-	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
-
-private:
-		// sort all edges at a vertex in clockwise direction
-	vertexEdgeList sortVEList(vertexEdgeList veList , plane p);
 };
 
 
