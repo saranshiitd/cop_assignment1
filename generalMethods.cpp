@@ -7,9 +7,11 @@
 #include <cstdlib>
 #include <climits>
 #include <iostream>
-
+#include <cmath>
 namespace generalMethods{
 
+
+#define PI 3.141592653f ;
 /**
 * print methods
 */
@@ -411,11 +413,44 @@ namespace generalMethods{
 		return 0 ;
 	}
 
-	float *getAlphaAndDirection(faceLoop fl1 , faceLoop fl2, edge3D referenceEdge){
+	float *getAlphaAndDirection(faceLoop flk , faceLoop fls, edge3D referenceEdge){
 
+		float ns = fls.normal ; 
+		float nk = flk.normal ; 
+		float magNs = magnitude(ns) ; 
+		float magNk = magnitude(nk) ;
+		float cosTheta = dotProduct(ns,nk);
+		cosTheta = cosTheta/(magNs,magNk) ;
+		float theta = acos(cosTheta) ;
+		float edgeDirection = {referenceEdge.v1.a - referenceEdge.v2.a , referenceEdge.v1.b - referenceEdge.v2.b , referenceEdge.v1.c - referenceEdge.v2.c  } ;
+		float* nsCrossnk = crossProduct(ns,nk) ; 
+		float* directionRight = crossProduct(edgeDirection , ns) ; 
+		bool sameDirection = ( dotProduct(nsCrossnk , edgeDirection) > 0 );
+		bool isDirectionRight = dotProduct(nk , sameDirection) ; 
+
+		if (sameDirection && isDirectionRight)
+		{
+			float toReturn[] = {PI - theta , 1.0} ; 
+			return toReturn ;
+		}
+		else if (sameDirection && !isDirectionRight) 
+		{
+			float toReturn[] = {2*PI - theta , -1.0} ; 
+			return toReturn ; 
+		}
+		else if (!sameDirection && isDirectionRight) 
+		{
+			float toReturn[] = {PI + theta , 1.0} ;
+			return roReturn ; 
+		}
+		else
+		{
+			float toReturn[] = {theta , -1.0} ;
+			return toReturn ; 
+		}
 
 	}
 
 
 }
-// condom condom condom condom 
+ 

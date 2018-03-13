@@ -108,7 +108,7 @@ namespace generalMethods{
 	/**
 	* returns alpha as described in paper and whether to select +Fs or -Fs 
 	*/
-	float *getAlphaAndDirection(faceLoop fl1 , faceLoop fl2, edge3D referenceEdge);
+	float *getAlphaAndDirection(faceLoop flk , faceLoop fls, edge3D referenceEdge);
 
 	/**
 	* to determine whether the bodyloop is outer or inner by the method described in paper 
