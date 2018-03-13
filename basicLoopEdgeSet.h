@@ -9,6 +9,7 @@
 */
 class basicLoopEdgeSet{
 
+	public:
 	/**
 	* all the edges in a basic loop 
 	*/

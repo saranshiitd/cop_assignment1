@@ -10,6 +10,72 @@
 
 namespace generalMethods{
 
+/**
+* print methods
+*/
+//////////////////////////////////////////////////////////////////////////////
+	void printVertex(vertex3D i){
+		cout<<i.a<<" "<<i.b<<" "<<i.c ;
+	}
+
+	void printVerticesList (vector<vertex3D> v){
+			/**
+			* print the vertexList
+			*/
+			cout << "Vertices: "<< "\n";
+
+			for (vector<vertex3D>::const_iterator i = v.begin(); i != v.end(); ++i){
+				printVertex(*i);
+				cout << "\n";
+			}
+	}
+
+	void printEdge (edge3D i){
+			/**
+		* print the edgeList
+		*/
+		cout << " {"; printVertex(i.v1); cout <<"} {"; printVertex(i.v2); cout << "}" << " || "; 
+	}
+
+	void printEdgeList (vector<edge3D> e){
+			/**
+		* print the edgeList
+		*/
+		cout << "Edges --> ";
+		for (vector<edge3D>::const_iterator i = e.begin(); i != e.end(); ++i){
+			cout << " {"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << " || "; 
+		}
+	}
+
+	void printPlane (plane i){
+			cout<<i.a<<"x + "<<i.b<<"y + "<<i.c<<"z = "<<i.d<< "  " ;
+	}
+
+	void printPlanes ( vector<plane> p){
+		for (vector<plane>::iterator i = p.begin(); i != p.end(); ++i){
+			cout<<i->a<<"x + "<<i->b<<"y + "<<i->c<<"z = "<<i->d<< "  || " ;
+		}
+	}
+
+	void printVEList (vertexEdgeList veList){
+		cout << "Vertex --> ";
+		printVertex(veList.v);
+		cout << " || ";
+		printEdgeList(veList.e);
+		cout << "\n";
+	}
+
+	void printplaneVEL (planeVEL p){
+		cout << "Plane Vertex Edge List for plane --> ";
+		printPlane(p.p);
+		cout << "\n";
+		for (int i = 0; i < p.velList.size(); i++)
+		{
+			printVEList(p.velList.at(i));	
+		}
+	}
+////////////////////////////////////////////////////////////////////////////
+
 	// class adder: public binary_function<vertex3D, vertex3D, edge3D> {
 	// 	public:
 	//     bool operator()(vertex3D v1 , vertex3D v2 , edge3D e ) const
@@ -52,35 +118,7 @@ namespace generalMethods{
 
 		return sorted ; 
 	}
-
-	void printVertex(vertex3D i){
-		cout<<i.a<<" "<<i.b<<" "<<i.c ;
-	}
-
-	void printVerticesList (vector<vertex3D> v){
-			/**
-			* print the vertexList
-			*/
-			cout << "Vertices: "<< "\n";
-
-			for (vector<vertex3D>::const_iterator i = v.begin(); i != v.end(); ++i){
-				printVertex(*i);
-				cout << "\n";
-			}
-	}
-
-	void printEdgeList (vector<edge3D> e){
-			/**
-		* print the edgeList
-		*/
-		cout << "Edges:" << "\n";
-		for (vector<edge3D>::const_iterator i = e.begin(); i != e.end(); ++i){
-			cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << "\n"; 
-		}
-	}
-
 	
-
 
 	bool checkOverlapCollinear(edge3D e1 , edge3D e2) {
 
@@ -150,15 +188,16 @@ namespace generalMethods{
 		// return distancePl < epsilon ;
 	}
 
-	void printPlanes ( vector<plane> p){
-		for (vector<plane>::iterator i = p.begin(); i != p.end(); ++i){
-			cout<<i->a<<" "<<i->b<<" "<<i->c<<" "<<i->d<<"\n" ;
+
+	std::vector<plane> removeDuplicate(std::vector<plane> planes){
+		std::vector<plane> tempPlanes;
+		for (int i = 0; i < planes.size(); i++){
+			// return true if plane is in tempPlanes
+			if (find(tempPlanes.begin(), tempPlanes.end(), planes.at(i)) == tempPlanes.end() ){
+				tempPlanes.push_back(planes.at(i));
+			}
 		}
-	}
-	void removeDuplicate(std::vector<plane> planes){
-
-		std::unique (planes.begin(), planes.end(), planeEqual); 
-
+		return tempPlanes;
 	}  
 
 	float findDistanceBetweenPlanes(plane p, plane q) {
@@ -189,7 +228,7 @@ namespace generalMethods{
 		for (int i = 0; i < eList.size(); i++)
 		{
 			currentEdge = eList[i] ; 
-			if(!(generalMethods::ifEdgeOnPlane(p, currentEdge))) edgeList.push_back(currentEdge) ;
+			if((generalMethods::ifEdgeOnPlane(p, currentEdge))) edgeList.push_back(currentEdge) ;
 		}
 		return edgeList ;
 	}
@@ -201,7 +240,7 @@ namespace generalMethods{
 		for (int i = 0; i < eop.size(); i++)
 		{
 			currentVertex = eop[i] ; 
-			if(!(ifVertexOnPlane(p, currentVertex))) vertexList.push_back(currentVertex) ;
+			if(ifVertexOnPlane(p, currentVertex)) vertexList.push_back(currentVertex) ;
 		}
 		return vertexList ;
 	}
@@ -223,4 +262,139 @@ namespace generalMethods{
 
 	}
 
+	bool onSegment(vertex3D v , edge3D edge){ // check if edge contains v
+		vertex3D v1 = edge.v1 ;
+		vertex3D v2 = edge.v2 ;
+		if (v.a <= std::max(v1.a,v2.a) && v.a >= std::min(v1.a,v2.a) && v.b <= std::max(v1.b,v2.b) && v.b >= std::min(v1.b,v2.b) && v.c <= std::max(v1.c,v2.c) && v.c >= std::min(v1.c,v2.c)) return true ;
+		return false ; 
+	}
+
+	// returns 0 if points collinear 
+	// returns 1 if points clockwise and 2 otherwise 
+	int orientation(vertex3D p, vertex3D q, vertex3D r , plane s )
+	{	
+		float normal[] = {s.a,s.b,s.c} ;
+		float vector1[] = {r.a - q.a , r.b - q.b ,r.c - q.c} ; 
+		float vector2[] = {q.a - p.a , q.b - p.b ,q.c - p.c} ;
+		float* crossv1v2 = crossProduct(vector1 , vector2) ;
+		float magnitudeCross = magnitude(crossv1v2) ;
+		if(magnitudeCross < epsilon ) return 0 ; 
+	    float val = dotProduct(crossv1v2 , normal) ;  // colinear
+	    return (val > 0)? 1: 2 ; // clock or counterclock wise
+	}
+
+
+	// returns if p1q1 and p2q2 intersect
+ 	bool doIntersect(vertex3D p1 , vertex3D q1 , vertex3D p2 , vertex3D q2,plane p) {
+		int o1 = orientation(p1, q1, p2,p);
+		int o2 = orientation(p1, q1, q2,p);
+		int o3 = orientation(p2, q2, p1,p);
+		int o4 = orientation(p2, q2, q1,p);
+
+
+		// source https://www.geeksforgeeks.org/how-to-check-if-a-given-point-lies-inside-a-polygon/
+		if(o1 != o2 && o3 != o4) return true ;
+		// Special Cases
+		edge3D edgep1q1 = {p1 , q1 };
+		edge3D edgep2q2 = {p1 , q1 }; 		 
+		// p1, q1 and p2 are colinear and p2 lies on segment p1q1
+		if (o1 == 0 && onSegment(p2, edgep1q1)) return true;
+
+		// p1, q1 and p2 are colinear and q2 lies on segment p1q1
+		if (o2 == 0 && onSegment(q2, edgep1q1)) return true;
+
+		// p2, q2 and p1 are colinear and p1 lies on segment p2q2
+		if (o3 == 0 && onSegment( p1  , edgep2q2)) return true;
+
+		 // p2, q2 and q1 are colinear and q1 lies on segment p2q2
+		if (o4 == 0 && onSegment(q1 , edgep2q2)) return true;
+
+		return false; // Doesn't fall in any of the above cases
+ 	}
+
+ 	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , edge3D refEdge, plane q )
+	{
+	// There must be at least 3 vertices in polygon[]
+		if (n < 3)  return false;
+		float refDirection[] = {refEdge.v1.a - refEdge.v2.a , refEdge.v1.a - refEdge.v2.a , refEdge.v1.a - refEdge.v2.a } ;		// Create a point for line segment from p to infinite
+		
+		vertex3D extreme  = {p.a + INF*refDirection[0] , p.b + INF*refDirection[1] , p.c + INF*refDirection[2]  } ;
+		// Count intersections of the above line with sides of polygon
+		int count = 0, i = 0;
+		do
+		{
+		    int next = (i+1)%n;
+
+		    // Check if the line segment from 'p' to 'extreme' intersects
+		    // with the line segment from 'polygon[i]' to 'polygon[next]'
+		    if (doIntersect(polygon[i], polygon[next], p, extreme,q))
+		    {
+		        // If the point 'p' is colinear with line segment 'i-next',
+		        // then check if it lies on segment. If it lies, return true,
+		        // otherwise false
+		        if (orientation(polygon[i], p, polygon[next],q) == 0)
+		        {	
+		        	edge3D tempEdge = {polygon[i] , polygon[next] } ;
+		            return onSegment(p ,  tempEdge) ;
+		        }
+		        	count++;
+
+		    }
+		    i = next;
+		} while (i != 0);
+
+		// Return true if count is odd, false otherwise
+		return count&1;  // Same as (count%2 == 1)
+	}
+
+	// assumes verices are in order 
+	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2,plane p){
+		std::vector<edge3D> edgesFL1 = fl1.eList;
+		std::vector<edge3D> edgesFL2 = fl2.eList ;
+		std::vector<vertex3D> verticesFL1 ;
+		std::vector<vertex3D> verticesFL2 ;
+
+		for (int i = 0; i < edgesFL1.size() ; ++i)
+		{
+			verticesFL1.push_back(edgesFL1[i].v1) ; 
+		}
+		
+		for (int i = 0; i < edgesFL2.size() ; ++i)
+		{
+			verticesFL2.push_back(edgesFL2[i].v1) ; 
+		}
+
+		bool fl1InFl2  ;
+		for (int i = 0; i < verticesFL1.size() ; ++i)
+		{
+			fl1InFl2 = isInside(verticesFL2 , verticesFL2.size() , verticesFL1[i] ,edgesFL2[0] ,  p) ; 
+			if (!fl1InFl2)
+			{
+				break ;
+			}
+		}
+		if (fl1InFl2)
+		{
+			return -1 ;
+		}
+
+		bool fl2InFl1  ;
+		for (int i = 0; i < verticesFL2.size() ; ++i)
+		{
+			fl2InFl1 = isInside(verticesFL1 , verticesFL1.size() , verticesFL2[i] , edgesFL1[0] , p) ; 
+			if (!fl2InFl1)
+			{
+				break ;
+			}
+		}
+
+		if (fl1InFl2)
+		{
+			return -1 ;
+		}
+
+		return 0 ;
+	}
+
 }
+// condom condom condom condom 

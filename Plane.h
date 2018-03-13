@@ -4,6 +4,10 @@
 using namespace std;
 
 
+float findAngle(edge3D refEdge, edge3D otherEdge, vertex3D refVertex,plane p) ;
+
+bool compareTriplets(edgeVertexTriplet t1 , edgeVertexTriplet t2) ;
+
 class Plane
 {
 	public:

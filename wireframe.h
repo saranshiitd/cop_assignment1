@@ -5,7 +5,7 @@
 #include "structs.h"
 #include "VertexList2D.h"
 #include "EdgeList2D.h"
-
+#include "basicLoopEdgeSet.h"
 using namespace std;
 class wireFrame
 {
@@ -75,6 +75,10 @@ public:
 	*/
 	void procedurePEVR() ;
 
+	vertexEdgeList adjEdgesAtVertexPlane (vertex3D v , std::vector<edge3D> edges) ; 
+
+
+	planeVEL getVEListOnPlane(plane p) ;
 	// /**
 	// * check if edges overlap and collinear 
 	// */
@@ -90,8 +94,18 @@ public:
 	*/
 	vector<plane> generatePlanes() ; 
 
-	
+	/**
+	* removes redundent planes 
+	*/
+	std::vector<plane> removeRedundentPlanes(std::vector<plane> v);
 
+
+	// takes a plane vertex Edge List and returns all basic loops on that plane
+	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
+
+private:
+		// sort all edges at a vertex in clockwise direction
+	vertexEdgeList sortVEList(vertexEdgeList veList , plane p);
 };
 
 

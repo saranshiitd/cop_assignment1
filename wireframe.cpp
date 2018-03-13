@@ -6,7 +6,10 @@
 #include "EdgeList2D.h"
 #include "structs.h"
 #include "generalMethods.h"
+#include "basicLoopEdgeSet.h"
+#include "Plane.h"
 using namespace std;
+
 
 //! data structures inside wireframe class
 // vector<vertex3D> vertexList;
@@ -154,18 +157,21 @@ void wireFrame::removeEdges (vector<edge3D> eList){
 }
 
 // takes a edgesList and edges to be removed and removes them from that edgesList
-void removeEdgesFromEdgeList (vector<edge3D> EdgeList, vector<edge3D> eList){
+vector<edge3D> removeEdgesFromEdgeList (vector<edge3D> EdgeList, vector<edge3D> eList){
 	/**
 	* removes edges from EdgeList
 	*/
 	// return true if edge is in edgeList
+	vector<edge3D> tempVector;
 
-	for (vector<edge3D>::const_iterator i = eList.begin(); i != eList.end(); ++i){
-		if (find(EdgeList.begin(), EdgeList.end(), *i) != EdgeList.end() )
-	  	 	EdgeList.erase(std::remove(EdgeList.begin(), EdgeList.end(), *i), EdgeList.end());
-		else
-	  		printf("%s\n", "Edge does not exist in the EdgeList!");	
-	}	
+	for (int i = 0; i < EdgeList.size(); i++)
+	{	
+		if (find(eList.begin(), eList.end(), EdgeList.at(i)) == eList.end() ){
+			tempVector.push_back(EdgeList.at(i));
+		}
+
+	}
+	return tempVector;
 }
 
 // takes a edgeList and returns a vertexList
@@ -216,7 +222,7 @@ void wireFrame::resolveOverlap(){
 		  	 unexaminedEdges.erase(remove(unexaminedEdges.begin(), unexaminedEdges.end(), E.at(0)), unexaminedEdges.end());
 		else{
 			removeEdges(E);
-			removeEdgesFromEdgeList(unexaminedEdges, E);
+			unexaminedEdges = removeEdgesFromEdgeList(unexaminedEdges, E);
 			vector<vertex3D> collinearOverlappingVertices = getVerticesFromEdges(E);
 			vector<vertex3D> sortedVertices = generalMethods::sortVertices(collinearOverlappingVertices, E.at(0));
 			for(vector<vertex3D>::size_type i = 0; i != sortedVertices.size()-1; i++) {
@@ -244,6 +250,20 @@ vertexEdgeList wireFrame::adjEdgesAtVertex (vertex3D v){
 	tempList.v = v;
 
 	for (vector<edge3D>::iterator i = edgeList.begin(); i != edgeList.end(); ++i){
+		if( i->v1 == v || i->v2 == v){
+			tempList.e.push_back(*i);
+		}
+	}
+	return tempList;
+}
+
+
+// for gettind veList with edges on plane
+vertexEdgeList wireFrame::adjEdgesAtVertexPlane (vertex3D v , std::vector<edge3D> edges){
+	vertexEdgeList tempList;
+	tempList.v = v;
+
+	for (vector<edge3D>::iterator i = edges.begin(); i != edges.end(); ++i){
 		if( i->v1 == v || i->v2 == v){
 			tempList.e.push_back(*i);
 		}
@@ -285,3 +305,201 @@ vector<plane> wireFrame::generatePlanes(){
 	}
 	return tempPlanes;
 }
+
+
+// used in F3.3
+vector<edge3D> findAdjacentEdgesAtVertexFromplaneVEL(planeVEL pvel, vertex3D vertex){
+	vector<vertexEdgeList> tempvelList = pvel.velList;
+
+	for (int i = 0; i < tempvelList.size(); i++)
+	{
+		if(tempvelList.at(i).v == vertex){
+			return tempvelList.at(i).e;
+		}
+	}
+	// should not happen
+	cout << "Could not find adjacent edgeList for this vertex";
+	return tempvelList.at(0).e; ;
+}
+
+vertex3D otherVertexOfEdge(edge3D e, vertex3D v){
+	if (e.v2 == v) return e.v1;
+	else if( e.v1 == v) return  e.v2;
+	else{
+		cout << "Vertex does not belong to this edge";
+		return v;
+	}
+}
+
+edge3D findNextEdge(vector<edge3D> eList, edge3D e){
+	int size = eList.size();
+
+	for (int i = 0; i < size; i++)
+	{
+		if(eList.at(i) == e){
+			//cout << "Current Edge: ";
+			//generalMethods::printEdge(eList.at(i));
+			//cout << "Next Edge: ";
+			//generalMethods::printEdge(eList.at((i+1)%size));
+			return eList.at((i+1)%size);
+		}
+	}
+
+	// should not happen
+	cout << "Could not find Next edge for edge: ";
+	// generalMethods::printVertex(e.v1);
+	// cout << ", ";
+	// generalMethods::printVertex(e.v2);
+	// cout<<"\n";
+	return eList.at(0);
+}
+
+// arrange the vertices in one direction -->   v1-->v2-->v3-->v4-->v1
+basicLoopEdgeSet arrangeVerticesInOneDirecton(basicLoopEdgeSet bles){
+
+	edge3D eTemp;
+	vector<edge3D> tempEList;
+	eTemp = {bles.eList.at(0).v2, bles.eList.at(0).v1};
+	tempEList.push_back(eTemp);
+	vertex3D vTemp = tempEList.at(0).v2;
+	for (int i = 0; i < bles.eList.size()-1; i++)
+	{
+		if(bles.eList.at(i+1).v1 == vTemp){
+			tempEList.push_back(bles.eList.at(i+1));
+			vTemp = tempEList.at(i+1).v2;
+		}
+		else{
+			eTemp = {bles.eList.at(i+1).v2, bles.eList.at(i+1).v1};
+			tempEList.push_back(eTemp);
+			vTemp = bles.eList.at(i+1).v1;
+		}
+	}
+
+	basicLoopEdgeSet b;
+	b.eList = tempEList;
+	return b;
+}
+
+// takes a plane vertex Edge List and returns all basic loops on that plane
+vector<basicLoopEdgeSet> wireFrame::generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane){
+	
+	cout << "Gererating basicLoops of plane: " ;
+	generalMethods::printPlane(pvel.p);cout <<"\n";
+	// vector of all basic loops on the plane	
+	vector<basicLoopEdgeSet> basicLoopVectorToBeReturned;
+
+	// to mark which edges are still present
+	vector<edge3D> tempEdgesOnPlane = edgesOnPlane;
+
+	// starting and ending vertex of loop
+	vertex3D vStart, vEnd;
+
+	vector<edge3D> tempEdgeList;
+	// until there is a remaining edge on plane do
+	while(tempEdgesOnPlane.size()!=0){
+		// a temp loop set to hold current loop
+		basicLoopEdgeSet tempBasicLoop;
+		// select a edge from edgesLeft
+		edge3D tempEdge = tempEdgesOnPlane.at(0);
+
+		vStart = tempEdge.v1;
+		vEnd   = tempEdge.v2;
+
+		tempBasicLoop.addEdge(tempEdge);
+
+
+		// until vStart != vEnd go on to make the loop
+		while (!( vStart == vEnd )){
+			//cout << "this ---:"; generalMethods::printVertex(vStart);cout<<"\n";
+			tempEdgeList = findAdjacentEdgesAtVertexFromplaneVEL(pvel, vStart);
+			//generalMethods::printEdgeList(tempEdgeList);
+			// find next edge at vStart adjcacent to tempEdge
+			//cout << "that :"; generalMethods::printVertex(vEnd);cout <<"\n";
+			//generalMethods::printEdge(tempEdge);
+			tempEdge = findNextEdge(tempEdgeList, tempEdge);
+			// vStart = other endPoint of edge
+			vStart = otherVertexOfEdge(tempEdge, vStart);
+			tempBasicLoop.addEdge(tempEdge);
+			//generalMethods::printEdgeList(tempBasicLoop.eList);cout <<"\n";
+
+		}
+		//cout << "Anyone here"<<"\n";
+		// add this loop to set and remove all the edges of this loop
+		tempBasicLoop = arrangeVerticesInOneDirecton(tempBasicLoop);
+		basicLoopVectorToBeReturned.push_back(tempBasicLoop);
+		//cout << "Before: ";
+		//generalMethods::printEdgeList(tempEdgesOnPlane);cout << "\n";
+		tempEdgesOnPlane = removeEdgesFromEdgeList (tempEdgesOnPlane, tempBasicLoop.eList);
+		//cout << "After: ";
+		//generalMethods::printEdgeList(tempEdgesOnPlane);cout << "\n\n";
+
+	}
+
+	return basicLoopVectorToBeReturned;
+}
+
+vertexEdgeList wireFrame::sortVEList(vertexEdgeList veList , plane p) {
+	std::vector<edgeVertexTriplet> triplets ;
+	std::vector<edge3D> edgeList = veList.e ;
+	edgeVertexTriplet currentTriplet ;
+	edge3D ref = edgeList[0] ;
+	
+	for (int i = 0; i < edgeList.size(); i++)
+	{
+		currentTriplet = {veList.v , edgeList[i] , ref , p} ;
+		triplets.push_back(currentTriplet) ;
+
+	}
+
+	std::sort(triplets.begin(),triplets.end(), compareTriplets) ; 
+
+	std::vector<edge3D> sortedList;
+
+	for (int i = 0; i < triplets.size(); i++)
+	{
+		sortedList.push_back(triplets[i].e)  ;
+	}
+
+	vertexEdgeList sortedStruct = {veList.v , sortedList}  ;
+	return sortedStruct ;	
+}
+
+
+planeVEL wireFrame::getVEListOnPlane(plane p){
+
+		std::vector<edge3D> edgesOnPlane = generalMethods::findEdgesOnPlane(p , edgeList);
+		std::vector<vertex3D> verticesOnPlane = generalMethods::findVerticesOnPlane(p , vertexList);
+
+		std::vector<vertexEdgeList> velList ;
+		vertexEdgeList current_veList ; 
+		vertexEdgeList			 currentvel ;  ;
+		for (int i = 0; i < verticesOnPlane.size(); i++) 
+		{
+			 currentvel = adjEdgesAtVertexPlane(verticesOnPlane[i],edgesOnPlane) ;
+			 currentvel = sortVEList(currentvel , p) ;
+			 velList.push_back(currentvel)  ;
+		}
+
+		planeVEL toReturn = {p , velList} ;
+		return toReturn ; 
+
+}
+
+/**
+* removes redundent planes 
+*/
+std::vector<plane> wireFrame::removeRedundentPlanes(std::vector<plane> v){
+
+	vector<plane> tempPlanes = generalMethods::removeDuplicate(v);
+
+	vector<plane> moreTempPlanes;
+	for (int i = 0; i < tempPlanes.size(); i++)
+	{
+		if((generalMethods::findEdgesOnPlane (tempPlanes.at(i), edgeList)).size() > 2){
+			moreTempPlanes.push_back(tempPlanes.at(i));
+		}	
+	}
+	return moreTempPlanes;
+}
+
+

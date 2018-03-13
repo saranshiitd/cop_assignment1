@@ -9,8 +9,8 @@ CXXFLAGS = -Wall -std=c++11
 # ****************************************************
 # Targets needed to bring the executable up to date
 
-main: main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o
-	$(CXX) $(CXXFLAGS) -o main main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o
+main: main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o
+	$(CXX) $(CXXFLAGS) -o main main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o
 
 
 main.o: wireframe.h EdgeList2D.h generalMethods.h Plane.h VertexList2D.h basicLoopEdgeSet.h bodyLoop.h
@@ -21,7 +21,7 @@ main.o: wireframe.h EdgeList2D.h generalMethods.h Plane.h VertexList2D.h basicLo
 VertexList2D.o: VertexList2D.h structs.h	
 	$(CXX) $(CXXFLAGS) -c VertexList2D.cpp
 
-wireframe.o: wireframe.h structs.h EdgeList2D.h VertexList2D.h generalMethods.h
+wireframe.o: wireframe.h structs.h EdgeList2D.h VertexList2D.h generalMethods.h basicLoopEdgeSet.h
 	$(CXX) $(CXXFLAGS) -c wireframe.cpp
 
 EdgeList2D.o: EdgeList2D.h structs.h
@@ -32,8 +32,12 @@ generalMethods.o: generalMethods.h structs.h basicLoopEdgeSet.h faceLoop.h bodyL
 
 structs.o: structs.cpp structs.h
 	$(CXX) $(CXXFLAGS) -c structs.cpp
+
 Plane.o: Plane.h structs.h
 	$(CXX) $(CXXFLAGS) -c Plane.cpp
+
+basicLoopEdgeSet.o: basicLoopEdgeSet.h VertexList2D.h EdgeList2D.h structs.h
+	$(CXX) $(CXXFLAGS) -c basicLoopEdgeSet.cpp
 
 # To start over from scratch, type 'make clean'.  This
 # removes the executable file, as well as old .o object

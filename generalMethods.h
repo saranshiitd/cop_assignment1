@@ -5,7 +5,21 @@
 #include "faceLoop.h"
 #include "bodyLoop.h"
 
+#define INF 10000.0f
+
 namespace generalMethods{
+
+	//! print methods
+	void printVertex(vertex3D i);
+	void printVerticesList (vector<vertex3D> v);
+	void printEdge (edge3D i);
+	void printEdgeList (vector<edge3D> e);
+	void printPlane (plane p);
+	void printPlanes (vector<plane> p);
+	void printVEList (vertexEdgeList veList);
+	void printplaneVEL (planeVEL p);
+
+
 	/**
 	* -----------------methods of vertices-------------------------- 
 	*/
@@ -15,14 +29,11 @@ namespace generalMethods{
 	*/
 	std::vector<vertex3D> sortVertices(std::vector<vertex3D> V, edge3D e);
 
-	void printVertex(vertex3D i);
-	void printVerticesList (vector<vertex3D> v);
 
 	/**
 	* -----------------methods of edges----------------------------- 
 	*/
 
-	void printEdgeList (vector<edge3D> e);
 
 	/**
 	* check if edges overlap and collinear 
@@ -54,11 +65,10 @@ namespace generalMethods{
 	/**
 	* use this to make all possible planes and then remove the duplicate ones 
 	*/
-	void printPlanes (vector<plane> p);
-	/**
-	* removes duplicate planes 
-	*/
-	void removeDuplicate(std::vector<plane> v);
+
+
+	// remove duplicate planes
+	std::vector<plane> removeDuplicate(std::vector<plane> v);
 	
 	/**
 	* returns distance between two planes 
@@ -77,10 +87,9 @@ namespace generalMethods{
 	std::vector<edge3D> findEdgesOnPlane (plane p, std::vector<edge3D> eList);
 
 	/**
-	* takes a plane and all edges on a plane (found using findEdgesOnPlane) 
-	* and returns all the vertices on that plane 
+	* takes a plane and all vertices and returns all the vertices on that plane 
 	*/ 
-	std::vector<vertex3D> findVerticesOnPlane (plane p, std::vector<edge3D> eop);	
+	std::vector<vertex3D> findVerticesOnPlane (plane p, std::vector<vertex3D> eop);	
 
 
 	/**
@@ -105,6 +114,8 @@ namespace generalMethods{
 	* to determine whether the bodyloop is outer or inner by the method described in paper 
 	*/
 	bool getIfOuter(bodyLoop b) ;
+
+
 
 }
 
