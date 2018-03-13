@@ -76,7 +76,7 @@ void wireFrame::printVertices(){
 
 	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
 		printVertex(*i);
-		cout << "\n";
+		cout << " || ";
 	}
 }
 
@@ -86,14 +86,14 @@ void wireFrame::printEdges(){
 	*/
 	cout << "Edges in wireFrame:" << "\n";
 	for (vector<edge3D>::const_iterator i = edgeList.begin(); i != edgeList.end(); ++i){
-		cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << "\n"; 
+		cout << "{"; printVertex(i->v1); cout <<"} {"; printVertex(i->v2); cout << "}" << " || "; 
 	}
 }
 
 void wireFrame::addVertex(vertex3D v){
 	// return true if vertex is in vertexList
 	if (find(vertexList.begin(), vertexList.end(), v) != vertexList.end() )
-  	 	printf("%s\n", "Vertex Already Exists");
+  	 	printf("%s\n", "Vertex Already Exists in the wireframe");
 	else
   		vertexList.push_back(v);
 }
@@ -123,10 +123,8 @@ void wireFrame::addEdge(vertex3D v1, vertex3D v2){
 
 void wireFrame::addEdge(edge3D e){
 	// return true if edge is in edgeList
-	if (find(edgeList.begin(), edgeList.end(), e) != edgeList.end() )
-  	 	printf("%s\n", "Edge Already Exists in the wireframe");
-	else
-  		edgeList.push_back(e);
+	if (find(edgeList.begin(), edgeList.end(), e) == edgeList.end() )
+		edgeList.push_back(e);
 }
 
 

@@ -103,7 +103,7 @@ namespace generalMethods{
 	* take a point and return if substitution product less than 0 
 	*/
 
-	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2) ; /* returns 1 if fl1 contains fl2 -1 if vice versa and 0 otherwise */
+	int checkConfinement(basicLoopEdgeSet fl1 , basicLoopEdgeSet fl2, plane p) ; /* returns 1 if fl1 contains fl2 -1 if vice versa and 0 otherwise */
 
 	/**
 	* returns alpha as described in paper and whether to select +Fs or -Fs 
