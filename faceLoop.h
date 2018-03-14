@@ -28,7 +28,7 @@ public:
 	/** 
 	* will arrange all the basicLoopEdgeSet such that their direction is same as that of normal  
 	*/
-
+	bool operator==(faceLoop& other) const;
 
 };
 

@@ -7,7 +7,7 @@
 #include "EdgeList2D.h"
 #include "basicLoopEdgeSet.h"
 #include "faceLoop.h"
-
+#include <string>
 using namespace std;
 class wireFrame
 {
@@ -29,6 +29,7 @@ public:
 	//! print function for wireframe
 	void printVertex (vertex3D i);
 	void printVertices();
+	string getVertices();
 	void printEdges();
 	void printPlanes ();
 	void printFaceLoops();

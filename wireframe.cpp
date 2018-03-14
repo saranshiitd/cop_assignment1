@@ -9,6 +9,7 @@
 #include "basicLoopEdgeSet.h"
 #include "Plane.h"
 #include "faceLoop.h"
+#include <string>
 
 using namespace std;
 
@@ -77,12 +78,28 @@ void wireFrame::printVertices(){
 	/**
 	* print the vertexList
 	*/
-	cout << "Vertices in wireFrame: "<< "\n";
+	cout << "# Vertices in wireFrame: "<< "\n";
 
 	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
-		printVertex(*i);
+		cout << "v ";printVertex(*i);
 		cout << "\n";
 	}
+}
+
+string wireFrame::getVertices(){
+	/**
+	* print the vertexList
+	*/
+	string v;
+	v = "# Vertices in wireFrame: \n";
+
+	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
+		v += "v ";
+		v += "" + to_string(i->a) + " " + to_string(i->b) + " " + to_string(i->c) ;
+		v += "\n";
+	}
+	v += "\n";
+	return v;
 }
 
 void wireFrame::printEdges(){

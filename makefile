@@ -39,7 +39,7 @@ Plane.o: Plane.h structs.h
 basicLoopEdgeSet.o: basicLoopEdgeSet.h VertexList2D.h EdgeList2D.h structs.h
 	$(CXX) $(CXXFLAGS) -c basicLoopEdgeSet.cpp
 
-faceLoop.o: structs.h faceLoop.h basicLoopEdgeSet.h
+faceLoop.o: structs.h faceLoop.h basicLoopEdgeSet.h generalMethods.h
 	$(CXX) $(CXXFLAGS) -c faceLoop.cpp	
 
 # To start over from scratch, type 'make clean'.  This
