@@ -27,6 +27,9 @@ class faceLoop{
 	* will arrange all the basicLoopEdgeSet such that their direction is same as that of normal  
 	*/
 
+	std::vector<edge3D> getAllEdges() ;
+
+	bool ifFaceLoopContains(edge3D edge) ; 
 
 };
 

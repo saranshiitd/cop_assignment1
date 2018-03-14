@@ -31,3 +31,27 @@ void faceLoop::removeLoop(basicLoopEdgeSet loop){
 void arrange(){
 
 }
+
+std::vector<edge3D> faceLoop::getAllEdges(){
+	std::vector<edge3D> allEdges ;
+	std::vector<edge3D> edgesInCurrentLoop;
+	for (int i = 0; i < faceloop.size(); ++i)
+	{
+		edgesInCurrentLoop = faceloop[i].eList ; 
+		allEdges.insert(allEdges.end(),edgesInCurrentLoop.begin() , edgesInCurrentLoop.end()) ; 	
+
+	}
+	return allEdges ; 
+}
+
+bool faceLoop::ifFaceLoopContains(edge3D edge) {
+	std::vector<edge3D> edgesInCurrentLoop ;
+	for (int i = 0; i < faceloop.size(); ++i)
+	{
+		edgesInCurrentLoop = faceloop[i].eList ; 
+		if(std::find(edgesInCurrentLoop.begin(), edgesInCurrentLoop.end(), edge) != edgesInCurrentLoop.end()) {
+			return true  ;
+		} 
+	}
+	return false ; 
+}

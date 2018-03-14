@@ -504,4 +504,143 @@ std::vector<plane> wireFrame::removeRedundentPlanes(std::vector<plane> v){
 	return moreTempPlanes;
 }
 
+// std::vector<faceLoop> getFaceLoopsContainingEdge(edge3D refEdge){
+// 	std::vector<faceLoop> faceLoopsContaingEdge ;
+// 	faceLoop currentFaceLoop ;
+// 	std::vector<edge3D> edgesInCurrentFL;
+// 	for (int i = 0; i < faceloops.size(); ++i)
+// 	{
+// 		currentFaceLoop = faceloops[i] ; 
+// 		if (currentFaceLoop.ifFaceLoopContains(refEdge))
+// 		 {
+// 		 	faceLoopsContaingEdge.push_back(currentFaceLoop)  ;
+// 		 } 
+// 	}	
+// 	return faceLoopsContaingEdge ;
+// }
 
+std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge) {
+	std::vector<int> faceLoopContaingEdge ;	
+	faceLoop currentFaceLoop ;
+	std::vector<edge3D> edgesInCurrentFL ;
+	for (int i = 0; i < faceloops.size(); ++i)
+	{
+		currentFaceLoop = faceloops[i] ; 
+		if (currentFaceLoop.ifFaceLoopContains(refEdge))
+		 {
+		 	faceLoopsContaingEdge.push_back(i)  ;
+		 } 
+	}
+	return faceLoopsContaingEdge ; 
+}
+
+std::vector<pair<int , bool>> expandFaceLoop(faceLoop fl) {	
+	edge3D currentEdge ;
+	std::vector<int> faceContaingCurrentEdge;
+	std::vector<edge3D> allEdgesInFaceLoop = fl.getAllEdges() ;
+	std::vector<pair<int , bool >> selectedPairsList ;
+	for (int i = 0; i < allEdgesInFaceLoop.size(); ++i)
+	 {
+	 	currentEdge = allEdgesInFaceLoop[i]  ;
+	 	faceContainingCurrentEdge = getFaceLoopsContainingEdge(currentEdge) ;
+	 	float *alphaAndDirection  = generalMethods::getAlphaAndDirection(fl , faceContainingCurrentEdge[0] , currentEdge) ;
+	 	float minTheta = alphaAndDirection[0] ; 
+	 	int minIndex = 0 ; 
+	 	float minDirection = alphaAndDirection[1] ; 
+	 	float currentTheta ;
+	 	// float currentDirection ; 
+	 	// int currnetMinIndex ; 
+	 	for (int i = 1; i < faceContainingCurrentEdge.size(); ++i)
+	 	{
+	 		alphaAndDirection = generalMethods::getAlphaAndDirection(fl , faceloops(faceContainingCurrentEdge[i]) , currentEdge ) ;
+	 		currentTheta = alphaAndDirection[0] ; 
+	 		// currentDirection = alphaAndDirection[1] ; 
+	 		if(currentTheta < minTheta ) {
+	 			minTheta = currentTheta ; 
+	 			minIndex = i ;
+	 			minDirection = alphaAndDirection[1] ;  
+	 		} 
+	 	}
+	 	pair<int , bool> selectedPair(minIndex , (minDirection > 0)) ; 
+	 	selectedPairsList.push_back(selectedPair) ; 
+	 }
+	 return selectedPair ;   
+}
+
+void wireFrame::generateBodyLoops() {
+
+	std::vector<int> positivesUsed(faceloops.size() , 0) ;
+	std::vector<int> negativesUsed(faceloops.size() , 0) ;
+	std::std::vector<bool> positivesExpanded(faceloops.size(),false);
+	std::std::vector<bool> negativesExpanded(faceloops.size(),false);
+
+	faceLoop startingLoop ; 
+	int numberOfFLvisited = 0 ;
+	bool somethingSelected ; 
+	while(numberOfFLvisited < 2*faceloops.size()){
+		bodyLoop currentBodyLoop ;
+		for (int i = 0; i < faceloops.size(); ++i)
+			{
+			somethingSelected = false ; 
+			if (positivesUsed[i] = 0)
+			{
+				somethingSelected = true ; 
+				positivesUsed[i] = 1 ;
+				startingLoop = faceloops[i] ;
+
+			}
+			else if (negativesUsed[i] = 0)
+			{
+				somethingSelected = true ; 
+				negativesUsed[i] = 1 ; 
+				faceLoop newFaceLoop ;
+				newFaceLoop.faceloop = faceloops[i].faceloop ; 
+				std::reverse(newFaceLoop.faceloop.begin(),newFaceLoop.faceLoop.end()) ;
+				newFaceLoop.normal = { -faceloops[i].normal[0] , -faceloops[i].normal[1] , -faceloops[i].normal[2] } ;   
+				startingLoop = newFaceLoop ;  
+
+			}
+			if (somethingSelected)
+			{
+				currentBodyLoop.addLoop(startingLoop) ;
+				std::vector<pair<int , bool>> selectedLoops ;
+				// std::vector<int> expandedLoops ;
+				expandedLoops.push_back(0) ; 
+				faceLoop currentLoop = startingLoop ;
+				int loopCount = 0 ;  
+				while(true){
+					selectedLoops = expandFaceLoop(currentLoop) ;
+					// expandedLoops[loopCount] = 1 ; 
+					pair<int , bool > currentPair ; 
+					for (int i = 0; i < selectedLoops.size(); ++i)
+					{	
+						currentPair = selectedLoops[i] ;
+						faceLoop loopToInsert = faceloops[currentPair.first] ; 
+						if (!currentPair.second)
+						{
+							loopToInsert.normal = {-loopToInsert.normal[0] , -loopToInsert.normal[1] , -loopToInsert.normal[2] } ; 
+							std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; 
+							negativesUsed[currentPair.first] = 1 ; 
+						}
+						else {
+							positivesUsed[currentPair.first]  = 1 ; 
+						}
+						bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
+						if (ifInserted)
+						{
+							expandFaceLoop.push_back(0) ;
+						}
+					}
+
+					loopCount += 1 ; 
+					if (loopCount == currentBodyLoop.bodyLoop.size())
+					{
+						break ; 
+					}
+				}
+				bodyloops.push_back(currentBodyLoop) ;   
+				break ;  
+			}
+		}
+	}
+}

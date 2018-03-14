@@ -181,7 +181,12 @@ struct direction
 	float x;
 	float y;
 	float z;
-
+	direction(){} 
+	direction(float X , float Y , float Z) {
+		x = X ;
+		y = Y ;
+		z = Z ;
+	}
 	bool operator==(const direction& rhs )
 	{
 		float v1[] = {x, y, z};
@@ -192,13 +197,14 @@ struct direction
 		return (crossMagnitude < epsilon) && (scalarProduct > 0 ) ; 
 	}
 
+
 };
 
 struct vertexEdgePair
 {
 	vertex3D v ;
 	edge3D e ;
-
+	vertexEdgePair(){}
 	vertexEdgePair(vertex3D vertex , edge3D  edge) {
 		v = vertex ;
 		e = edge ; 

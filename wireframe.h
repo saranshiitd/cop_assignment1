@@ -19,6 +19,7 @@ public:
 	
 	vector<plane> planes;
 	vector<faceLoop> faceloops;
+	std::vector<bodyLoop> bodyloops ;
 
 	//! generate wireframe form 3 vertices list --> front, top, side
 	//! and from three edges list --> front, top side
@@ -100,6 +101,8 @@ public:
 
 	// takes a plane vertex Edge List and returns all basic loops on that plane
 	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
+
+	void generateBodyLoops() ;
 
 private:
 		// sort all edges at a vertex in clockwise direction
