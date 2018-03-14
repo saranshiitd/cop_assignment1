@@ -571,7 +571,10 @@ void wireFrame::generateFaceLoops(){
 
 			tempFaceLoop.faceloop = tempBaiscSet;
 			tempFaceLoop.p = planes.at(i);
-			tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+			if(planes.at(i).d>=-epsilon)
+				tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+			else
+				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
 			tempFaceLoop.arrange();
 			faceLoops.push_back(tempFaceLoop);
 		}

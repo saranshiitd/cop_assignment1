@@ -57,7 +57,7 @@ void faceLoop::arrange(){
 
 		float loopDirection[] = {crossProduct(e1, e2)[0], crossProduct(e1, e2)[1], crossProduct(e1, e2)[2]};
 		float normalDirection[] = {normal.x, normal.y, normal.z};
-		if(dotProduct(loopDirection, normalDirection) < 0){
+		if(dotProduct(loopDirection, normalDirection) < -epsilon){
 			faceloop.at(i) = reversebasicLoopEdgeSet(faceloop.at(i));
 		}
 
