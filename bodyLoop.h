@@ -7,18 +7,18 @@
 
 class bodyLoop{
 
-	std::vector< pair<faceLoop, bool> > bodyLoop;
+	std::vector<faceLoop > bodyLoop;
 
 	/**
 	* add loop/remove to face loop 
 	*/
-	void addLoop(faceLoop loop, bool b);
+	bool addLoop(faceLoop loop);
 	void removeLoop(faceLoop loop);
-
+	void addMultipleLoops(std::vector<faceLoop>) ; 
 	/**
 	* sets a loop in bodyLoop as 'expanded' or 'unexpanded' 
 	*/
-	void setLoop (faceLoop loop, bool b);
+	void setLoop (faceLoop loop);
 
 	/**
 	* does bodyLoop contain a faceLoop 
