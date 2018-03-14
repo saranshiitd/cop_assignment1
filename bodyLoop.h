@@ -6,7 +6,7 @@
 #include "faceLoop.h"
 
 class bodyLoop{
-
+public :
 	std::vector<faceLoop > bodyLoop;
 
 	/**

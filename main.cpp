@@ -175,7 +175,14 @@ int main(){
 
 	object = wireframe.getVertices();
 	myfile << object;
+
+	//std::vector<bodyLoop> bodyloops ;
+	//std::vector<faceLoop > bodyLoop;
+	//std::vector<edge3D> eList;
+
+	// doing for first body loop
 	
+
 	myfile.close();
 /*****************/
 	return 0;

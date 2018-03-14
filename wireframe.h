@@ -7,6 +7,7 @@
 #include "EdgeList2D.h"
 #include "basicLoopEdgeSet.h"
 #include "faceLoop.h"
+#include "bodyLoop.h"
 #include <string>
 using namespace std;
 class wireFrame
@@ -121,6 +122,9 @@ private:
 	*/
 	std::vector<plane> removeRedundentPlanes(std::vector<plane> v);
 
+	std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge);
+	std::vector<pair<int , bool>> expandFaceLoop(faceLoop fl);
+	std::vector<pair<int , bool>> wireFexpandFaceLoop(faceLoop fl);
 };
 
 
