@@ -163,44 +163,9 @@ int main(){
 
 	wireframe.printVertices();
 	wireframe.printEdges();
+	wireframe.printPlanes();
+	wireframe.printFaceLoops();
 
-
-	cout << "Planes Finally: \n";
-	cout << wireframe.planes.size() << "\n";
-	generalMethods::printPlanes(wireframe.planes);
-	cout <<"\n";
-	planeVEL tempPlaneVEL;
-	//basic loops
-	// vector<basicLoopEdgeSet> tempBasicLoopEdgeSet;
-	// for (int i = 0; i < tempPlanes.size(); i++)
-	// {
-	// 	vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(i), wireframe.edgeList);
-	// 	//cout << "Plane : ";
-	// 	//generalMethods::printPlane(tempPlanes.at(i));
-	// 	tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(i));
-	// 	//generalMethods::printplaneVEL(tempPlaneVEL);
-	// 	//cout << "Edges On Plane: "<< "\n";
-	// 	//generalMethods::printEdgeList(tempEdgesOnPlane);
-	// 	cout << "\n" << "Loop Edge Set: " << "\n";
-	// 	tempBasicLoopEdgeSet = wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane); 
-	// 	for (int j = 0; j < tempBasicLoopEdgeSet.size(); j++)
-	// 	{
-	// 		generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(j).eList);
-	// 		cout << "\n";
-	// 	}
-	// }
-
-	// // testing included function
-	// vector<edge3D> tempEdgesOnPlane = generalMethods::findEdgesOnPlane(tempPlanes.at(3), wireframe.edgeList);
-	// tempPlaneVEL = wireframe.getVEListOnPlane(tempPlanes.at(3));
-	// tempBasicLoopEdgeSet = (wireframe.generateBasicLoopsOnPlane(tempPlaneVEL, tempEdgesOnPlane)); 
-
-	// cout << "First LOOp:"<<"\n";
-	// generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(1).eList);cout<<"\n";
-	// cout << "Second LOOp:"<<"\n";
-	// generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(0).eList);cout<<"\n";
-	// int confi = generalMethods::checkConfinement(tempBasicLoopEdgeSet.at(1), tempBasicLoopEdgeSet.at(0), tempPlanes.at(3));
-	// cout << "Confi: " << confi << "\n";
 
 	return 0;
 }
