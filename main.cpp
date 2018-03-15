@@ -6,6 +6,8 @@
 #include "basicLoopEdgeSet.h"
 #include "bodyLoop.h"
 #include <iostream>
+#include <string>
+#include <fstream>
 using namespace std;
 
 /*
@@ -166,6 +168,22 @@ int main(){
 	wireframe.printPlanes();
 	wireframe.printFaceLoops();
 
+/******************/
+	// writing object to obj file
+	ofstream myfile ("object.obj");
+	string object;
 
+	object = wireframe.getVertices();
+	myfile << object;
+
+	//std::vector<bodyLoop> bodyloops ;
+	//std::vector<faceLoop > bodyLoop;
+	//std::vector<edge3D> eList;
+
+	// doing for first body loop
+	
+
+	myfile.close();
+/*****************/
 	return 0;
 }

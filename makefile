@@ -21,7 +21,7 @@ main.o: wireframe.h EdgeList2D.h generalMethods.h Plane.h VertexList2D.h basicLo
 VertexList2D.o: VertexList2D.h structs.h	
 	$(CXX) $(CXXFLAGS) -c VertexList2D.cpp
 
-wireframe.o: wireframe.h structs.h EdgeList2D.h VertexList2D.h generalMethods.h basicLoopEdgeSet.h
+wireframe.o: wireframe.h structs.h EdgeList2D.h VertexList2D.h generalMethods.h basicLoopEdgeSet.h bodyLoop.h
 	$(CXX) $(CXXFLAGS) -c wireframe.cpp
 
 EdgeList2D.o: EdgeList2D.h structs.h
@@ -39,8 +39,9 @@ Plane.o: Plane.h structs.h
 basicLoopEdgeSet.o: basicLoopEdgeSet.h VertexList2D.h EdgeList2D.h structs.h
 	$(CXX) $(CXXFLAGS) -c basicLoopEdgeSet.cpp
 
-faceLoop.o: structs.h faceLoop.h basicLoopEdgeSet.h
-	$(CXX) $(CXXFLAGS) -c faceLoop.cpp	
+faceLoop.o: structs.h faceLoop.h basicLoopEdgeSet.h generalMethods.h
+	$(CXX) $(CXXFLAGS) -c faceLoop.cpp
+	
 
 # To start over from scratch, type 'make clean'.  This
 # removes the executable file, as well as old .o object

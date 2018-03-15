@@ -2,7 +2,8 @@
 #include "structs.h"
 #include "faceLoop.h"
 #include "basicLoopEdgeSet.h"
-
+#include "generalMethods.h"
+#include <iostream>
 void faceLoop::addLoop(basicLoopEdgeSet loop){
 
 	// if (find(faceloop.begin(), faceloop.end(), loop) != faceloop.end() )
@@ -61,6 +62,64 @@ void faceLoop::arrange(){
 		}
 
 	}
+}
+
+
+
+bool faceLoop::operator==(faceLoop& other) const{
+
+	if(faceloop.size() != other.faceloop.size()){
+		return false;
+	}	
+	else if ( !( other.p == p)){
+		return false;
+	}
+	else{
+		if( faceloop.size() == 1){
+			if (generalMethods::checkConfinement(faceloop.at(0) , other.faceloop.at(0), p) == 0 ){
+				return false;
+			}
+			else{
+				return true;
+			} 
+		}
+		else if ( faceloop.size() == 2 ){
+			if ((generalMethods::checkConfinement(faceloop.at(0) , other.faceloop.at(0), p) == 0) && (generalMethods::checkConfinement(faceloop.at(0) , other.faceloop.at(1), p) == 0) ){
+				return false;
+			}
+			else if ((generalMethods::checkConfinement(faceloop.at(1) , other.faceloop.at(0), p) == 0) && (generalMethods::checkConfinement(faceloop.at(1) , other.faceloop.at(1), p) == 0) ){
+				return false;
+			} 
+			else {
+				return true;
+			}
+		}
+		else if ( faceloop.size() == 3 ){
+			if ((   generalMethods::checkConfinement(faceloop.at(0) , other.faceloop.at(0), p) == 0) 
+				&& (generalMethods::checkConfinement(faceloop.at(0) , other.faceloop.at(1), p) == 0) 
+				&& (generalMethods::checkConfinement(faceloop.at(0) , other.faceloop.at(2), p) == 0)){
+				return false;
+			}
+			else if ((generalMethods::checkConfinement(faceloop.at(1) , other.faceloop.at(0), p) == 0) 
+				&& (generalMethods::checkConfinement(faceloop.at(1) , other.faceloop.at(1), p) == 0) 
+				&& (generalMethods::checkConfinement(faceloop.at(1) , other.faceloop.at(2), p) == 0)){
+				return false;
+			}
+			else if ((generalMethods::checkConfinement(faceloop.at(2) , other.faceloop.at(0), p) == 0) 
+				&& (generalMethods::checkConfinement(faceloop.at(2) , other.faceloop.at(1), p) == 0) 
+				&& (generalMethods::checkConfinement(faceloop.at(2) , other.faceloop.at(2), p) == 0)){
+				return false;
+			}
+			else{
+				return true;
+			}
+		}
+		else {
+			std::cout << "faceLoop with more than 4 basic loops!" << "\n";
+			return true;
+		}
+	}
+
 
 }
 
@@ -86,4 +145,5 @@ bool faceLoop::ifFaceLoopContains(edge3D edge) {
 		} 
 	}
 	return false ; 
+
 }
