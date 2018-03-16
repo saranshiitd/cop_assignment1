@@ -124,7 +124,6 @@ string wireFrame::getBody(){
 		}
 
 	}
-	return s;
 }
 
 void wireFrame::printEdges(){
@@ -729,6 +728,92 @@ void wireFrame::generateBodyLoops() {
 	printf("%d\n", numberOfFLvisited);
 }
 
+// bool oneContainsTwo(int confinement[][]){
+// 	int count = 0;
+// 	for (int i = 0; i < 3; i++){
+// 		count = 0;
+// 		for (int j = 0; j < 3; j++){
+// 			if(i!=j){
+// 				if(confinement[i][j] == 1)
+// 					count ++;
+// 			}
+// 		}	
+// 		if(count == 2) return true;		
+// 	}
+// 	return false;
+// }
+
+// bool oneContainsOne(int confinement[][]){
+// 	int count = 0;
+// 	for (int i = 0; i < 3; i++){
+// 		count = 0;
+// 		for (int j = 0; j < 3; j++){
+// 			if(i!=j){
+// 				if(confinement[i][j] == 1)
+// 					count ++;
+// 			}
+// 		}	
+// 		if(count == 1) return true;		
+// 	}
+// 	return false;
+// }
+
+// bool threeLoopsOneInsideOther(int confinement[][]){
+// 	if(oneContainsTwo(confinement) && oneContainsOne(confinement))
+// 		return true;
+// 	else
+// 		return false;
+// }
+
+// int firstLoop(int confinement[][]){
+
+// 	for (int i = 0; i < 3; i++){
+// 		count = 0;
+// 		for (int j = 0; j < 3; j++){
+// 			if(i!=j){
+// 				if(confinement[i][j] == 1)
+// 					count ++;
+// 			}
+// 		}	
+// 		if(count == 2) return i;		
+// 	}	
+// 	cout << "Fitst Loop not found" <<"\n";
+// 	return 0;
+// }
+
+// int secondLoop(int confinement[][]){
+	
+// 	for (int i = 0; i < 3; i++){
+// 		count = 0;
+// 		for (int j = 0; j < 3; j++){
+// 			if(i!=j){
+// 				if(confinement[i][j] == 1)
+// 					count ++;
+// 			}
+// 		}	
+// 		if(count == 1) return i;		
+// 	}	
+// 	cout << "second Loop not found" <<"\n";
+// 	return 0;
+// }
+
+// int thirdLoop(int confinement[][]){
+	
+// 	for (int i = 0; i < 3; i++){
+// 		count = 0;
+// 		for (int j = 0; j < 3; j++){
+// 			if(i!=j){
+// 				if(confinement[i][j] == 1)
+// 					count ++;
+// 			}
+// 		}	
+// 		if(count == 0) return i;		
+// 	}	
+// 	cout << "third Loop not found" <<"\n";
+// 	return 0;
+// }
+
+
 // generate all face loops from the planes generated
 void wireFrame::generateFaceLoops(){
 
@@ -748,42 +833,195 @@ void wireFrame::generateFaceLoops(){
 		int temp = tempBasicLoopEdgeSet.size();
 
 		int confinement[temp][temp];
+		//vector<basicLoopEdgeSet> tempBaiscSet;
 
 		for (int j = 0; j < temp; j++ ){
-			for (int k = 0; k < temp; k++){
-				confinement[j][k] = generalMethods::checkConfinement(tempBasicLoopEdgeSet.at(j), tempBasicLoopEdgeSet.at(k), planes.at(i) );
+			for (int k = 0; k < temp; k++)
+			confinement[j][k] = generalMethods::checkConfinement(tempBasicLoopEdgeSet.at(j), tempBasicLoopEdgeSet.at(k), planes.at(i) );
+		}
+
+		if(temp == 1 ){
+			int flag = 0 ;
+			for (int j = 0; j < temp; j++ ){
+				vector<basicLoopEdgeSet> tempBaiscSet;
+				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(0));
+				// make this loop a faceloop
+				tempFaceLoop.faceloop = tempBaiscSet;
+				tempFaceLoop.p = planes.at(i);
+				if(planes.at(i).d>= -0.01)
+					tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+				else
+					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+				tempFaceLoop.arrange();
+				faceLoops.push_back(tempFaceLoop);
+			}
+		}
+		else if(temp == 2){
+			if(confinement[0][1] == 1){
+				vector<basicLoopEdgeSet> tempBaiscSet;
+				// 0 contains 1 --> 0 is parent loop
+				//				--> 1 is child loop
+				//				--> push 0 first and then 1
+				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(0));
+				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(1));
+				// makes these loops 1 faceloop
+				tempFaceLoop.faceloop = tempBaiscSet;
+				tempFaceLoop.p = planes.at(i);
+				if(planes.at(i).d>= -0.01)
+					tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+				else
+					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+				tempFaceLoop.arrange();
+				faceLoops.push_back(tempFaceLoop);
+			}
+			else if(confinement[1][0] == 1){
+				vector<basicLoopEdgeSet> tempBaiscSet;
+				// 0 contains 1 --> 0 is parent loop
+				//				--> 1 is child loop
+				//				--> push 0 first and then 1
+				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(1));
+				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(0));
+				// makes these loops 1 faceloop
+				tempFaceLoop.faceloop = tempBaiscSet;
+				tempFaceLoop.p = planes.at(i);
+				if(planes.at(i).d>= -0.01)
+					tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+				else
+					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+				tempFaceLoop.arrange();
+				faceLoops.push_back(tempFaceLoop);
+			}
+			else{
+				// 1st faceloop
+				vector<basicLoopEdgeSet> tempBaiscSet;
+				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(0));
+				// makes these loops 1 faceloop
+				tempFaceLoop.faceloop = tempBaiscSet;
+				tempFaceLoop.p = planes.at(i);
+				if(planes.at(i).d>= -0.01)
+					tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+				else
+					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+				tempFaceLoop.arrange();
+				faceLoops.push_back(tempFaceLoop);	
+
+				// 2nd faceloop
+				vector<basicLoopEdgeSet> tempBaiscSet1;
+				tempBaiscSet1.push_back(tempBasicLoopEdgeSet.at(0));
+				// makes these loops 1 faceloop
+				tempFaceLoop.faceloop = tempBaiscSet1;
+				tempFaceLoop.p = planes.at(i);
+				if(planes.at(i).d>= -0.01)
+					tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+				else
+					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+				tempFaceLoop.arrange();
+				faceLoops.push_back(tempFaceLoop);	
 			}
 		}
 
-		int flag = 0 ;
-		for (int j = 0; j < temp; j++ ){
-			vector<basicLoopEdgeSet> tempBaiscSet;
-			flag = 0;
-			for (int k = 0; k < temp; k++){
-				if(confinement[j][k]==-1 and j!=k)
-					flag = 1;
-			}
-			// if this loop is contained in other --> leave it --> it is useless
-			if(flag == 1) continue;
+		// else if(temp == 3)
+		// {
 
-			for (int k = 0; k < temp; k++){
-				if(confinement[j][k]==1 || (confinement[j][k]==-1 && j==k)){
-					tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
-				}
-			}
+		//   if(!threeLoopsOneInsideOther(confinement)){
+		//   	int flag = 0;
+		// 	for (int j = 0; j < temp; j++ )
+		// 	{
+		// 		vector<basicLoopEdgeSet> tempBaiscSet;
+		// 		flag = 0;
+		// 		for (int k = 0; k < temp; k++)
+		// 		{
+		// 			if(confinement[j][k]==-1 and j!=k)
+		// 				flag = 1;
+		// 		}
+		// 		// if this loop is contained in other --> leave it --> it is useless
+		// 		if(flag == 1) continue;
+		// 		int count = 0;
+		// 		for (int k = 0; k < temp; k++)
+		// 		{
+		// 			if(confinement[j][k]==1 || (confinement[j][k]==-1 && j==k)){
+		// 				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
+		// 				count ++;
+		// 			}
+		// 		}
 
-			tempFaceLoop.faceloop = tempBaiscSet;
-			tempFaceLoop.p = planes.at(i);
-			if(planes.at(i).d>= -0.01)
-				tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
-			else
-				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
-			tempFaceLoop.arrange();
-			faceLoops.push_back(tempFaceLoop);
+		// 		if(count > 1){
+		// 			vector<basicLoopEdgeSet> tempBaiscSet1;
+		// 			tempBaiscSet1.push_back(tempBasicLoopEdgeSet.at(j));
+		// 			for (int k = 0; k < temp; k++)
+		// 			{
+		// 				if(confinement[j][k]==1)
+		// 					tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
+		// 			}
+		// 			tempBaiscSet = tempBaiscSet1;
+		// 		}
+
+		// 		tempFaceLoop.faceloop = tempBaiscSet;
+		// 		tempFaceLoop.p = planes.at(i);
+		// 		if(planes.at(i).d>= -0.01)
+		// 			tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+		// 		else
+		// 			tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+		// 		tempFaceLoop.arrange();
+		// 		faceLoops.push_back(tempFaceLoop);
+		// 	}
+		//   }
+		//   // three loops one inside other
+		//   else{
+		//   	int a = firstLoop(confinement);
+		//   	int b = secondLoop(confinement);
+		//   	int c = thirdLoop(confinement);
+
+		//   	vector<basicLoopEdgeSet> tempBaiscSet;
+		//   	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(a));
+		//   	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(b));
+		//   	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(c));
+
+	 //  		tempFaceLoop.faceloop = tempBaiscSet;
+		// 	tempFaceLoop.p = planes.at(i);
+		// 	if(planes.at(i).d>= -0.01)
+		// 		tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+		// 	else
+		// 		tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+		// 	tempFaceLoop.arrange();
+		// 	faceLoops.push_back(tempFaceLoop);
+		//   }
+		// }
+
+		else{
+			cout << "4 basicLopps on a Plane :(" << "\n";
 		}
 
-	}
-	wireFrame::faceloops = faceLoops;
+		// int flag = 0;
+		// for (int j = 0; j < temp; j++ ){
+		// 	vector<basicLoopEdgeSet> tempBaiscSet;
+		// 	flag = 0;
+		// 	for (int k = 0; k < temp; k++){
+		// 		if(confinement[j][k]==-1 and j!=k)
+		// 			flag = 1;
+		// 	}
+		// 	// if this loop is contained in other --> leave it --> it is useless
+		// 	if(flag == 1) continue;
+
+		// 	for (int k = 0; k < temp; k++){
+		// 		if(confinement[j][k]==1 || (confinement[j][k]==-1 && j==k)){
+		// 			tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
+		// 		}
+		// 	}
+
+		// tempFaceLoop.faceloop = tempBaiscSet;
+		// tempFaceLoop.p = planes.at(i);
+		// if(planes.at(i).d>= -0.01)
+		// 	tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+		// else
+		// 	tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+		// tempFaceLoop.arrange();
+		// faceLoops.push_back(tempFaceLoop);
+		// }
+
+		}
+		wireFrame::faceloops = faceLoops;
+
 }
 
 
