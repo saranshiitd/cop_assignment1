@@ -648,7 +648,7 @@ void wireFrame::generateBodyLoops() {
 	faceLoop startingLoop ; 
 	int numberOfFLvisited = 0 ;
 	bool somethingSelected ; 
-	printf("%d\n", faceloops.size());
+	printf("%d faceloops size \n  ", faceloops.size());
 	int inthisloop ;
 	while(numberOfFLvisited < 2*faceloops.size()){
 		// printf("%s\n","stck in loop" );
@@ -785,3 +785,5 @@ void wireFrame::generateFaceLoops(){
 	}
 	wireFrame::faceloops = faceLoops;
 }
+
+
