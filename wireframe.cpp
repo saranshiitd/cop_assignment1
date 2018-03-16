@@ -108,22 +108,79 @@ string wireFrame::getVertices(){
 //std::vector<basicLoopEdgeSet> faceloop;
 //std::vector<edge3D> eList;
 
+vector<edge3D> reverseEdgeSet(vector<edge3D> bles){
+	vector<edge3D> tempEdges;
+	edge3D tempEdge;
+	// append the vector in reverse order
+	for (int i = bles.size()-1; i >= 0 ; i--){
+		tempEdge = { bles.at(i).v2, bles.at(i).v1 };
+		tempEdges.push_back(tempEdge);
+	}
+	// form basicLoopEdgeSet and return
+	return tempEdges;
+}
+
+string getAFace(vector<edge3D> eList, vector<vertex3D> vList){
+	string s;
+	vector<vertex3D>::iterator it;
+	s += "f ";
+	for (int i = 0; i < eList.size(); i++){
+		it = find(vList.begin(), vList.end(), eList.at(i).v1);
+		int pos = distance(vList.begin(), it) + 1;
+
+		s+= to_string(pos);
+		s+= " ";
+	}	
+	return s;
+}
+
 string wireFrame::getBody(){
 
 	string s;
-
-	for (int i = 0; i < bodyloops.size(); i++){
-		bodyLoop bl = bodyloops.at(i);
-
-		for (int j = 0; j < bl.bodyloop.size(); j++){
-
+//	for (int i = 0; i < bodyloops.size(); i++){
+//		bodyLoop bl = bodyloops.at(i);
+		for (int j = 0; j < faceloops.size(); j++){
 			// face loop on bodyloop
-			faceLoop fl = bl.bodyloop.at(j);
-			
-			
+			faceLoop fl = faceloops.at(j);
+			for (int k = 0; k < fl.faceloop.size(); k++){
+				// basic Loop Edge Set on faceLoop
+				basicLoopEdgeSet bles = fl.faceloop.at(k);
+				int numberOfLoopsOnFaceLoop = fl.faceloop.size();
+				if(numberOfLoopsOnFaceLoop == 1){
+					s += getAFace(bles.eList, vertexList);
+					s += "\n";
+				}
+				else if(numberOfLoopsOnFaceLoop == 2){
+					if(k==1){
+						s += getAFace(bles.eList, vertexList);
+						s += "\n";
+					}
+					else{
+						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += "\n";			
+					}
+				}
+				else if(numberOfLoopsOnFaceLoop == 3){
+					if(k==1){
+						s += getAFace(bles.eList, vertexList);
+						s += "\n";
+					}
+					else if(k==2){
+						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += "\n";
+					}
+					else{
+						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += "\n";			
+					}				
+				}
+				else{
+					cout << "4 loops on a faceLoop :(" << "\n";
+				}
+			}		
 		}
-
-	}
+//	}
+	return s;
 }
 
 void wireFrame::printEdges(){
@@ -975,8 +1032,20 @@ void wireFrame::generateFaceLoops(){
 		  	vector<basicLoopEdgeSet> tempBaiscSet;
 		  	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(a));
 		  	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(b));
-		  	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(c));
 
+	  		tempFaceLoop.faceloop = tempBaiscSet;
+			tempFaceLoop.p = planes.at(i);
+			if(planes.at(i).d>= -0.01)
+				tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+			else
+				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+			tempFaceLoop.arrange();
+			faceLoops.push_back(tempFaceLoop);
+
+			// inside most loop is another faceLoop
+			vector<basicLoopEdgeSet> tempBaiscSet1;
+			tempBaiscSet1.push_back(tempBasicLoopEdgeSet.at(c));
+			tempBaiscSet = tempBaiscSet1;
 	  		tempFaceLoop.faceloop = tempBaiscSet;
 			tempFaceLoop.p = planes.at(i);
 			if(planes.at(i).d>= -0.01)
