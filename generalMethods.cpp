@@ -12,7 +12,7 @@
 namespace generalMethods{
 
 
-#define PI 3.141592653f ;
+#define PI 3.141592653f 	
 /**
 * print methods
 */
@@ -418,37 +418,47 @@ namespace generalMethods{
 
 		direction ns = fls.normal ; 
 		direction nk = flk.normal ; 
-		float magNs = magnitude(ns.getDirectionArray()) ; 
-		float magNk = magnitude(nk.getDirectionArray()) ;
-		float cosTheta = dotProduct(ns.getDirectionArray(),nk.getDirectionArray());
+		float *nsDirection = ns.getDirectionArray() ; 
+		float *nkDirection = nk.getDirectionArray() ; 
+		float magNs = magnitude(nsDirection) ; 
+		float magNk = magnitude(nkDirection) ;
+		float cosTheta = dotProduct(nsDirection,nkDirection);
 		cosTheta = cosTheta/(magNs,magNk) ;
 		float theta = acos(cosTheta) ;
-		float edgeDirection = {referenceEdge.v1.a - referenceEdge.v2.a , referenceEdge.v1.b - referenceEdge.v2.b , referenceEdge.v1.c - referenceEdge.v2.c  } ;
-		float* nsCrossnk = crossProduct(ns.getDirectionArray(),nk.getDirectionArray()) ; 
-		float* directionRight = crossProduct(edgeDirection , ns.getDirectionArray()) ; 
+		float edgeDirection[] = {referenceEdge.v1.a - referenceEdge.v2.a , referenceEdge.v1.b - referenceEdge.v2.b , referenceEdge.v1.c - referenceEdge.v2.c  } ;
+		float* nsCrossnk = crossProduct(nsDirection,nkDirection) ; 
+		float* directionRight = crossProduct(edgeDirection , nsDirection) ; 
 		bool sameDirection = ( dotProduct(nsCrossnk , edgeDirection) > 0 );
-		bool isDirectionRight = dotProduct(ns.getDirectionArray() , directionRight) ; 
-
+		bool isDirectionRight = dotProduct(nsDirection, directionRight) ; 
+		float *toReturn = new float[2] ;	 
 		if (sameDirection && isDirectionRight)
 		{
-			float toReturn[] = {PI - theta , 1.0} ; 
-			return toReturn ;
+			toReturn[0] = PI - theta ; 
+			toReturn[1] = 1.0f ;
+			// float toReturn[] = {PI - theta , 1.0} ; 
+			// return toReturn ;
 		}
 		else if (sameDirection && !isDirectionRight) 
 		{
-			float toReturn[] = {2*PI - theta , -1.0} ; 
-			return toReturn ; 
+			toReturn[0] = 2*PI - theta  ;
+			toReturn[1] =  -1.0f ; 
+			
 		}
 		else if (!sameDirection && isDirectionRight) 
-		{
-			float toReturn[] = {PI + theta , 1.0} ;
-			return roReturn ; 
+		{	
+			toReturn[0] = PI + theta  ;
+			toReturn[1] = 1.0f ; 
+			// float toReturn[] = { , 1.0} ;
+			// return toReturn ; 
 		}
 		else
 		{
-			float toReturn[] = {theta , -1.0} ;
-			return toReturn ; 
+			toReturn[0] = theta  ;
+			toReturn[1] =  -1.0f ; 
+			// float toReturn[] = {theta , -1.0} ;
+			// return toReturn ; 
 		}
+		return toReturn ; 
 
 	}
 
