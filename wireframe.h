@@ -123,7 +123,7 @@ private:
 	*/
 	std::vector<plane> removeRedundentPlanes(std::vector<plane> v);
 
-	std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge);
+	std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge, faceLoop fl);
 	std::vector<pair<int , bool>> expandFaceLoop(faceLoop fl);
 	std::vector<pair<int , bool>> wireFexpandFaceLoop(faceLoop fl);
 };
