@@ -582,14 +582,14 @@ std::vector<plane> wireFrame::removeRedundentPlanes(std::vector<plane> v){
 // 	return faceLoopsContaingEdge ;
 // }
 
-std::vector<int> wireFrame::getFaceLoopsContainingEdge(edge3D refEdge) {
+std::vector<int> wireFrame::getFaceLoopsContainingEdge(edge3D refEdge, faceLoop notInclude) {
 	std::vector<int> faceLoopContainingEdge ;	
 	faceLoop currentFaceLoop ;
 	std::vector<edge3D> edgesInCurrentFL ;
 	for (int i = 0; i < faceloops.size(); ++i)
 	{
 		currentFaceLoop = faceloops[i] ; 
-		if (currentFaceLoop.ifFaceLoopContains(refEdge))
+		if (currentFaceLoop.ifFaceLoopContains(refEdge) && !(currentFaceLoop == notInclude))
 		 {
 		 	faceLoopContainingEdge.push_back(i)  ;
 		 } 
@@ -606,11 +606,11 @@ std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
 	for (int i = 0; i < allEdgesInFaceLoop.size(); ++i)
 	 {
 	 	currentEdge = allEdgesInFaceLoop[i]  ;
-	 	faceContainingCurrentEdge = wireFrame::getFaceLoopsContainingEdge(currentEdge) ;
+	 	faceContainingCurrentEdge = wireFrame::getFaceLoopsContainingEdge(currentEdge,fl) ;
 	 	float *alphaAndDirection  = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[0]] , currentEdge) ;
 		
-		// printf("%f\n",alphaAndDirection[0] );
-		// printf("%f\n",alphaAndDirection[1] );	
+		printf("%f\n",alphaAndDirection[0] );
+		printf("%f\n",alphaAndDirection[1] );	
 		// // for (int k =0; k < (sizeof(alphaAndDirection)/sizeof(*alphaAndDirection)); k++){
   //   		printf("%f\n", alphaAndDirection[k]);	
 		// } 
@@ -620,7 +620,7 @@ std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
 	 	float currentTheta ;
 	 	// float currentDirection ; 
 	 	// int currnetMinIndex ; 
-	 	for (int i = 1; i < faceContainingCurrentEdge.size(); ++i)
+	 	for (int i = 0; i < faceContainingCurrentEdge.size(); ++i)
 	 	{
 	 		alphaAndDirection = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[i]] , currentEdge ) ;
 	 		currentTheta = alphaAndDirection[0] ; 
@@ -649,8 +649,10 @@ void wireFrame::generateBodyLoops() {
 	int numberOfFLvisited = 0 ;
 	bool somethingSelected ; 
 	printf("%d\n", faceloops.size());
+	int inthisloop ;
 	while(numberOfFLvisited < 2*faceloops.size()){
 		// printf("%s\n","stck in loop" );
+		inthisloop = 0 ; 
 		bodyLoop currentBodyLoop ;
 		for (int i = 0; i < faceloops.size(); ++i)
 			{
@@ -660,6 +662,8 @@ void wireFrame::generateBodyLoops() {
 				somethingSelected = true ; 
 				positivesUsed[i] = 1 ;
 				startingLoop = faceloops[i] ;
+				numberOfFLvisited += 1 ; 
+				inthisloop ++ ;
 				// cout<<"not here" ; 
 			}
 			else if (negativesUsed[i] == 0)
@@ -670,8 +674,9 @@ void wireFrame::generateBodyLoops() {
 				newFaceLoop.faceloop = faceloops[i].faceloop ; 
 				std::reverse(newFaceLoop.faceloop.begin(),newFaceLoop.faceloop.end()) ;
 				newFaceLoop.normal = { -faceloops[i].normal.x , -faceloops[i].normal.y , -faceloops[i].normal.z } ;   
-				startingLoop = newFaceLoop ;  
-
+				startingLoop = newFaceLoop ;
+				numberOfFLvisited += 1 ;   
+				inthisloop ++ ;
 			}
 			if (somethingSelected)
 			{
@@ -703,10 +708,12 @@ void wireFrame::generateBodyLoops() {
 							positivesUsed[currentPair.first]  = 1 ; 
 						}
 						bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
-						
-						
-					}
+						if(ifInserted) {
+							numberOfFLvisited += 1 ;
+							inthisloop ++ ;
 
+						}
+					}	
 					loopCount += 1 ; 
 					if (loopCount == currentBodyLoop.bodyloop.size())
 					{
@@ -717,7 +724,9 @@ void wireFrame::generateBodyLoops() {
 				break ;  
 			}
 		}
+		printf("%d\n",inthisloop );
 	}
+	printf("%d\n", numberOfFLvisited);
 }
 
 // generate all face loops from the planes generated
@@ -746,7 +755,7 @@ void wireFrame::generateFaceLoops(){
 			}
 		}
 
-		int flag = 0;
+		int flag = 0 ;
 		for (int j = 0; j < temp; j++ ){
 			vector<basicLoopEdgeSet> tempBaiscSet;
 			flag = 0;
@@ -776,4 +785,3 @@ void wireFrame::generateFaceLoops(){
 	}
 	wireFrame::faceloops = faceLoops;
 }
-
