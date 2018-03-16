@@ -181,11 +181,13 @@ struct direction
 	float x;
 	float y;
 	float z;
+	float array[3];
 	direction(){} 
 	direction(float X , float Y , float Z) {
 		x = X ;
 		y = Y ;
 		z = Z ;
+		array[0] = x;array[1] = y;array[2] = z;
 	}
 	bool operator==(const direction& rhs )
 	{
@@ -195,6 +197,9 @@ struct direction
 		float* vectorProduct = crossProduct(v1, v2) ; 
 		float crossMagnitude = magnitude(vectorProduct) ; 
 		return (crossMagnitude < 0.01) && (scalarProduct > 0 ) ; 
+	}
+	inline float *getDirectionArray() {
+		return array ; 
 	}
 
 

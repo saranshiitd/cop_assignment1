@@ -1,7 +1,7 @@
 #ifndef WIREFRAME_H
 #define WIREFRAME_H
 
-#include<vector>
+#include <vector>
 #include "structs.h"
 #include "VertexList2D.h"
 #include "EdgeList2D.h"

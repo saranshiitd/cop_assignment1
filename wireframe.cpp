@@ -8,6 +8,7 @@
 #include "generalMethods.h"
 #include "basicLoopEdgeSet.h"
 #include "Plane.h"
+#include "bodyLoop.h"
 #include "faceLoop.h"
 #include <string>
 
@@ -114,16 +115,16 @@ string wireFrame::getBody(){
 	for (int i = 0; i < bodyloops.size(); i++){
 		bodyLoop bl = bodyloops.at(i);
 
-		for (int j = 0; j < bl.bodyLoop.size(); j++){
+		for (int j = 0; j < bl.bodyloop.size(); j++){
 
 			// face loop on bodyloop
-			faceLoop fl = bl.bodyLoop.at(j);
-			
+			faceLoop fl = bl.bodyloop.at(j);
 			
 			
 		}
 
 	}
+	return s;
 }
 
 void wireFrame::printEdges(){

@@ -10,7 +10,7 @@ CXXFLAGS =-std=c++11
 # Targets needed to bring the executable up to date
 
 main: main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o faceLoop.o bodyLoop.o
-	$(CXX) $(CXXFLAGS) -o main main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o faceLoop.o
+	$(CXX) $(CXXFLAGS) -o main main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o faceLoop.o bodyLoop.o
 
 
 main.o: wireframe.h EdgeList2D.h generalMethods.h Plane.h VertexList2D.h basicLoopEdgeSet.h bodyLoop.h
