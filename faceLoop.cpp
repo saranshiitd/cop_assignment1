@@ -67,7 +67,7 @@ void faceLoop::arrange(){
 
 
 
-bool faceLoop::operator==(faceLoop& other) const{
+bool faceLoop::operator == (faceLoop other) const{
 
 	if(faceloop.size() != other.faceloop.size()){
 		return false;
