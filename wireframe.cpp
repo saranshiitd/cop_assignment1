@@ -102,6 +102,30 @@ string wireFrame::getVertices(){
 	return v;
 }
 
+//std::vector<bodyLoop> bodyloops ;
+//std::vector<faceLoop > bodyLoop;
+//std::vector<basicLoopEdgeSet> faceloop;
+//std::vector<edge3D> eList;
+
+string wireFrame::getBody(){
+
+	string s;
+
+	for (int i = 0; i < bodyloops.size(); i++){
+		bodyLoop bl = bodyloops.at(i);
+
+		for (int j = 0; j < bl.bodyLoop.size(); j++){
+
+			// face loop on bodyloop
+			faceLoop fl = bl.bodyLoop.at(j);
+			
+			
+			
+		}
+
+	}
+}
+
 void wireFrame::printEdges(){
 	/**
 	* print the edgeList

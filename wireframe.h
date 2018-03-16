@@ -32,6 +32,7 @@ public:
 	void printVertex (vertex3D i);
 	void printVertices();
 	string getVertices();
+	string getBody();
 	void printEdges();
 	void printPlanes ();
 	void printFaceLoops();
