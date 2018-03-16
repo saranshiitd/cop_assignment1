@@ -167,6 +167,7 @@ int main(){
 	wireframe.printEdges();
 	wireframe.printPlanes();
 	wireframe.printFaceLoops();
+	wireframe.generateBodyLoops() ; 
 
 /******************/
 	// writing object to obj file

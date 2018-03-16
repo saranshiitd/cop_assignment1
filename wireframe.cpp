@@ -608,6 +608,12 @@ std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
 	 	currentEdge = allEdgesInFaceLoop[i]  ;
 	 	faceContainingCurrentEdge = wireFrame::getFaceLoopsContainingEdge(currentEdge) ;
 	 	float *alphaAndDirection  = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[0]] , currentEdge) ;
+		
+		// printf("%f\n",alphaAndDirection[0] );
+		// printf("%f\n",alphaAndDirection[1] );	
+		// // for (int k =0; k < (sizeof(alphaAndDirection)/sizeof(*alphaAndDirection)); k++){
+  //   		printf("%f\n", alphaAndDirection[k]);	
+		// } 
 	 	float minTheta = alphaAndDirection[0] ; 
 	 	int minIndex = 0 ; 
 	 	float minDirection = alphaAndDirection[1] ; 
@@ -628,6 +634,7 @@ std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
 	 	pair<int , bool> selectedPair(minIndex , (minDirection > 0)) ; 
 	 	selectedPairsList.push_back(selectedPair) ; 
 	 }
+	 printf("%s\n","return expandFaceLoop" ); 
 	 return selectedPairsList ;   
 }
 
@@ -641,7 +648,9 @@ void wireFrame::generateBodyLoops() {
 	faceLoop startingLoop ; 
 	int numberOfFLvisited = 0 ;
 	bool somethingSelected ; 
+	printf("%d\n", faceloops.size());
 	while(numberOfFLvisited < 2*faceloops.size()){
+		// printf("%s\n","stck in loop" );
 		bodyLoop currentBodyLoop ;
 		for (int i = 0; i < faceloops.size(); ++i)
 			{
@@ -651,7 +660,7 @@ void wireFrame::generateBodyLoops() {
 				somethingSelected = true ; 
 				positivesUsed[i] = 1 ;
 				startingLoop = faceloops[i] ;
-
+				// cout<<"not here" ; 
 			}
 			else if (negativesUsed[i] == 0)
 			{
@@ -667,13 +676,17 @@ void wireFrame::generateBodyLoops() {
 			if (somethingSelected)
 			{
 				currentBodyLoop.addLoop(startingLoop) ;
+				// printf("%s\n","maka bhosda madarchod" );
+				// throw std::exception() ; 
 				std::vector<pair<int , bool>> selectedLoops ;
 				// std::vector<int> expandedLoops ;
 				// expandedLoops.push_back(0) ; 
 				faceLoop currentLoop = startingLoop ;
 				int loopCount = 0 ;  
+				// printf("%s\n", "entering while loop ");
 				while(true){
 					selectedLoops = expandFaceLoop(currentLoop) ;
+					printf("%s\n","returned from alphaAndDirection" );
 					// expandedLoops[loopCount] = 1 ; 
 					pair<int , bool > currentPair ; 
 					for (int i = 0; i < selectedLoops.size(); ++i)
