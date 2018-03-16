@@ -7,18 +7,18 @@
 
 class bodyLoop{
 public :
-	std::vector<faceLoop > bodyLoop;
+	std::vector<faceLoop > bodyloop;
 
 	/**
 	* add loop/remove to face loop 
 	*/
 	bool addLoop(faceLoop loop);
 	void removeLoop(faceLoop loop);
-	void addMultipleLoops(std::vector<faceLoop>) ; 
+	// void addMultipleLoops(std::vector<faceLoop>) ; 
 	/**
 	* sets a loop in bodyLoop as 'expanded' or 'unexpanded' 
 	*/
-	void setLoop (faceLoop loop);
+	// void setLoop (faceLoop loop);
 
 	/**
 	* does bodyLoop contain a faceLoop 

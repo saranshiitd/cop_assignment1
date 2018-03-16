@@ -2,6 +2,7 @@
 #include "basicLoopEdgeSet.h"
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 void basicLoopEdgeSet::addEdge(edge3D e) {
 	if (find(eList.begin(),eList.end(),e)==eList.end()) {
@@ -19,3 +20,5 @@ void basicLoopEdgeSet::removeEdge(edge3D e) {
 void basicLoopEdgeSet::sort() {
 	
 }
+
+

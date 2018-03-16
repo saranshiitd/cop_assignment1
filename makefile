@@ -9,7 +9,7 @@ CXXFLAGS = -Wall -std=c++11
 # ****************************************************
 # Targets needed to bring the executable up to date
 
-main: main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o faceLoop.o
+main: main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o faceLoop.o bodyLoop.o
 	$(CXX) $(CXXFLAGS) -o main main.o VertexList2D.o wireframe.o EdgeList2D.o generalMethods.o structs.o Plane.o basicLoopEdgeSet.o faceLoop.o
 
 
@@ -41,7 +41,9 @@ basicLoopEdgeSet.o: basicLoopEdgeSet.h VertexList2D.h EdgeList2D.h structs.h
 
 faceLoop.o: structs.h faceLoop.h basicLoopEdgeSet.h generalMethods.h
 	$(CXX) $(CXXFLAGS) -c faceLoop.cpp
-	
+
+bodyLoop.o : structs.h bodyLoop.h faceLoop.h 
+	$(CXX) $(CXXFLAGS) -c bodyLoop.cpp 
 
 # To start over from scratch, type 'make clean'.  This
 # removes the executable file, as well as old .o object

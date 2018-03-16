@@ -573,7 +573,7 @@ std::vector<int> wireFrame::getFaceLoopsContainingEdge(edge3D refEdge) {
 }
 
 
-std::vector<pair<int , bool>> wireFrame::wireFexpandFaceLoop(faceLoop fl) {	
+std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {	
 	edge3D currentEdge ;
 	std::vector<int> faceContainingCurrentEdge;
 	std::vector<edge3D> allEdgesInFaceLoop = fl.getAllEdges() ;
@@ -670,7 +670,7 @@ void wireFrame::generateBodyLoops() {
 					}
 
 					loopCount += 1 ; 
-					if (loopCount == currentBodyLoop.bodyLoop.size())
+					if (loopCount == currentBodyLoop.bodyloop.size())
 					{
 						break ; 
 					}
@@ -727,7 +727,7 @@ void wireFrame::generateFaceLoops(){
 
 			tempFaceLoop.faceloop = tempBaiscSet;
 			tempFaceLoop.p = planes.at(i);
-			if(planes.at(i).d>=-epsilon)
+			if(planes.at(i).d>= -0.01)
 				tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
 			else
 				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
