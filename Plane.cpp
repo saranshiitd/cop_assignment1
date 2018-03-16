@@ -2,6 +2,7 @@
 #include "Plane.h" 
 #include <cmath>
 #include "structs.h"
+#include <algorithm>
 using namespace std;
 
 #define PI 3.14159265
@@ -51,7 +52,7 @@ vertexEdgeList Plane::sortEdgesOnVertex (vertexEdgeList veList) {
 
 	}
 
-	std::sort(triplets.begin(),triplets.end(), compareTriplets) ; 
+	sort(triplets.begin(),triplets.end(), compareTriplets) ; 
 
 	std::vector<edge3D> sortedList;
 

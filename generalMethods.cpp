@@ -8,6 +8,7 @@
 #include <climits>
 #include <iostream>
 #include <cmath>
+#include <algorithm>
 namespace generalMethods{
 
 
@@ -109,7 +110,7 @@ namespace generalMethods{
 			pairList.push_back({vertices[i], e}) ;
 		}
 
-		std::sort(pairList.begin(),pairList.end(),comparePairs) ;
+		sort(pairList.begin(),pairList.end(),comparePairs) ;
 
 		std::vector<vertex3D> sorted;
 
@@ -128,7 +129,7 @@ namespace generalMethods{
 		float vector2[] = {e2.v1.a-e2.v2.a,e2.v1.b-e2.v2.b,e2.v1.c-e2.v2.c} ;
 		float* crossv1v2 = crossProduct(vector1 , vector2) ;
 		float magnitudeCross = magnitude(crossv1v2) ;
-		bool ifColliner = (magnitudeCross < epsilon) ; 
+		bool ifColliner = (magnitudeCross < 0.01) ; 
 		if (!ifColliner)
 		{
 			/* code */
@@ -168,7 +169,7 @@ namespace generalMethods{
 		float* crossv1v3 = crossProduct(vector1 , vector3) ; 
 		float* crossNormals = crossProduct(crossv1v2 , crossv1v3) ; 
 		float magnitudeCross = magnitude(crossNormals) ; 
-		return (magnitudeCross < epsilon) ;
+		return (magnitudeCross < 0.01) ;
 	}
 
 	plane makePlane (edge3D e1 , edge3D e2){
@@ -187,7 +188,7 @@ namespace generalMethods{
 	bool planeEqual(plane p1 , plane p2) {
 		return (p1 == p2);
 		// float distancePl = findDistanceBetweenPlanes(p1,p2) ; 
-		// return distancePl < epsilon ;
+		// return distancePl < 0.01 ;
 	}
 
 
@@ -214,7 +215,7 @@ namespace generalMethods{
 	bool ifVertexOnPlane(plane p, vertex3D v) {
 		float magnitudeP = sqrt(p.a*p.a+p.b*p.b+p.c*p.c) ;
 		float d = ( p.a*v.a+p.b*v.b + p.c*v.c - p.d ) / magnitudeP ;
-		return (abs(d)< epsilon);
+		return (abs(d)< 0.01);
 	}
 
 	bool ifEdgeOnPlane(plane p, edge3D e) {
@@ -283,7 +284,7 @@ namespace generalMethods{
 		// cout<<"---------------------" ;
 		// cout<< magnitudeCross << '\n' ;
 		// cout<<crossv1v2[0]<<" "<<crossv1v2[1]<<" "<<crossv1v2[2]<<'\n' ;
-		if(magnitudeCross < epsilon ) return 0 ; 
+		if(magnitudeCross < 0.01 ) return 0 ; 
 	    float val = dotProduct(crossv1v2 , normal) ;
 	    // cout << val << '\n' ;  // colinear
 	    return (val > 0)? 1: 2 ; // clock or counterclock wise

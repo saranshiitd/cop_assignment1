@@ -4,6 +4,7 @@
 #include "basicLoopEdgeSet.h"
 #include "generalMethods.h"
 #include <iostream>
+#include <algorithm>
 void faceLoop::addLoop(basicLoopEdgeSet loop){
 
 	// if (find(faceloop.begin(), faceloop.end(), loop) != faceloop.end() )
@@ -57,7 +58,7 @@ void faceLoop::arrange(){
 
 		float loopDirection[] = {crossProduct(e1, e2)[0], crossProduct(e1, e2)[1], crossProduct(e1, e2)[2]};
 		float normalDirection[] = {normal.x, normal.y, normal.z};
-		if(dotProduct(loopDirection, normalDirection) < -epsilon){
+		if(dotProduct(loopDirection, normalDirection) < -0.01){
 			faceloop.at(i) = reversebasicLoopEdgeSet(faceloop.at(i));
 		}
 
@@ -66,7 +67,7 @@ void faceLoop::arrange(){
 
 
 
-bool faceLoop::operator==(faceLoop& other) const{
+bool faceLoop::operator == (faceLoop other) const{
 
 	if(faceloop.size() != other.faceloop.size()){
 		return false;

@@ -8,7 +8,7 @@ using namespace std;
 */
 
 // tolerance for error in floats
-#define epsilon 0.01
+
  
 struct vertex2D{
 	/**
@@ -32,7 +32,7 @@ struct vertex2D{
 	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex2D& n)
 	{
-	    return ((abs(a - n.a) < epsilon) && (abs(b - n.b) < epsilon));
+	    return ((abs(a - n.a) < 0.01) && (abs(b - n.b) < 0.01));
 	}
 };
 
@@ -100,7 +100,7 @@ struct vertex3D{
  	// equality for two 3D vertices (method overloading)
 	bool operator==(const vertex3D& n)
 	{
-	    return (abs(a - n.a) < epsilon) && (abs(b - n.b) < epsilon) && (abs(c - n.c) < epsilon);
+	    return (abs(a - n.a) < 0.01) && (abs(b - n.b) < 0.01) && (abs(c - n.c) < 0.01);
 	}
 };
 
@@ -171,7 +171,7 @@ struct plane
 		float v2[] = {rhs.a,rhs.b,rhs.c} ; 
 		float* vectorProduct = crossProduct(v1, v2); 
 		float crossMagnitude = magnitude(vectorProduct) ; 
-		return (crossMagnitude < epsilon)  &&  (abs(a*rhs.d - d*rhs.a)< epsilon) &&  (abs(b*rhs.d - d*rhs.b)< epsilon) &&  (abs(c*rhs.d - d*rhs.c)< epsilon) ;
+		return (crossMagnitude < 0.01)  &&  (abs(a*rhs.d - d*rhs.a)< 0.01) &&  (abs(b*rhs.d - d*rhs.b)< 0.01) &&  (abs(c*rhs.d - d*rhs.c)< 0.01) ;
 	}
 
 };
@@ -194,7 +194,7 @@ struct direction
 		float scalarProduct = dotProduct(v1, v2) ; 
 		float* vectorProduct = crossProduct(v1, v2) ; 
 		float crossMagnitude = magnitude(vectorProduct) ; 
-		return (crossMagnitude < epsilon) && (scalarProduct > 0 ) ; 
+		return (crossMagnitude < 0.01) && (scalarProduct > 0 ) ; 
 	}
 
 
