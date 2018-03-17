@@ -423,13 +423,13 @@ namespace generalMethods{
 		float magNs = magnitude(nsDirection) ; 
 		float magNk = magnitude(nkDirection) ;
 		float cosTheta = dotProduct(nsDirection,nkDirection);
-		cosTheta = cosTheta/(magNs,magNk) ;
+		cosTheta = cosTheta/(magNs*magNk) ;
 		float theta = acos(cosTheta) ;
-		float edgeDirection[] = {referenceEdge.v1.a - referenceEdge.v2.a , referenceEdge.v1.b - referenceEdge.v2.b , referenceEdge.v1.c - referenceEdge.v2.c  } ;
+		float edgeDirection[] = {referenceEdge.v2.a - referenceEdge.v1.a , referenceEdge.v2.b - referenceEdge.v1.b , referenceEdge.v2.c - referenceEdge.v1.c  } ;
 		float* nsCrossnk = crossProduct(nsDirection,nkDirection) ; 
-		float* directionRight = crossProduct(edgeDirection , nsDirection) ; 
+		float* directionRight = crossProduct(edgeDirection , nkDirection) ; 
 		bool sameDirection = ( dotProduct(nsCrossnk , edgeDirection) > 0 );
-		bool isDirectionRight = dotProduct(nsDirection, directionRight) ; 
+		bool isDirectionRight = ( dotProduct(nsDirection, directionRight) > 0 ) ; 
 		float *toReturn = new float[2] ;	 
 		if (sameDirection && isDirectionRight)
 		{
@@ -459,8 +459,5 @@ namespace generalMethods{
 			// return toReturn ; 
 		}
 		return toReturn ; 
-
 	}
-
-
 }

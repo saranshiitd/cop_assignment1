@@ -33,8 +33,11 @@ public:
 
 	std::vector<edge3D> getAllEdges() ;
 
-	bool ifFaceLoopContains(edge3D edge) ; 
+	bool ifFaceLoopContains(edge3D edge) ;
 
+	faceLoop getReversedFaceLoop() ; 
+
+	// basicLoopEdgeSet reversebasicLoopEdgeSet(basicLoopEdgeSet bles) ; 
 
 };
 

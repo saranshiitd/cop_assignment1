@@ -21,7 +21,7 @@ class basicLoopEdgeSet{
 	void addEdge(edge3D e);
 	void removeEdge(edge3D e);
 	void sort() ; 
-
+	// std::vector<edge3D> getAllEdges();
 };
 
 #endif

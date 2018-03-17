@@ -102,16 +102,17 @@ int main(){
 	wireframe.printPlanes();
 	wireframe.printFaceLoops();
 
-
 	wireframe.generateBodyLoops() ; 
+	// wireframe.
+	
 
 /******************/
 	// writing object to obj file
-	ofstream myfile ("object.obj");
-	string object;
+	// ofstream myfile ("object.obj");
+	// string object;
 
-	object = wireframe.getVertices();
-	myfile << object;
+	// object = wireframe.getVertices();
+	// myfile << object;
 
 	//std::vector<bodyLoop> bodyloops ;
 	//std::vector<faceLoop > bodyLoop;
@@ -120,7 +121,7 @@ int main(){
 	// doing for first body loop
 	
 
-	myfile.close();
+	// myfile.close();
 /*****************/
-	return 0;
+	return 0 ;
 }

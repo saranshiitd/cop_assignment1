@@ -108,6 +108,7 @@ public:
 	vector<basicLoopEdgeSet> generateBasicLoopsOnPlane(planeVEL pvel, vector<edge3D> edgesOnPlane);
 
 	void generateBodyLoops() ;
+	std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge, faceLoop fl);
 
 private:
 		// sort all edges at a vertex in clockwise direction
@@ -123,7 +124,6 @@ private:
 	*/
 	std::vector<plane> removeRedundentPlanes(std::vector<plane> v);
 
-	std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge, faceLoop fl);
 	std::vector<pair<int , bool>> expandFaceLoop(faceLoop fl);
 	std::vector<pair<int , bool>> wireFexpandFaceLoop(faceLoop fl);
 };

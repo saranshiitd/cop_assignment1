@@ -156,6 +156,15 @@ void wireFrame::printFaceLoops(){
 	}
 }
 
+void printFaceLoop(faceLoop argFace){
+
+	for (int j = 0; j < argFace.faceloop.size(); j++){
+			cout << j << "--> ";
+			generalMethods::printEdgeList(argFace.faceloop.at(j).eList);
+		}
+
+} ;
+
 void wireFrame::addVertex(vertex3D v){
 	// return true if vertex is in vertexList
 	if (find(vertexList.begin(), vertexList.end(), v) != vertexList.end() )
@@ -597,59 +606,66 @@ std::vector<int> wireFrame::getFaceLoopsContainingEdge(edge3D refEdge, faceLoop 
 }
 
 
-std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {	
+std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
+
 	edge3D currentEdge ;
-	std::vector<int> faceContainingCurrentEdge;
+	std::vector<int> faceContainingCurrentEdge ;
 	std::vector<edge3D> allEdgesInFaceLoop = fl.getAllEdges() ;
+	// printf("%d number of edges\n", allEdgesInFaceLoop.size()) ;
 	std::vector<pair<int , bool >> selectedPairsList ;
 	for (int i = 0; i < allEdgesInFaceLoop.size(); ++i)
-	 {
+	 {	
+
 	 	currentEdge = allEdgesInFaceLoop[i]  ;
+	 	generalMethods::printEdge(currentEdge) ; 
 	 	faceContainingCurrentEdge = wireFrame::getFaceLoopsContainingEdge(currentEdge,fl) ;
-	 	float *alphaAndDirection  = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[0]] , currentEdge) ;
+	 	float *alphaAndDirection  = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[0]] , currentEdge) ; // here assuming that there is atleast one face containing the edge other than orignal plane
 		
-		printf("%f\n",alphaAndDirection[0] );
-		printf("%f\n",alphaAndDirection[1] );	
-		// // for (int k =0; k < (sizeof(alphaAndDirection)/sizeof(*alphaAndDirection)); k++){
-  //   		printf("%f\n", alphaAndDirection[k]);	
+		// printf("%f\n",alphaAndDirection[0] );
+		// printf("%f\n",alphaAndDirection[1] );
+		//  for (int k =0; k < (sizeof(alphaAndDirection)/sizeof(*alphaAndDirection)); k++){
+     	//	printf("%f\n", alphaAndDirection[k]);	
 		// } 
-	 	float minTheta = alphaAndDirection[0] ; 
-	 	int minIndex = 0 ; 
-	 	float minDirection = alphaAndDirection[1] ; 
+	 	float minTheta = alphaAndDirection[0] ;
+	 	int minIndex = 0 ;
+	 	float minDirection = alphaAndDirection[1] ;
 	 	float currentTheta ;
 	 	// float currentDirection ; 
 	 	// int currnetMinIndex ; 
-	 	for (int i = 0; i < faceContainingCurrentEdge.size(); ++i)
+	 	for (int i = 1 ; i < faceContainingCurrentEdge.size(); i++)
 	 	{
 	 		alphaAndDirection = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[i]] , currentEdge ) ;
-	 		currentTheta = alphaAndDirection[0] ; 
+	 		currentTheta = alphaAndDirection[0] ;
 	 		// currentDirection = alphaAndDirection[1] ; 
 	 		if(currentTheta < minTheta ) {
-	 			minTheta = currentTheta ; 
+	 			minTheta = currentTheta ;
 	 			minIndex = i ;
-	 			minDirection = alphaAndDirection[1] ;  
-	 		} 
-	 	}
-	 	pair<int , bool> selectedPair(minIndex , (minDirection > 0)) ; 
-	 	selectedPairsList.push_back(selectedPair) ; 
+	 			minDirection = alphaAndDirection[1] ;
+			}
+		}
+	 	pair<int , bool> selectedPair(faceContainingCurrentEdge[minIndex] , (minDirection > 0)) ;
+	 	selectedPairsList.push_back(selectedPair) ;
 	 }
-	 printf("%s\n","return expandFaceLoop" ); 
-	 return selectedPairsList ;   
+	 // printf("%s\n","return expandFaceLoop" );
+	 return selectedPairsList ;
 }
 
 void wireFrame::generateBodyLoops() {
 
 	std::vector<int> positivesUsed(faceloops.size() , 0) ;
 	std::vector<int> negativesUsed(faceloops.size() , 0) ;
+	// printf("%d  faceloop size \n",faceloops.size());
 	// std::std::vector<bool> positivesExpanded(faceloops.size(),false);
 	// std::std::vector<bool> negativesExpanded(faceloops.size(),false);
 
 	faceLoop startingLoop ; 
 	int numberOfFLvisited = 0 ;
 	bool somethingSelected ; 
-	printf("%d faceloops size \n  ", faceloops.size());
+	// printf("%d faceloops size \n", faceloops.size());
 	int inthisloop ;
-	while(numberOfFLvisited < 2*faceloops.size()){
+	while(numberOfFLvisited < 2*faceloops.size()) {
+
+		printf("%d\n", numberOfFLvisited);
 		// printf("%s\n","stck in loop" );
 		inthisloop = 0 ; 
 		bodyLoop currentBodyLoop ;
@@ -667,19 +683,25 @@ void wireFrame::generateBodyLoops() {
 			}
 			else if (negativesUsed[i] == 0)
 			{
-				somethingSelected = true ; 
-				negativesUsed[i] = 1 ; 
-				faceLoop newFaceLoop ;
-				newFaceLoop.faceloop = faceloops[i].faceloop ; 
-				std::reverse(newFaceLoop.faceloop.begin(),newFaceLoop.faceloop.end()) ;
-				newFaceLoop.normal = { -faceloops[i].normal.x , -faceloops[i].normal.y , -faceloops[i].normal.z } ;   
-				startingLoop = newFaceLoop ;
-				numberOfFLvisited += 1 ;   
+				somethingSelected = true ;
+				negativesUsed[i] = 1 ;
+				// faceLoop newFaceLoop ;
+				// newFaceLoop.faceloop = faceloops[i].faceloop ;
+				// std::reverse(newFaceLoop.faceloop.begin(),newFaceLoop.faceloop.end()) ; // this reverse is not cool
+				// newFaceLoop.normal = { -faceloops[i].normal.x , -faceloops[i].normal.y , -faceloops[i].normal.z } ;
+				// newFaceLoop.p = {-faceloops[i].p.a,-faceloops[i].p.b,-faceloops[i].p.c,-faceloops[i].p.d} ; 
+				// startingLoop = newFaceLoop ;
+				startingLoop = faceloops[i].getReversedFaceLoop() ; 
+				numberOfFLvisited += 1 ;
 				inthisloop ++ ;
 			}
+
 			if (somethingSelected)
 			{
 				currentBodyLoop.addLoop(startingLoop) ;
+				printf("%s\n", "see arg face here");
+				printFaceLoop(startingLoop) ;
+				printf("%s\n","finish" );
 				// printf("%s\n","maka bhosda madarchod" );
 				// throw std::exception() ; 
 				std::vector<pair<int , bool>> selectedLoops ;
@@ -690,29 +712,74 @@ void wireFrame::generateBodyLoops() {
 				// printf("%s\n", "entering while loop ");
 				while(true){
 					selectedLoops = expandFaceLoop(currentLoop) ;
-					printf("%s\n","returned from alphaAndDirection" );
+					// printf("%s\n","returned from alphaAndDirection");
 					// expandedLoops[loopCount] = 1 ; 
 					pair<int , bool > currentPair ; 
 					for (int i = 0; i < selectedLoops.size(); ++i)
 					{	
 						currentPair = selectedLoops[i] ;
-						faceLoop loopToInsert = faceloops[currentPair.first] ; 
+						faceLoop loopToInsert = faceloops[currentPair.first] ;
+						bool canUse = false ;  
 						if (!currentPair.second)
 						{
-							loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ; 
-							std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; 
+							// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
+							// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
+							// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
+							if(negativesUsed[currentPair.first]==0) { canUse = true ; }
+							loopToInsert = loopToInsert.getReversedFaceLoop() ; 
 							negativesUsed[currentPair.first] = 1 ; 
 						}
 						else {
+							if(positivesUsed[currentPair.first]==0){canUse = true ; }
 							positivesUsed[currentPair.first]  = 1 ; 
+						}
+						if(!canUse) {
+							break ; 
 						}
 						bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
 						if(ifInserted) {
 							numberOfFLvisited += 1 ;
 							inthisloop ++ ;
-
+							printf("%s\n", "see selected Loop here");
+							printFaceLoop(loopToInsert) ; 
+							printf("%s\n", "finish selected Loop");
 						}
-					}	
+					}
+
+					int k = 1 ; 
+					 
+					while(k<currentBodyLoop.bodyloop.size()){
+						selectedLoops = expandFaceLoop(currentBodyLoop.bodyloop[k]) ; 
+						for (int i = 0; i < selectedLoops.size(); ++i)
+						{	
+							currentPair = selectedLoops[i] ;
+							faceLoop loopToInsert = faceloops[currentPair.first] ; 
+							// printf("%f\n",currentPair.second );
+							// std::cout<<currentPair.second()<<	
+							if (!currentPair.second)
+							{
+								// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
+								// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
+								// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
+								loopToInsert = loopToInsert.getReversedFaceLoop() ; 
+								negativesUsed[currentPair.first] = 1 ; 
+							}
+							else {
+								positivesUsed[currentPair.first]  = 1 ; 
+							}
+							bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
+							if(ifInserted) {
+								numberOfFLvisited += 1 ;
+								inthisloop ++ ;
+								printf("%s\n", "see selected Loop here");
+								printFaceLoop(loopToInsert) ; 
+								printf("%s\n", "finish selected Loop");
+							}
+						}
+						k+=1;
+
+					}
+					printf("%d\n",k );
 					loopCount += 1 ; 
 					if (loopCount == currentBodyLoop.bodyloop.size())
 					{
@@ -723,7 +790,10 @@ void wireFrame::generateBodyLoops() {
 				break ;  
 			}
 		}
-		printf("%d\n",inthisloop );
+		// printf("%d\n",inthisloop );
+		printf("%s\n", "----------------------------------------------------------");
+		printf("%s\n", "----------------------------------------------------------");
+
 	}
 	printf("%d\n", numberOfFLvisited);
 }

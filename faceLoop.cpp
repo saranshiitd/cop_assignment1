@@ -44,7 +44,18 @@ basicLoopEdgeSet reversebasicLoopEdgeSet(basicLoopEdgeSet bles){
 	return temp;
 }
 
-
+faceLoop faceLoop::getReversedFaceLoop() {
+	faceLoop reversedFaceLoop ; 
+	reversedFaceLoop.normal = {-normal.x , -normal.y , -normal.z} ;
+	reversedFaceLoop.p = {-p.a , -p.b , - p.c , -p.d} ;
+	for (int i = 0; i < faceloop.size(); i++)
+	 {
+		basicLoopEdgeSet  tempLoopEdgeSet ; 
+	 	tempLoopEdgeSet = reversebasicLoopEdgeSet(faceloop[i]) ;
+	 	reversedFaceLoop.faceloop.push_back(tempLoopEdgeSet) ;  
+	 }
+	 return reversedFaceLoop ;  
+}
 /////// arranged according to (a,b,c) irrespective of d
 void faceLoop::arrange(){
 	// arrange every basic loop in the direction of 
@@ -120,8 +131,6 @@ bool faceLoop::operator==(faceLoop other) const{
 			return true;
 		}
 	}
-
-
 }
 
 std::vector<edge3D> faceLoop::getAllEdges(){
@@ -130,8 +139,7 @@ std::vector<edge3D> faceLoop::getAllEdges(){
 	for (int i = 0; i < faceloop.size(); ++i)
 	{
 		edgesInCurrentLoop = faceloop[i].eList ; 
-		allEdges.insert(allEdges.end(),edgesInCurrentLoop.begin() , edgesInCurrentLoop.end()) ; 	
-
+		allEdges.insert(allEdges.end(),edgesInCurrentLoop.begin() , edgesInCurrentLoop.end()) ;
 	}
 	return allEdges ; 
 }
