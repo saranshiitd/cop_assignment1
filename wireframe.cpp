@@ -141,6 +141,9 @@ string wireFrame::getBody(){
 	for (int i = 0; i < 1; i++){
 		bodyLoop bl = bodyloops.at(i);
 		for (int j = 0; j < bl.bodyloop.size(); j++){
+			s+= "# bodyLoop No. ";
+			s+= to_string(j);
+			s+= "\n";
 			// face loop on bodyloop
 			faceLoop fl = bl.bodyloop.at(j);
 			for (int k = 0; k < fl.faceloop.size(); k++){
