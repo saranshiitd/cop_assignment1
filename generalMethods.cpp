@@ -447,14 +447,14 @@ namespace generalMethods{
 		else if (!sameDirection && isDirectionRight) 
 		{	
 			toReturn[0] = PI + theta  ;
-			toReturn[1] = 1.0f ; 
+			toReturn[1] = -1.0f ; 
 			// float toReturn[] = { , 1.0} ;
 			// return toReturn ; 
 		}
 		else
 		{
 			toReturn[0] = theta  ;
-			toReturn[1] =  -1.0f ; 
+			toReturn[1] =  1.0f ; 
 			// float toReturn[] = {theta , -1.0} ;
 			// return toReturn ; 
 		}

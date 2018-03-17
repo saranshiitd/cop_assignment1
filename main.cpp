@@ -174,24 +174,24 @@ int main(){
 
 /******************/
 	// writing object to obj file
-<<<<<<< HEAD
-	// ofstream myfile ("object.obj");
-	// string object;
+// <<<<<<< HEAD
+// 	// ofstream myfile ("object.obj");
+// 	// string object;
 
-	// object = wireframe.getVertices();
-	// myfile << object;
+// 	// object = wireframe.getVertices();
+// 	// myfile << object;
 
-	//std::vector<bodyLoop> bodyloops ;
-	//std::vector<faceLoop > bodyLoop;
-	//std::vector<edge3D> eList;
-=======
-	ofstream myfile ("hollowCube.obj");
-	string vertices = wireframe.getVertices();
-	myfile << vertices;
->>>>>>> 9a48129f32fc5cc4d64c8705daf0dff0d840d43e
+// 	//std::vector<bodyLoop> bodyloops ;
+// 	//std::vector<faceLoop > bodyLoop;
+// 	//std::vector<edge3D> eList;
+// =======
+// 	ofstream myfile ("hollowCube.obj");
+// 	string vertices = wireframe.getVertices();
+// 	myfile << vertices;
+// >>>>>>> 9a48129f32fc5cc4d64c8705daf0dff0d840d43e
 
-	string body = wireframe.getBody();
-	myfile << body;
+// 	string body = wireframe.getBody();
+// 	myfile << body;
 	
 
 	// myfile.close();
