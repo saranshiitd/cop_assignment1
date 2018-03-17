@@ -67,6 +67,7 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 		}
 	}
 
+	procedurePEVR();
 	planes = generatePlanes();
 	generateFaceLoops();
 }
@@ -108,22 +109,79 @@ string wireFrame::getVertices(){
 //std::vector<basicLoopEdgeSet> faceloop;
 //std::vector<edge3D> eList;
 
+vector<edge3D> reverseEdgeSet(vector<edge3D> bles){
+	vector<edge3D> tempEdges;
+	edge3D tempEdge;
+	// append the vector in reverse order
+	for (int i = bles.size()-1; i >= 0 ; i--){
+		tempEdge = { bles.at(i).v2, bles.at(i).v1 };
+		tempEdges.push_back(tempEdge);
+	}
+	// form basicLoopEdgeSet and return
+	return tempEdges;
+}
+
+string getAFace(vector<edge3D> eList, vector<vertex3D> vList){
+	string s;
+	vector<vertex3D>::iterator it;
+	s += "f ";
+	for (int i = 0; i < eList.size(); i++){
+		it = find(vList.begin(), vList.end(), eList.at(i).v1);
+		int pos = distance(vList.begin(), it) + 1;
+
+		s+= to_string(pos);
+		s+= " ";
+	}	
+	return s;
+}
+
 string wireFrame::getBody(){
 
 	string s;
-
-	for (int i = 0; i < bodyloops.size(); i++){
-		bodyLoop bl = bodyloops.at(i);
-
-		for (int j = 0; j < bl.bodyloop.size(); j++){
-
+//	for (int i = 0; i < bodyloops.size(); i++){
+//		bodyLoop bl = bodyloops.at(i);
+		for (int j = 0; j < faceloops.size(); j++){
 			// face loop on bodyloop
-			faceLoop fl = bl.bodyloop.at(j);
-			
-			
+			faceLoop fl = faceloops.at(j);
+			for (int k = 0; k < fl.faceloop.size(); k++){
+				// basic Loop Edge Set on faceLoop
+				basicLoopEdgeSet bles = fl.faceloop.at(k);
+				int numberOfLoopsOnFaceLoop = fl.faceloop.size();
+				if(numberOfLoopsOnFaceLoop == 1){
+					s += getAFace(bles.eList, vertexList);
+					s += "\n";
+				}
+				else if(numberOfLoopsOnFaceLoop == 2){
+					if(k==1){
+						s += getAFace(bles.eList, vertexList);
+						s += "\n";
+					}
+					else{
+						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += "\n";			
+					}
+				}
+				else if(numberOfLoopsOnFaceLoop == 3){
+					if(k==1){
+						s += getAFace(bles.eList, vertexList);
+						s += "\n";
+					}
+					else if(k==2){
+						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += "\n";
+					}
+					else{
+						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += "\n";			
+					}				
+				}
+				else{
+					cout << "4 loops on a faceLoop :(" << "\n";
+				}
+			}		
 		}
-
-	}
+//	}
+	return s;
 }
 
 void wireFrame::printEdges(){
@@ -302,6 +360,207 @@ void wireFrame::resolveOverlap(){
 			   	addEdge({sortedVertices.at(i), sortedVertices.at(1)});
 			}
 		}
+	}
+}
+
+bool areCollinear(edge3D e1, edge3D e2){
+
+	float vector1[] = {e1.v1.a-e1.v2.a,e1.v1.b-e1.v2.b,e1.v1.c-e1.v2.c} ;
+	float vector2[] = {e2.v1.a-e2.v2.a,e2.v1.b-e2.v2.b,e2.v1.c-e2.v2.c} ;
+	float* crossv1v2 = crossProduct(vector1 , vector2) ;
+	float magnitudeCross = magnitude(crossv1v2) ;
+	return (magnitudeCross < 0.01) ;
+
+}
+
+bool areNotCollinear(edge3D e1, edge3D e2, edge3D e3){
+	return !(areCollinear(e1,e2) || areCollinear(e2,e3) || areCollinear(e1,e3));
+}
+ 
+bool areAllNOnCollinear(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	return !(areCollinear(e1,e2) || areCollinear(e1,e3) || areCollinear(e1,e4) || areCollinear(e2,e3) || areCollinear(e2,e4) || areCollinear(e3,e4));
+}
+
+bool twoOfThreeAreCollinear(edge3D e1, edge3D e2, edge3D e3){
+	return (areCollinear(e1,e2) || areCollinear(e2,e3) || areCollinear(e1,e3));
+}
+
+bool twoPairsAreCollinear(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	return (areCollinear(e1,e2) && areCollinear(e3,e4)) || (areCollinear(e1,e3) && areCollinear(e2,e4))
+			|| (areCollinear(e1,e4) && areCollinear(e2,e3));
+}
+
+bool onlyTwoareCollinear(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	bool b;
+	b= (areCollinear(e1,e2) && !areCollinear(e1,e3) && !areCollinear(e1,e4));
+	b = b || (areCollinear(e1,e3) && !areCollinear(e1,e2) && !areCollinear(e1,e4));
+	b = b || (areCollinear(e1,e4) && !areCollinear(e1,e2) && !areCollinear(e1,e3));
+	b = b || (areCollinear(e2,e3) && !areCollinear(e2,e1) && !areCollinear(e2,e4));
+	b = b || (areCollinear(e2,e4) && !areCollinear(e2,e1) && !areCollinear(e1,e3));
+	b = b || (areCollinear(e3,e4) && !areCollinear(e3,e1) && !areCollinear(e3,e2));
+
+	return b;
+}
+
+bool are4Coplanar(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	return generalMethods::checkCoplanar(e1,e2,e3) && generalMethods::checkCoplanar(e1,e2,e4) ;
+}
+
+vector<edge3D> getNonCollinearEdge(edge3D e1, edge3D e2, edge3D e3){
+	vector<edge3D> tempEdges;
+	if(areCollinear(e1,e2)){
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+	}
+	else if(areCollinear(e2,e3)){
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+	}
+	else {
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e3);
+	}
+	return tempEdges;
+}
+
+vector<edge3D> getNonCollinearEdge4(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	vector<edge3D> tempEdges;
+	if(areCollinear(e1,e2)){
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e4);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+	}
+	else if(areCollinear(e1,e3)){
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e4);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e3);
+	}
+	else if(areCollinear(e1,e4)){
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e4);
+	}
+	else if(areCollinear(e2,e3)){
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e4);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+	}
+	else if(areCollinear(e2,e4)){
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e4);
+	}
+	else {
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e4);
+	}
+	
+	return tempEdges;
+}
+
+
+
+edge3D getRemovedVertexEdge(edge3D e1, edge3D e2, vertex3D v){
+	edge3D anEdge;
+	if(!(e1.v1 == v)){
+		anEdge.v1 = e1.v1;
+	}
+	else{
+		anEdge.v1 = e1.v2;
+	}
+	if(!(e2.v1 == v)){
+		anEdge.v2 = e2.v1;
+	}
+	else{
+		anEdge.v2 = e2.v2;
+	}
+	return anEdge;
+}
+void wireFrame::procedurePEVR(){
+
+	int flag = 1;
+	while(flag!=0)
+	{
+		flag = 0;
+		for (int i = 0; i < vertexList.size(); i++)
+		{
+			vertexEdgeList veListatV = adjEdgesAtVertex(vertexList.at(i));
+			
+			if(veListatV.e.size() == 0){
+				flag = 1;
+				removeVertex(vertexList.at(i));
+			}
+			else if(veListatV.e.size() == 1){
+				flag = 1;
+				removeVertex(vertexList.at(i));
+				removeEdge(veListatV.e.at(0));
+			}
+			else if(veListatV.e.size() == 2){
+				flag = 1;
+				if(areCollinear(veListatV.e.at(0), veListatV.e.at(1))){
+					removeEdge(veListatV.e.at(0));
+					removeEdge(veListatV.e.at(1));
+					removeVertex(veListatV.v);
+					addEdge(getRemovedVertexEdge(veListatV.e.at(0), veListatV.e.at(1), veListatV.v));
+				}
+				else{
+					removeEdge(veListatV.e.at(0));
+					removeEdge(veListatV.e.at(1));
+					removeVertex(veListatV.v);					
+				}
+			}
+			else if(veListatV.e.size() == 3){
+				edge3D e1,e2,e3;
+				e1= veListatV.e.at(0);
+				e2= veListatV.e.at(1);
+				e3= veListatV.e.at(2);
+				if(generalMethods::checkCoplanar(e1, e2, e3) && areNotCollinear(e1,e2,e3)){
+					flag =1;
+					removeVertex(veListatV.v);
+					removeEdges(veListatV.e);
+				}
+				else if(twoOfThreeAreCollinear(e1,e2,e3)){
+					flag=1;
+					vector<edge3D> tempEdges = getNonCollinearEdge(e1,e2,e3);
+					removeEdge(tempEdges.at(0));
+					removeVertex(veListatV.v);
+					addEdge(getRemovedVertexEdge(tempEdges.at(1), tempEdges.at(2), veListatV.v));
+				}
+			}
+			else{
+				flag =1;
+				edge3D e1,e2,e3,e4;
+				e1= veListatV.e.at(0);
+				e2= veListatV.e.at(1);
+				e3= veListatV.e.at(2);
+				e4= veListatV.e.at(3);	
+
+				if(are4Coplanar(e1,e2,e3,e4)){
+					if(onlyTwoareCollinear(e1,e2,e3,e4)){
+						vector<edge3D> tempEdges = getNonCollinearEdge4(e1,e2,e3,e4);
+						removeEdge(tempEdges.at(0));
+						removeEdge(tempEdges.at(1));
+						removeVertex(veListatV.v);
+						addEdge(getRemovedVertexEdge(tempEdges.at(2), tempEdges.at(3), veListatV.v));						
+					}
+					else if(twoPairsAreCollinear(e1,e2,e3,e4) || areAllNOnCollinear(e1,e2,e3,e4)){
+						removeVertex(veListatV.v);
+						removeEdges(veListatV.e);
+					}
+				}
+			}
+		}
+
 	}
 }
 
@@ -798,90 +1057,90 @@ void wireFrame::generateBodyLoops() {
 	printf("%d\n", numberOfFLvisited);
 }
 
-// bool oneContainsTwo(int confinement[][]){
-// 	int count = 0;
-// 	for (int i = 0; i < 3; i++){
-// 		count = 0;
-// 		for (int j = 0; j < 3; j++){
-// 			if(i!=j){
-// 				if(confinement[i][j] == 1)
-// 					count ++;
-// 			}
-// 		}	
-// 		if(count == 2) return true;		
-// 	}
-// 	return false;
-// }
+bool oneContainsTwo(int** confinement){
+	int count = 0;
+	for (int i = 0; i < 3; i++){
+		count = 0;
+		for (int j = 0; j < 3; j++){
+			if(i!=j){
+				if(*( *(confinement + i*3) + j) == 1)
+					count ++;
+			}
+		}	
+		if(count == 2) return true;		
+	}
+	return false;
+}
 
-// bool oneContainsOne(int confinement[][]){
-// 	int count = 0;
-// 	for (int i = 0; i < 3; i++){
-// 		count = 0;
-// 		for (int j = 0; j < 3; j++){
-// 			if(i!=j){
-// 				if(confinement[i][j] == 1)
-// 					count ++;
-// 			}
-// 		}	
-// 		if(count == 1) return true;		
-// 	}
-// 	return false;
-// }
+bool oneContainsOne(int** confinement){
+	int count = 0;
+	for (int i = 0; i < 3; i++){
+		count = 0;
+		for (int j = 0; j < 3; j++){
+			if(i!=j){
+				if(*( *(confinement + i*3) + j) == 1)
+					count ++;
+			}
+		}	
+		if(count == 1) return true;		
+	}
+	return false;
+}
 
-// bool threeLoopsOneInsideOther(int confinement[][]){
-// 	if(oneContainsTwo(confinement) && oneContainsOne(confinement))
-// 		return true;
-// 	else
-// 		return false;
-// }
+bool threeLoopsOneInsideOther(int* confinement){
+	if(oneContainsTwo(&confinement) && oneContainsOne(&confinement))
+		return true;
+	else
+		return false;
+}
 
-// int firstLoop(int confinement[][]){
+int firstLoop(int *confinement){
+	int count = 0;
+	for (int i = 0; i < 3; i++){
+		count = 0;
+		for (int j = 0; j < 3; j++){
+			if(i!=j){
+				if( *( (confinement + i*3) + j) == 1)
+					count ++;
+			}
+		}	
+		if(count == 2) return i;		
+	}	
+	cout << "Fitst Loop not found" <<"\n";
+	return 0;
+}
 
-// 	for (int i = 0; i < 3; i++){
-// 		count = 0;
-// 		for (int j = 0; j < 3; j++){
-// 			if(i!=j){
-// 				if(confinement[i][j] == 1)
-// 					count ++;
-// 			}
-// 		}	
-// 		if(count == 2) return i;		
-// 	}	
-// 	cout << "Fitst Loop not found" <<"\n";
-// 	return 0;
-// }
+int secondLoop(int *confinement){
+	int count =0;	
+	for (int i = 0; i < 3; i++){
+		count = 0;
+		for (int j = 0; j < 3; j++){
+			if(i!=j){
+				if(*( (confinement + i*3) + j) == 1)
+					count ++;
+			}
+		}	
+		if(count == 1) return i;		
+	}	
+	cout << "second Loop not found" <<"\n";
+	return 0;
+}
 
-// int secondLoop(int confinement[][]){
-	
-// 	for (int i = 0; i < 3; i++){
-// 		count = 0;
-// 		for (int j = 0; j < 3; j++){
-// 			if(i!=j){
-// 				if(confinement[i][j] == 1)
-// 					count ++;
-// 			}
-// 		}	
-// 		if(count == 1) return i;		
-// 	}	
-// 	cout << "second Loop not found" <<"\n";
-// 	return 0;
-// }
-
-// int thirdLoop(int confinement[][]){
-	
-// 	for (int i = 0; i < 3; i++){
-// 		count = 0;
-// 		for (int j = 0; j < 3; j++){
-// 			if(i!=j){
-// 				if(confinement[i][j] == 1)
-// 					count ++;
-// 			}
-// 		}	
-// 		if(count == 0) return i;		
-// 	}	
-// 	cout << "third Loop not found" <<"\n";
-// 	return 0;
-// }
+int thirdLoop(int* confinement){
+	int count = 0;
+	for (int i = 0; i < 3; i++){
+		count = 0;
+		for (int j = 0; j < 3; j++){
+			if(i!=j){
+				if(*( (confinement + i*3) + j) == 1)
+					count ++;
+			}
+		}	
+		if(count == 0) return i;		
+	}	
+	cout << "third Loop not found" <<"\n";
+	return 0;
+}
 
 
 // generate all face loops from the planes generated
@@ -990,73 +1249,85 @@ void wireFrame::generateFaceLoops(){
 			}
 		}
 
-		// else if(temp == 3)
-		// {
+		else if(temp == 3)
+		{
 
-		//   if(!threeLoopsOneInsideOther(confinement)){
-		//   	int flag = 0;
-		// 	for (int j = 0; j < temp; j++ )
-		// 	{
-		// 		vector<basicLoopEdgeSet> tempBaiscSet;
-		// 		flag = 0;
-		// 		for (int k = 0; k < temp; k++)
-		// 		{
-		// 			if(confinement[j][k]==-1 and j!=k)
-		// 				flag = 1;
-		// 		}
-		// 		// if this loop is contained in other --> leave it --> it is useless
-		// 		if(flag == 1) continue;
-		// 		int count = 0;
-		// 		for (int k = 0; k < temp; k++)
-		// 		{
-		// 			if(confinement[j][k]==1 || (confinement[j][k]==-1 && j==k)){
-		// 				tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
-		// 				count ++;
-		// 			}
-		// 		}
+		  if(!threeLoopsOneInsideOther(confinement[0])){
+		  	int flag = 0;
+			for (int j = 0; j < temp; j++ )
+			{
+				vector<basicLoopEdgeSet> tempBaiscSet;
+				flag = 0;
+				for (int k = 0; k < temp; k++)
+				{
+					if(confinement[j][k]==-1 and j!=k)
+						flag = 1;
+				}
+				// if this loop is contained in other --> leave it --> it is useless
+				if(flag == 1) continue;
+				int count = 0;
+				for (int k = 0; k < temp; k++)
+				{
+					if(confinement[j][k]==1 || (confinement[j][k]==-1 && j==k)){
+						tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
+						count ++;
+					}
+				}
 
-		// 		if(count > 1){
-		// 			vector<basicLoopEdgeSet> tempBaiscSet1;
-		// 			tempBaiscSet1.push_back(tempBasicLoopEdgeSet.at(j));
-		// 			for (int k = 0; k < temp; k++)
-		// 			{
-		// 				if(confinement[j][k]==1)
-		// 					tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
-		// 			}
-		// 			tempBaiscSet = tempBaiscSet1;
-		// 		}
+				if(count > 1){
+					vector<basicLoopEdgeSet> tempBaiscSet1;
+					tempBaiscSet1.push_back(tempBasicLoopEdgeSet.at(j));
+					for (int k = 0; k < temp; k++)
+					{
+						if(confinement[j][k]==1)
+							tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(k));
+					}
+					tempBaiscSet = tempBaiscSet1;
+				}
 
-		// 		tempFaceLoop.faceloop = tempBaiscSet;
-		// 		tempFaceLoop.p = planes.at(i);
-		// 		if(planes.at(i).d>= -0.01)
-		// 			tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
-		// 		else
-		// 			tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
-		// 		tempFaceLoop.arrange();
-		// 		faceLoops.push_back(tempFaceLoop);
-		// 	}
-		//   }
-		//   // three loops one inside other
-		//   else{
-		//   	int a = firstLoop(confinement);
-		//   	int b = secondLoop(confinement);
-		//   	int c = thirdLoop(confinement);
+				tempFaceLoop.faceloop = tempBaiscSet;
+				tempFaceLoop.p = planes.at(i);
+				if(planes.at(i).d>= -0.01)
+					tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+				else
+					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+				tempFaceLoop.arrange();
+				faceLoops.push_back(tempFaceLoop);
+			}
+		  }
+		  // three loops one inside other
+		  else{
+		  	int a = firstLoop(confinement[0]);
+		  	int b = secondLoop(confinement[0]);
+		  	int c = thirdLoop(confinement[0]);
 
-		//   	vector<basicLoopEdgeSet> tempBaiscSet;
-		//   	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(a));
-		//   	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(b));
-		//   	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(c));
+		  	vector<basicLoopEdgeSet> tempBaiscSet;
+		  	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(a));
+		  	tempBaiscSet.push_back(tempBasicLoopEdgeSet.at(b));
 
-	 //  		tempFaceLoop.faceloop = tempBaiscSet;
-		// 	tempFaceLoop.p = planes.at(i);
-		// 	if(planes.at(i).d>= -0.01)
-		// 		tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
-		// 	else
-		// 		tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
-		// 	tempFaceLoop.arrange();
-		// 	faceLoops.push_back(tempFaceLoop);
-		//   }
-		// }
+	  		tempFaceLoop.faceloop = tempBaiscSet;
+			tempFaceLoop.p = planes.at(i);
+			if(planes.at(i).d>= -0.01)
+				tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+			else
+				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+			tempFaceLoop.arrange();
+			faceLoops.push_back(tempFaceLoop);
+
+			// inside most loop is another faceLoop
+			vector<basicLoopEdgeSet> tempBaiscSet1;
+			tempBaiscSet1.push_back(tempBasicLoopEdgeSet.at(c));
+			tempBaiscSet = tempBaiscSet1;
+	  		tempFaceLoop.faceloop = tempBaiscSet;
+			tempFaceLoop.p = planes.at(i);
+			if(planes.at(i).d>= -0.01)
+				tempFaceLoop.normal = {planes.at(i).a, planes.at(i).b, planes.at(i).c};
+			else
+				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
+			tempFaceLoop.arrange();
+			faceLoops.push_back(tempFaceLoop);
+		  }
+		}
 
 		else{
 			cout << "4 basicLopps on a Plane :(" << "\n";
@@ -1091,7 +1362,5 @@ void wireFrame::generateFaceLoops(){
 
 		}
 		wireFrame::faceloops = faceLoops;
-
-}
-
+	}
 
