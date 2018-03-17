@@ -138,11 +138,11 @@ string getAFace(vector<edge3D> eList, vector<vertex3D> vList){
 string wireFrame::getBody(){
 
 	string s;
-//	for (int i = 0; i < bodyloops.size(); i++){
-//		bodyLoop bl = bodyloops.at(i);
-		for (int j = 0; j < faceloops.size(); j++){
+	for (int i = 0; i < bodyloops.size(); i++){
+		bodyLoop bl = bodyloops.at(i);
+		for (int j = 0; j < bl.bodyloop.size(); j++){
 			// face loop on bodyloop
-			faceLoop fl = faceloops.at(j);
+			faceLoop fl = bl.bodyloop.at(j);
 			for (int k = 0; k < fl.faceloop.size(); k++){
 				// basic Loop Edge Set on faceLoop
 				basicLoopEdgeSet bles = fl.faceloop.at(k);
@@ -180,7 +180,7 @@ string wireFrame::getBody(){
 				}
 			}		
 		}
-//	}
+	}
 	return s;
 }
 
