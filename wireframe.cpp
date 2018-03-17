@@ -923,13 +923,23 @@ void wireFrame::generateBodyLoops() {
 	// printf("%d faceloops size \n", faceloops.size());
 	int inthisloop ;
 	while(numberOfFLvisited < 2*faceloops.size()) {
-
+		for (int i = 0; i < positivesUsed.size(); ++i)
+		{
+			std::cout<<positivesUsed[i]<<" " ; 
+		}
+		std::cout<<'\n' ; 
+		for (int i = 0; i < negativesUsed.size(); ++i)
+		{
+			std::cout<<negativesUsed[i]<<" " ; 
+		}
+		std::cout<<'\n' ; 
 		printf("%d\n", numberOfFLvisited);
 		// printf("%s\n","stck in loop" );
 		inthisloop = 0 ; 
 		bodyLoop currentBodyLoop ;
 		for (int i = 0; i < faceloops.size(); ++i)
 			{
+			
 			somethingSelected = false ; 
 			if (positivesUsed[i] == 0)
 			{
@@ -978,25 +988,43 @@ void wireFrame::generateBodyLoops() {
 					{	
 						currentPair = selectedLoops[i] ;
 						faceLoop loopToInsert = faceloops[currentPair.first] ;
-						bool canUse = false ;  
+						bool canUse = false ;
+						bool posused = false ; 
+						bool negused = false ;   
 						if (!currentPair.second)
 						{
 							// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
 							// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
 							// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
-							if(negativesUsed[currentPair.first]==0) { canUse = true ; }
-							loopToInsert = loopToInsert.getReversedFaceLoop() ; 
-							negativesUsed[currentPair.first] = 1 ; 
+							if(negativesUsed[currentPair.first]==0) { 
+								canUse = true ;
+								loopToInsert = loopToInsert.getReversedFaceLoop() ; 
+								// negativesUsed[currentPair.first] = 1 ; 
+								negused = true ; 
+							 }
+							
 						}
 						else {
-							if(positivesUsed[currentPair.first]==0){canUse = true ; }
-							positivesUsed[currentPair.first]  = 1 ; 
+							if(positivesUsed[currentPair.first]==0){
+								canUse = true ;
+								posused = true ; 
+								// positivesUsed[currentPair.first]  = 1 ; 
+							} 
 						}
 						if(!canUse) {
 							break ; 
 						}
 						bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
 						if(ifInserted) {
+
+							if(posused) {
+								positivesUsed[currentPair.first] = 1 ;
+							}
+
+							else{
+								negativesUsed[currentPair.first] = 1 ;
+							}
+
 							numberOfFLvisited += 1 ;
 							inthisloop ++ ;
 							printf("%s\n", "see selected Loop here");
@@ -1015,19 +1043,39 @@ void wireFrame::generateBodyLoops() {
 							faceLoop loopToInsert = faceloops[currentPair.first] ; 
 							// printf("%f\n",currentPair.second );
 							// std::cout<<currentPair.second()<<	
+							bool POSUSED = false ; 
+							bool canuse = false ; 
 							if (!currentPair.second)
 							{
 								// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
 								// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
 								// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
-								loopToInsert = loopToInsert.getReversedFaceLoop() ; 
-								negativesUsed[currentPair.first] = 1 ; 
+								if(negativesUsed[currentPair.first]==0) { 
+									canuse = true ;
+									loopToInsert = loopToInsert.getReversedFaceLoop() ; 
+									// negativesUsed[currentPair.first] = 1 ; 
+									// negused = true ; 
+							 	}
 							}
 							else {
-								positivesUsed[currentPair.first]  = 1 ; 
+								if(positivesUsed[currentPair.first]==0){
+									canuse = true ;
+									POSUSED = true ; 
+									// positivesUsed[currentPair.first]  = 1 ; 
+								} 
+							}
+							if(!canuse) {
+								break ; 
 							}
 							bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
 							if(ifInserted) {
+								if (POSUSED)
+								{
+									positivesUsed[currentPair.first] = 1 ; 
+								}
+								else{
+									negativesUsed[currentPair.first] = 1 ; 
+								}
 								numberOfFLvisited += 1 ;
 								inthisloop ++ ;
 								printf("%s\n", "see selected Loop here");
@@ -1038,7 +1086,7 @@ void wireFrame::generateBodyLoops() {
 						k+=1;
 
 					}
-					printf("%d\n",k );
+					// printf("%d\n",k );
 					loopCount += 1 ; 
 					if (loopCount == currentBodyLoop.bodyloop.size())
 					{
@@ -1049,6 +1097,7 @@ void wireFrame::generateBodyLoops() {
 				break ;  
 			}
 		}
+
 		// printf("%d\n",inthisloop );
 		printf("%s\n", "----------------------------------------------------------");
 		printf("%s\n", "----------------------------------------------------------");
