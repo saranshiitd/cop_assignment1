@@ -25,91 +25,73 @@ using namespace std;
 
 
 int main(){
-
-/***************** 2nd example ************************/
-/*
-	projections
-
-		/\			 --------			/\
-	   /  \			|		|		   /  \
-      /    \		|		|         /   \
-     /     \		|		|        /     \
-     _ _ _ _		 --------        ______
-
-*/
-
-
+	
+//************************* 1st example ************************//
+// cube
 	VertexList2D frontProjVertex;
 	vertex2D tempVertex2D1;
 	vertex2D tempVertex2D2;
 	vertex2D tempVertex2D3;
 	vertex2D tempVertex2D4;
-	vertex2D tempVertex2D5;
 
-	tempVertex2D1.a = 1; tempVertex2D1.b = 0;
+	tempVertex2D1.a = 0; tempVertex2D1.b = 0;
 	frontProjVertex.addVertex(tempVertex2D1);
 
-	tempVertex2D2.a = -1; tempVertex2D2.b = 0;
+	tempVertex2D2.a = 0; tempVertex2D2.b = 1;
 	frontProjVertex.addVertex(tempVertex2D2);
 
-	tempVertex2D3.a = 0; tempVertex2D3.b = 2;
+	tempVertex2D3.a = 1; tempVertex2D3.b = 0;
 	frontProjVertex.addVertex(tempVertex2D3);
 
-	// tempVertex2D4.a = 1; tempVertex2D4.b = 1;
-	// frontProjVertex.addVertex(tempVertex2D4);
+	tempVertex2D4.a = 1; tempVertex2D4.b = 1;
+	frontProjVertex.addVertex(tempVertex2D4);
 
 	EdgeList2D frontProjEdges;
 	frontProjEdges.addEdge (tempVertex2D1, tempVertex2D2);
-	frontProjEdges.addEdge (tempVertex2D2, tempVertex2D3);
+	frontProjEdges.addEdge (tempVertex2D2, tempVertex2D4);
 	frontProjEdges.addEdge (tempVertex2D1, tempVertex2D3);
-	//frontProjEdges.addEdge (tempVertex2D3, tempVertex2D4);
+	frontProjEdges.addEdge (tempVertex2D3, tempVertex2D4);
 
 /****************/
 	VertexList2D topProjVertex;
-	tempVertex2D1.a = 1; tempVertex2D1.b = -1;
+	tempVertex2D1.a = 0; tempVertex2D1.b = 0;
 	topProjVertex.addVertex(tempVertex2D1);
 
-	tempVertex2D2.a = 1; tempVertex2D2.b = 1;
+	tempVertex2D2.a = 0; tempVertex2D2.b = 1;
 	topProjVertex.addVertex(tempVertex2D2);
 
-	tempVertex2D3.a = -1; tempVertex2D3.b = 1;
+	tempVertex2D3.a = 1; tempVertex2D3.b = 0;
 	topProjVertex.addVertex(tempVertex2D3);
 
-	tempVertex2D4.a = -1; tempVertex2D4.b = -1;
+	tempVertex2D4.a = 1; tempVertex2D4.b = 1;
 	topProjVertex.addVertex(tempVertex2D4);
-
-	tempVertex2D5.a = 0; tempVertex2D5.b = 0;
-	topProjVertex.addVertex(tempVertex2D5);
 
 	EdgeList2D topProjEdges;
 	topProjEdges.addEdge (tempVertex2D1, tempVertex2D2);
-	topProjEdges.addEdge (tempVertex2D2, tempVertex2D3);
-	topProjEdges.addEdge (tempVertex2D4, tempVertex2D3);
-	topProjEdges.addEdge (tempVertex2D4, tempVertex2D1);
-	topProjEdges.addEdge (tempVertex2D1, tempVertex2D5);
-	topProjEdges.addEdge (tempVertex2D2, tempVertex2D5);
-	topProjEdges.addEdge (tempVertex2D3, tempVertex2D5);
-	topProjEdges.addEdge (tempVertex2D4, tempVertex2D5);
+	topProjEdges.addEdge (tempVertex2D2, tempVertex2D4);
+	topProjEdges.addEdge (tempVertex2D1, tempVertex2D3);
+	topProjEdges.addEdge (tempVertex2D3, tempVertex2D4);
 
 /****************/
 	VertexList2D sideProjVertex;
-	tempVertex2D1.a = 1; tempVertex2D1.b = 0;
+	tempVertex2D1.a = 0; tempVertex2D1.b = 0;
 	sideProjVertex.addVertex(tempVertex2D1);
 
-	tempVertex2D2.a = -1; tempVertex2D2.b = 0;
+	tempVertex2D2.a = 0; tempVertex2D2.b = 1;
 	sideProjVertex.addVertex(tempVertex2D2);
 
-	tempVertex2D3.a = 0; tempVertex2D3.b = 2;
+	tempVertex2D3.a = 1; tempVertex2D3.b = 0;
 	sideProjVertex.addVertex(tempVertex2D3);
 
-	// tempVertex2D4.a = 1; tempVertex2D4.b = 1;
-	// sideProjVertex.addVertex(tempVertex2D4);
+	tempVertex2D4.a = 1; tempVertex2D4.b = 1;
+	sideProjVertex.addVertex(tempVertex2D4);
 
 	EdgeList2D sideProjEdges;
 	sideProjEdges.addEdge (tempVertex2D1, tempVertex2D2);
-	sideProjEdges.addEdge (tempVertex2D2, tempVertex2D3);
+	sideProjEdges.addEdge (tempVertex2D2, tempVertex2D4);
 	sideProjEdges.addEdge (tempVertex2D1, tempVertex2D3);
-	//sideProjEdges.addEdge (tempVertex2D3, tempVertex2D4);
+	sideProjEdges.addEdge (tempVertex2D3, tempVertex2D4);
+
 /****************/
 	wireFrame wireframe;
 	wireframe.generateWireFrame(frontProjVertex, topProjVertex, sideProjVertex, 
@@ -125,34 +107,16 @@ int main(){
 
 /******************/
 	// writing object to obj file
-	ofstream myfile ("pyramid.obj");
+	ofstream myfile ("cube.obj");
 	string vertices = wireframe.getVertices();
 	myfile << vertices;
 
 	string body = wireframe.getBody();
 	myfile << body;
-// <<<<<<< HEAD
-// 	// ofstream myfile ("object.obj");
-// 	// string object;
-
-// 	// object = wireframe.getVertices();
-// 	// myfile << object;
-
-// 	//std::vector<bodyLoop> bodyloops ;
-// 	//std::vector<faceLoop > bodyLoop;
-// 	//std::vector<edge3D> eList;
-// =======
-// 	ofstream myfile ("hollowCube.obj");
-// 	string vertices = wireframe.getVertices();
-// 	myfile << vertices;
-// >>>>>>> 9a48129f32fc5cc4d64c8705daf0dff0d840d43e
-
-// 	string body = wireframe.getBody();
- 	myfile << body;
-
 	
 
 	myfile.close();
 /*****************/
+
 	return 0 ;
 }
