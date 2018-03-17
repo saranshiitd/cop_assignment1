@@ -79,7 +79,7 @@
 
 /******************/
 	// writing object to obj file
-	ofstream myfile ("object.obj");
+	ofstream myfile ("cube.obj");
 	string vertices = wireframe.getVertices();
 	myfile << vertices;
 

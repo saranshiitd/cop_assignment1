@@ -67,7 +67,7 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 		}
 	}
 
-	procedurePEVR();
+	//procedurePEVR();
 	planes = generatePlanes();
 	generateFaceLoops();
 }
@@ -538,7 +538,6 @@ void wireFrame::procedurePEVR(){
 				}
 			}
 			else{
-				flag =1;
 				edge3D e1,e2,e3,e4;
 				e1= veListatV.e.at(0);
 				e2= veListatV.e.at(1);
@@ -546,6 +545,7 @@ void wireFrame::procedurePEVR(){
 				e4= veListatV.e.at(3);	
 
 				if(are4Coplanar(e1,e2,e3,e4)){
+					flag =1;
 					if(onlyTwoareCollinear(e1,e2,e3,e4)){
 						vector<edge3D> tempEdges = getNonCollinearEdge4(e1,e2,e3,e4);
 						removeEdge(tempEdges.at(0));
@@ -876,7 +876,7 @@ std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
 	 {	
 
 	 	currentEdge = allEdgesInFaceLoop[i]  ;
-	 	generalMethods::printEdge(currentEdge) ; 
+	 	// generalMethods::printEdge(currentEdge) ; 
 	 	faceContainingCurrentEdge = wireFrame::getFaceLoopsContainingEdge(currentEdge,fl) ;
 	 	float *alphaAndDirection  = generalMethods::getAlphaAndDirection(fl , faceloops[faceContainingCurrentEdge[0]] , currentEdge) ; // here assuming that there is atleast one face containing the edge other than orignal plane
 		
