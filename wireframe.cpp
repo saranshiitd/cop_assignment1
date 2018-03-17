@@ -979,120 +979,126 @@ void wireFrame::generateBodyLoops() {
 				faceLoop currentLoop = startingLoop ;
 				int loopCount = 0 ;  
 				// printf("%s\n", "entering while loop ");
-				while(true){
-					selectedLoops = expandFaceLoop(currentLoop) ;
-					// printf("%s\n","returned from alphaAndDirection");
-					// expandedLoops[loopCount] = 1 ; 
-					pair<int , bool > currentPair ; 
-					for (int i = 0; i < selectedLoops.size(); ++i)
+			
+				selectedLoops = expandFaceLoop(currentLoop) ;
+				// printf("%s\n","returned from alphaAndDirection");
+				// expandedLoops[loopCount] = 1 ; 
+				pair<int , bool > currentPair ; 
+				for (int i = 0; i < selectedLoops.size(); ++i)
+				{	
+					currentPair = selectedLoops[i] ;
+					faceLoop loopToInsert = faceloops[currentPair.first] ;
+					bool canUse = false ;
+					bool posused = false ; 
+					bool negused = false ;   
+					if (!currentPair.second)
+					{
+						// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
+						// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
+						// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
+						if(negativesUsed[currentPair.first]==0) { 
+							canUse = true ;
+							loopToInsert = loopToInsert.getReversedFaceLoop() ; 
+							// negativesUsed[currentPair.first] = 1 ; 
+							negused = true ; 
+						 }
+						
+					}
+					else {
+						if(positivesUsed[currentPair.first]==0){
+							canUse = true ;
+							posused = true ; 
+							// positivesUsed[currentPair.first]  = 1 ; 
+						} 
+					}
+					if(!canUse) {
+						break ; 
+					}
+					bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
+					if(ifInserted) {
+
+						if(posused) {
+							positivesUsed[currentPair.first] = 1 ;
+						}
+
+						else{
+							negativesUsed[currentPair.first] = 1 ;
+						}
+
+						numberOfFLvisited += 1 ;
+						inthisloop ++ ;
+						printf("%s\n", "see selected Loop here");
+						printFaceLoop(loopToInsert) ; 
+						printf("%s\n", "finish selected Loop");
+					}
+				}
+
+					 
+				int k = 1 ; 
+				while(k<currentBodyLoop.bodyloop.size()){
+					selectedLoops = expandFaceLoop(currentBodyLoop.bodyloop[k]) ;
+					printf("%s\n","***********************************" );
+					printFaceLoop(currentBodyLoop.bodyloop[k]) ;  
+					for (int i = 0; i < selectedLoops.size(); i++)
 					{	
+
 						currentPair = selectedLoops[i] ;
-						faceLoop loopToInsert = faceloops[currentPair.first] ;
-						bool canUse = false ;
-						bool posused = false ; 
-						bool negused = false ;   
+						faceLoop loopToInsert = faceloops[currentPair.first] ; 
+						// printf("%f\n",currentPair.second );
+						// std::cout<<currentPair.second()<<	
+						bool POSUSED = false ; 
+						bool canuse = false ; 
 						if (!currentPair.second)
 						{
 							// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
 							// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
 							// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
 							if(negativesUsed[currentPair.first]==0) { 
-								canUse = true ;
+								canuse = true ;
 								loopToInsert = loopToInsert.getReversedFaceLoop() ; 
 								// negativesUsed[currentPair.first] = 1 ; 
-								negused = true ; 
-							 }
-							
+								// negused = true ; 
+						 	}
 						}
 						else {
 							if(positivesUsed[currentPair.first]==0){
-								canUse = true ;
-								posused = true ; 
+								canuse = true ;
+								POSUSED = true ; 
 								// positivesUsed[currentPair.first]  = 1 ; 
 							} 
 						}
-						if(!canUse) {
-							break ; 
-						}
-						bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
-						if(ifInserted) {
+						
+						if (canuse)
+						{
+							bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
+							if(ifInserted) {
 
-							if(posused) {
-								positivesUsed[currentPair.first] = 1 ;
+							if (POSUSED)
+							{
+								positivesUsed[currentPair.first] = 1 ; 
 							}
-
 							else{
-								negativesUsed[currentPair.first] = 1 ;
+								negativesUsed[currentPair.first] = 1 ; 
 							}
-
 							numberOfFLvisited += 1 ;
 							inthisloop ++ ;
 							printf("%s\n", "see selected Loop here");
 							printFaceLoop(loopToInsert) ; 
 							printf("%s\n", "finish selected Loop");
-						}
-					}
+							}
+							else{
+							printf("%s\n", "cant add this ******************" );
+							printFaceLoop(loopToInsert);
 
-					int k = 1 ; 
-					 
-					while(k<currentBodyLoop.bodyloop.size()){
-						selectedLoops = expandFaceLoop(currentBodyLoop.bodyloop[k]) ; 
-						for (int i = 0; i < selectedLoops.size(); ++i)
-						{	
-							currentPair = selectedLoops[i] ;
-							faceLoop loopToInsert = faceloops[currentPair.first] ; 
-							// printf("%f\n",currentPair.second );
-							// std::cout<<currentPair.second()<<	
-							bool POSUSED = false ; 
-							bool canuse = false ; 
-							if (!currentPair.second)
-							{
-								// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
-								// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
-								// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
-								if(negativesUsed[currentPair.first]==0) { 
-									canuse = true ;
-									loopToInsert = loopToInsert.getReversedFaceLoop() ; 
-									// negativesUsed[currentPair.first] = 1 ; 
-									// negused = true ; 
-							 	}
-							}
-							else {
-								if(positivesUsed[currentPair.first]==0){
-									canuse = true ;
-									POSUSED = true ; 
-									// positivesUsed[currentPair.first]  = 1 ; 
-								} 
-							}
-							if(!canuse) {
-								break ; 
-							}
-							bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
-							if(ifInserted) {
-								if (POSUSED)
-								{
-									positivesUsed[currentPair.first] = 1 ; 
-								}
-								else{
-									negativesUsed[currentPair.first] = 1 ; 
-								}
-								numberOfFLvisited += 1 ;
-								inthisloop ++ ;
-								printf("%s\n", "see selected Loop here");
-								printFaceLoop(loopToInsert) ; 
-								printf("%s\n", "finish selected Loop");
 							}
 						}
-						k+=1;
+						
+					}
+					k+=1;
 
-					}
-					// printf("%d\n",k );
-					loopCount += 1 ; 
-					if (loopCount == currentBodyLoop.bodyloop.size())
-					{
-						break ; 
-					}
 				}
+					// printf("%d\n",k );
+									
 				bodyloops.push_back(currentBodyLoop) ;   
 				break ;  
 			}
