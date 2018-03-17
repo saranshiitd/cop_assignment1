@@ -460,4 +460,18 @@ namespace generalMethods{
 		}
 		return toReturn ; 
 	}
+
+
+	faceLoop getReversedFaceLoop(faceLoop faceloop) {
+		faceLoop reversedFaceLoop ; 
+		reversedFaceLoop.normal = {-faceloop.normal.x , -faceloop.normal.y , -faceloop.normal.z} ;
+		reversedFaceLoop.p = {-faceloop.p.a , -faceloop.p.b , - faceloop.p.c , -faceloop.p.d} ;
+		for (int i = 0; i < faceloop.faceloop.size(); i++)
+		 {
+			basicLoopEdgeSet  tempLoopEdgeSet ; 
+		 	tempLoopEdgeSet = reversebasicLoopEdgeSet(faceloop.faceloop[i]) ;
+		 	reversedFaceLoop.faceloop.push_back(tempLoopEdgeSet) ;  
+		 }
+		 return reversedFaceLoop ;  
+		}
 }

@@ -123,7 +123,7 @@ namespace generalMethods{
 
  	bool isInside(std::vector<vertex3D> polygon, int n, vertex3D p , edge3D refEdge, plane q ) ;
 
-
+ 	faceLoop getReversedFaceLoop(faceLoop faceloop) ;
 }
 
 #endif

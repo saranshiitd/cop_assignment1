@@ -72,6 +72,13 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 	generateFaceLoops();
 }
 
+void wireFrame::reverseFaceLoops(){
+	for (int i = 0; i < faceloops.size(); i++){
+		faceLoop fl = faceloops.at(i);
+		faceloops.at(i) = generalMethods::getReversedFaceLoop(faceloops.at(i));
+	}
+}
+
 void wireFrame::printVertex(vertex3D i){
 	std::cout<<i.a<<" "<<i.b<<" "<<i.c ;
 }
@@ -138,11 +145,12 @@ string getAFace(vector<edge3D> eList, vector<vertex3D> vList){
 string wireFrame::getBody(){
 
 	string s;
-	for (int i = 0; i < bodyloops.size(); i++){
-			s+= "# bodyLoop No. ";
-			s+= to_string(i);
-			s+= "\n";
-		bodyLoop bl = bodyloops.at(i);
+//	for (int i = 0; i < bodyloops.size(); i++){
+//			s+= "# bodyLoop No. ";
+//			s+= to_string(i);
+//			s+= "\n";
+		bodyLoop bl = body;
+		cout << bl.bodyloop.size();
 		for (int j = 0; j < bl.bodyloop.size(); j++){
 			// face loop on bodyloop
 			faceLoop fl = bl.bodyloop.at(j);
@@ -160,7 +168,7 @@ string wireFrame::getBody(){
 						s += "\n";
 					}
 					else{
-						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += getAFace((bles.eList), vertexList);
 						s += "\n";			
 					}
 				}
@@ -170,11 +178,12 @@ string wireFrame::getBody(){
 						s += "\n";
 					}
 					else if(k==2){
-						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += getAFace((bles.eList), vertexList);
 						s += "\n";
 					}
 					else{
-						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+// 						s += getAFace(reverseEdgeSet(bles.eList), vertexList);
+						s += getAFace((bles.eList), vertexList);
 						s += "\n";			
 					}				
 				}
@@ -183,7 +192,6 @@ string wireFrame::getBody(){
 				}
 			}		
 		}
-	}
 	return s;
 }
 
@@ -912,207 +920,89 @@ std::vector<pair<int , bool>> wireFrame::expandFaceLoop(faceLoop fl) {
 	 return selectedPairsList ;
 }
 
-void wireFrame::generateBodyLoops() {
+// return 1 if edge in same direction --> -1 if opposite 
+int directionOfFaceLoop(edge3D e, faceLoop fl){
 
-	std::vector<int> positivesUsed(faceloops.size() , 0) ;
-	std::vector<int> negativesUsed(faceloops.size() , 0) ;
-	// printf("%d  faceloop size \n",faceloops.size());
-	// std::std::vector<bool> positivesExpanded(faceloops.size(),false);
-	// std::std::vector<bool> negativesExpanded(faceloops.size(),false);
+	for (int i = 0; i < fl.faceloop.size(); i++){
+		basicLoopEdgeSet bs = fl.faceloop.at(i);
+		vector<edge3D> el = bs.eList;
 
-	faceLoop startingLoop ; 
-	int numberOfFLvisited = 0 ;
-	bool somethingSelected ; 
-	// printf("%d faceloops size \n", faceloops.size());
-	int inthisloop ;
-	while(numberOfFLvisited < 2*faceloops.size()) {
-		for (int i = 0; i < positivesUsed.size(); ++i)
-		{
-			std::cout<<positivesUsed[i]<<" " ; 
-		}
-		std::cout<<'\n' ; 
-		for (int i = 0; i < negativesUsed.size(); ++i)
-		{
-			std::cout<<negativesUsed[i]<<" " ; 
-		}
-		std::cout<<'\n' ; 
-		printf("%d\n", numberOfFLvisited);
-		// printf("%s\n","stck in loop" );
-		inthisloop = 0 ; 
-		bodyLoop currentBodyLoop ;
-		for (int i = 0; i < faceloops.size(); ++i)
-			{
-			
-			somethingSelected = false ; 
-			if (positivesUsed[i] == 0)
-			{
-				somethingSelected = true ; 
-				positivesUsed[i] = 1 ;
-				startingLoop = faceloops[i] ;
-				numberOfFLvisited += 1 ; 
-				inthisloop ++ ;
-				// cout<<"not here" ; 
+		for(int j=0; j< el.size(); j++){
+			if(el.at(j) == e){
+				if(el.at(j).v1 == e.v1)
+					return 1;
+				else
+					return -1;
 			}
-			else if (negativesUsed[i] == 0)
-			{
-				somethingSelected = true ;
-				negativesUsed[i] = 1 ;
-				// faceLoop newFaceLoop ;
-				// newFaceLoop.faceloop = faceloops[i].faceloop ;
-				// std::reverse(newFaceLoop.faceloop.begin(),newFaceLoop.faceloop.end()) ; // this reverse is not cool
-				// newFaceLoop.normal = { -faceloops[i].normal.x , -faceloops[i].normal.y , -faceloops[i].normal.z } ;
-				// newFaceLoop.p = {-faceloops[i].p.a,-faceloops[i].p.b,-faceloops[i].p.c,-faceloops[i].p.d} ; 
-				// startingLoop = newFaceLoop ;
-				startingLoop = faceloops[i].getReversedFaceLoop() ; 
-				numberOfFLvisited += 1 ;
-				inthisloop ++ ;
-			}
-
-			if (somethingSelected)
-			{
-				currentBodyLoop.addLoop(startingLoop) ;
-				printf("%s\n", "see arg face here");
-				printFaceLoop(startingLoop) ;
-				printf("%s\n","finish" );
-				// printf("%s\n","maka bhosda madarchod" );
-				// throw std::exception() ; 
-				std::vector<pair<int , bool>> selectedLoops ;
-				// std::vector<int> expandedLoops ;
-				// expandedLoops.push_back(0) ; 
-				faceLoop currentLoop = startingLoop ;
-				int loopCount = 0 ;  
-				// printf("%s\n", "entering while loop ");
-			
-				selectedLoops = expandFaceLoop(currentLoop) ;
-				// printf("%s\n","returned from alphaAndDirection");
-				// expandedLoops[loopCount] = 1 ; 
-				pair<int , bool > currentPair ; 
-				for (int i = 0; i < selectedLoops.size(); ++i)
-				{	
-					currentPair = selectedLoops[i] ;
-					faceLoop loopToInsert = faceloops[currentPair.first] ;
-					bool canUse = false ;
-					bool posused = false ; 
-					bool negused = false ;   
-					if (!currentPair.second)
-					{
-						// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
-						// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
-						// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
-						if(negativesUsed[currentPair.first]==0) { 
-							canUse = true ;
-							loopToInsert = loopToInsert.getReversedFaceLoop() ; 
-							// negativesUsed[currentPair.first] = 1 ; 
-							negused = true ; 
-						 }
-						
-					}
-					else {
-						if(positivesUsed[currentPair.first]==0){
-							canUse = true ;
-							posused = true ; 
-							// positivesUsed[currentPair.first]  = 1 ; 
-						} 
-					}
-					if(!canUse) {
-						break ; 
-					}
-					bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
-					if(ifInserted) {
-
-						if(posused) {
-							positivesUsed[currentPair.first] = 1 ;
-						}
-
-						else{
-							negativesUsed[currentPair.first] = 1 ;
-						}
-
-						numberOfFLvisited += 1 ;
-						inthisloop ++ ;
-						printf("%s\n", "see selected Loop here");
-						printFaceLoop(loopToInsert) ; 
-						printf("%s\n", "finish selected Loop");
-					}
-				}
-
-					 
-				int k = 1 ; 
-				while(k<currentBodyLoop.bodyloop.size()){
-					selectedLoops = expandFaceLoop(currentBodyLoop.bodyloop[k]) ;
-					printf("%s\n","***********************************" );
-					printFaceLoop(currentBodyLoop.bodyloop[k]) ;  
-					for (int i = 0; i < selectedLoops.size(); i++)
-					{	
-
-						currentPair = selectedLoops[i] ;
-						faceLoop loopToInsert = faceloops[currentPair.first] ; 
-						// printf("%f\n",currentPair.second );
-						// std::cout<<currentPair.second()<<	
-						bool POSUSED = false ; 
-						bool canuse = false ; 
-						if (!currentPair.second)
-						{
-							// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
-							// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
-							// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
-							if(negativesUsed[currentPair.first]==0) { 
-								canuse = true ;
-								loopToInsert = loopToInsert.getReversedFaceLoop() ; 
-								// negativesUsed[currentPair.first] = 1 ; 
-								// negused = true ; 
-						 	}
-						}
-						else {
-							if(positivesUsed[currentPair.first]==0){
-								canuse = true ;
-								POSUSED = true ; 
-								// positivesUsed[currentPair.first]  = 1 ; 
-							} 
-						}
-						
-						if (canuse)
-						{
-							bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
-							if(ifInserted) {
-
-							if (POSUSED)
-							{
-								positivesUsed[currentPair.first] = 1 ; 
-							}
-							else{
-								negativesUsed[currentPair.first] = 1 ; 
-							}
-							numberOfFLvisited += 1 ;
-							inthisloop ++ ;
-							printf("%s\n", "see selected Loop here");
-							printFaceLoop(loopToInsert) ; 
-							printf("%s\n", "finish selected Loop");
-							}
-							else{
-							printf("%s\n", "cant add this ******************" );
-							printFaceLoop(loopToInsert);
-
-							}
-						}
-						
-					}
-					k+=1;
-
-				}
-					// printf("%d\n",k );
-									
-				bodyloops.push_back(currentBodyLoop) ;   
-				break ;  
-			}
-		}
-
-		// printf("%d\n",inthisloop );
-		printf("%s\n", "----------------------------------------------------------");
-		printf("%s\n", "----------------------------------------------------------");
-
+		}	
 	}
-	printf("%d\n", numberOfFLvisited);
+	return 1;
+}
+
+void wireFrame::generateBodyLoops() 
+{
+
+	bool isMarked[faceloops.size()];
+	bool isVisited[faceloops.size()];
+
+	for (int i = 0; i < faceloops.size(); i++){
+		isMarked[i] = false;
+		isVisited[i] = false;
+	}
+
+	// get the first face --> mark it visited
+	faceLoop tempFaceLoop = faceloops.at(0);
+	isMarked[0] = true;
+	isVisited[0] =false;
+	// select with the faceLoop with more number of basicLoops
+	for(int i = 0; i < faceloops.size(); i++){
+		if(faceloops.at(i).faceloop.size() > 1){
+			// mark this face visited and 0 unvisited
+			tempFaceLoop = faceloops.at(i);
+			isMarked[i] = true;
+			isVisited[i] = true;
+			isMarked[0] = false;
+			isVisited[0] = false;
+			break;
+		}
+	}
+
+	// ??? termination condition
+	int count = 1;
+	while(true)
+	{
+		// update tempFaceLoop------------------------
+		// for every edge of that faceloop do
+		for(int i = 0; i < tempFaceLoop.faceloop.size(); i++){
+			basicLoopEdgeSet tempBasicLoop = tempFaceLoop.faceloop.at(i);
+			for(int j = 0; j < tempBasicLoop.eList.size(); j++){
+				edge3D tempEdge = tempBasicLoop.eList.at(j);
+
+				vector<int> faceLoopsAtThisEdge = getFaceLoopsContainingEdge(tempEdge, tempFaceLoop);
+				for(int k = 0; k<faceLoopsAtThisEdge.size(); k++){
+					if( isMarked[faceLoopsAtThisEdge.at(k)] == false) count++ ;
+					isMarked[faceLoopsAtThisEdge.at(k)] = true;
+					if(directionOfFaceLoop(tempEdge, faceloops.at(faceLoopsAtThisEdge.at(k))) == 1){
+						faceloops.at(faceLoopsAtThisEdge.at(k)) = generalMethods::getReversedFaceLoop(faceloops.at(faceLoopsAtThisEdge.at(k)));
+					}
+				}
+			}
+		}
+		for(int i=0; i<faceloops.size();i++){
+			if(faceloops.at(i) == tempFaceLoop)
+				isVisited[i] = true;
+		}
+		if(count == faceloops.size()) break;
+		for(int i=0;i<faceloops.size();i++){
+			if(isMarked[i]==true && isVisited[i]==false){
+				tempFaceLoop = faceloops.at(i);
+				isMarked[i] = true;
+				isVisited[i] = true;
+				break;
+			}
+		}
+	}
+	body.bodyloop = faceloops; 
 }
 
 bool oneContainsTwo(int** confinement){
@@ -1245,6 +1135,9 @@ void wireFrame::generateFaceLoops(){
 		}
 		else if(temp == 2){
 			if(confinement[0][1] == 1){
+				cout << "----------------------------- Before" <<"\n";
+				generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(0).eList);
+				generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(1).eList);
 				vector<basicLoopEdgeSet> tempBaiscSet;
 				// 0 contains 1 --> 0 is parent loop
 				//				--> 1 is child loop
@@ -1259,9 +1152,17 @@ void wireFrame::generateFaceLoops(){
 				else
 					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
 				tempFaceLoop.arrange();
+				tempFaceLoop.faceloop.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+				//tempBaiscSet.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+				cout << "----------------------------- After" <<"\n";
+				generalMethods::printEdgeList(tempBaiscSet.at(0).eList);
+				generalMethods::printEdgeList(tempBaiscSet.at(1).eList);
 				faceLoops.push_back(tempFaceLoop);
 			}
 			else if(confinement[1][0] == 1){
+				cout << "----------------------------- Before" <<"\n";
+				generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(0).eList);
+				generalMethods::printEdgeList(tempBasicLoopEdgeSet.at(1).eList);
 				vector<basicLoopEdgeSet> tempBaiscSet;
 				// 0 contains 1 --> 0 is parent loop
 				//				--> 1 is child loop
@@ -1276,6 +1177,11 @@ void wireFrame::generateFaceLoops(){
 				else
 					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
 				tempFaceLoop.arrange();
+				tempFaceLoop.faceloop.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+				//tempBaiscSet.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+				cout << "----------------------------- After" <<"\n";
+				generalMethods::printEdgeList(tempBaiscSet.at(0).eList);
+				generalMethods::printEdgeList(tempBaiscSet.at(1).eList);
 				faceLoops.push_back(tempFaceLoop);
 			}
 			else{
@@ -1350,6 +1256,15 @@ void wireFrame::generateFaceLoops(){
 				else
 					tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
 				tempFaceLoop.arrange();
+				if(count == 2){
+					tempBaiscSet.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+				}
+				else if(count ==3){
+					//tempFaceLoop.faceloop.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+					//tempFaceLoop.faceloop.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+					tempBaiscSet.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+					tempBaiscSet.at(2) = reversebasicLoopEdgeSet(tempBaiscSet.at(2));
+				}
 				faceLoops.push_back(tempFaceLoop);
 			}
 		  }
@@ -1370,6 +1285,8 @@ void wireFrame::generateFaceLoops(){
 			else
 				tempFaceLoop.normal = {-planes.at(i).a, -planes.at(i).b, -planes.at(i).c};
 			tempFaceLoop.arrange();
+			//tempFaceLoop.faceloop.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
+			tempBaiscSet.at(1) = reversebasicLoopEdgeSet(tempBaiscSet.at(1));
 			faceLoops.push_back(tempFaceLoop);
 
 			// inside most loop is another faceLoop
@@ -1422,3 +1339,209 @@ void wireFrame::generateFaceLoops(){
 		wireFrame::faceloops = faceLoops;
 	}
 
+
+
+
+/////////////***************************////////////////
+// generate body loops written by saransh
+
+
+	// std::vector<int> positivesUsed(faceloops.size() , 0) ;
+	// std::vector<int> negativesUsed(faceloops.size() , 0) ;
+	// // printf("%d  faceloop size \n",faceloops.size());
+	// // std::std::vector<bool> positivesExpanded(faceloops.size(),false);
+	// // std::std::vector<bool> negativesExpanded(faceloops.size(),false);
+
+	// faceLoop startingLoop ; 
+	// int numberOfFLvisited = 0 ;
+	// bool somethingSelected ; 
+	// // printf("%d faceloops size \n", faceloops.size());
+	// int inthisloop ;
+	// while(numberOfFLvisited < 2*faceloops.size()) {
+	// 	for (int i = 0; i < positivesUsed.size(); ++i)
+	// 	{
+	// 		std::cout<<positivesUsed[i]<<" " ; 
+	// 	}
+	// 	std::cout<<'\n' ; 
+	// 	for (int i = 0; i < negativesUsed.size(); ++i)
+	// 	{
+	// 		std::cout<<negativesUsed[i]<<" " ; 
+	// 	}
+	// 	std::cout<<'\n' ; 
+	// 	printf("%d\n", numberOfFLvisited);
+	// 	// printf("%s\n","stck in loop" );
+	// 	inthisloop = 0 ; 
+	// 	bodyLoop currentBodyLoop ;
+	// 	for (int i = 0; i < faceloops.size(); ++i)
+	// 		{
+			
+	// 		somethingSelected = false ; 
+	// 		if (positivesUsed[i] == 0)
+	// 		{
+	// 			somethingSelected = true ; 
+	// 			positivesUsed[i] = 1 ;
+	// 			startingLoop = faceloops[i] ;
+	// 			numberOfFLvisited += 1 ; 
+	// 			inthisloop ++ ;
+	// 			// cout<<"not here" ; 
+	// 		}
+	// 		else if (negativesUsed[i] == 0)
+	// 		{
+	// 			somethingSelected = true ;
+	// 			negativesUsed[i] = 1 ;
+	// 			// faceLoop newFaceLoop ;
+	// 			// newFaceLoop.faceloop = faceloops[i].faceloop ;
+	// 			// std::reverse(newFaceLoop.faceloop.begin(),newFaceLoop.faceloop.end()) ; // this reverse is not cool
+	// 			// newFaceLoop.normal = { -faceloops[i].normal.x , -faceloops[i].normal.y , -faceloops[i].normal.z } ;
+	// 			// newFaceLoop.p = {-faceloops[i].p.a,-faceloops[i].p.b,-faceloops[i].p.c,-faceloops[i].p.d} ; 
+	// 			// startingLoop = newFaceLoop ;
+	// 			startingLoop = faceloops[i].getReversedFaceLoop() ; 
+	// 			numberOfFLvisited += 1 ;
+	// 			inthisloop ++ ;
+	// 		}
+
+	// 		if (somethingSelected)
+	// 		{
+	// 			currentBodyLoop.addLoop(startingLoop) ;
+	// 			printf("%s\n", "see arg face here");
+	// 			printFaceLoop(startingLoop) ;
+	// 			printf("%s\n","finish" );
+	// 			// printf("%s\n","maka bhosda madarchod" );
+	// 			// throw std::exception() ; 
+	// 			std::vector<pair<int , bool>> selectedLoops ;
+	// 			// std::vector<int> expandedLoops ;
+	// 			// expandedLoops.push_back(0) ; 
+	// 			faceLoop currentLoop = startingLoop ;
+	// 			int loopCount = 0 ;  
+	// 			// printf("%s\n", "entering while loop ");
+			
+	// 			selectedLoops = expandFaceLoop(currentLoop) ;
+	// 			// printf("%s\n","returned from alphaAndDirection");
+	// 			// expandedLoops[loopCount] = 1 ; 
+	// 			pair<int , bool > currentPair ; 
+	// 			for (int i = 0; i < selectedLoops.size(); ++i)
+	// 			{	
+	// 				currentPair = selectedLoops[i] ;
+	// 				faceLoop loopToInsert = faceloops[currentPair.first] ;
+	// 				bool canUse = false ;
+	// 				bool posused = false ; 
+	// 				bool negused = false ;   
+	// 				if (!currentPair.second)
+	// 				{
+	// 					// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
+	// 					// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
+	// 					// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
+	// 					if(negativesUsed[currentPair.first]==0) { 
+	// 						canUse = true ;
+	// 						loopToInsert = loopToInsert.getReversedFaceLoop() ; 
+	// 						// negativesUsed[currentPair.first] = 1 ; 
+	// 						negused = true ; 
+	// 					 }
+						
+	// 				}
+	// 				else {
+	// 					if(positivesUsed[currentPair.first]==0){
+	// 						canUse = true ;
+	// 						posused = true ; 
+	// 						// positivesUsed[currentPair.first]  = 1 ; 
+	// 					} 
+	// 				}
+	// 				if(!canUse) {
+	// 					break ; 
+	// 				}
+	// 				bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
+	// 				if(ifInserted) {
+
+	// 					if(posused) {
+	// 						positivesUsed[currentPair.first] = 1 ;
+	// 					}
+
+	// 					else{
+	// 						negativesUsed[currentPair.first] = 1 ;
+	// 					}
+
+	// 					numberOfFLvisited += 1 ;
+	// 					inthisloop ++ ;
+	// 					printf("%s\n", "see selected Loop here");
+	// 					printFaceLoop(loopToInsert) ; 
+	// 					printf("%s\n", "finish selected Loop");
+	// 				}
+	// 			}
+
+					 
+	// 			int k = 1 ; 
+	// 			while(k<currentBodyLoop.bodyloop.size()){
+	// 				selectedLoops = expandFaceLoop(currentBodyLoop.bodyloop[k]) ;
+	// 				printf("%s\n","***********************************" );
+	// 				printFaceLoop(currentBodyLoop.bodyloop[k]) ;  
+	// 				for (int i = 0; i < selectedLoops.size(); i++)
+	// 				{	
+
+	// 					currentPair = selectedLoops[i] ;
+	// 					faceLoop loopToInsert = faceloops[currentPair.first] ; 
+	// 					// printf("%f\n",currentPair.second );
+	// 					// std::cout<<currentPair.second()<<	
+	// 					bool POSUSED = false ; 
+	// 					bool canuse = false ; 
+	// 					if (!currentPair.second)
+	// 					{
+	// 						// loopToInsert.normal = {-loopToInsert.normal.x , -loopToInsert.normal.y , -loopToInsert.normal.z } ;
+	// 						// loopToInsert.p = {-loopToInsert.p.a , -loopToInsert.p.b , -loopToInsert.p.c , -loopToInsert.p.d  } ;
+	// 						// std::reverse(loopToInsert.faceloop.begin() , loopToInsert.faceloop.end()) ; // this reverse is not cool
+	// 						if(negativesUsed[currentPair.first]==0) { 
+	// 							canuse = true ;
+	// 							loopToInsert = loopToInsert.getReversedFaceLoop() ; 
+	// 							// negativesUsed[currentPair.first] = 1 ; 
+	// 							// negused = true ; 
+	// 					 	}
+	// 					}
+	// 					else {
+	// 						if(positivesUsed[currentPair.first]==0){
+	// 							canuse = true ;
+	// 							POSUSED = true ; 
+	// 							// positivesUsed[currentPair.first]  = 1 ; 
+	// 						} 
+	// 					}
+						
+	// 					if (canuse)
+	// 					{
+	// 						bool ifInserted = currentBodyLoop.addLoop(loopToInsert) ; 
+	// 						if(ifInserted) {
+
+	// 						if (POSUSED)
+	// 						{
+	// 							positivesUsed[currentPair.first] = 1 ; 
+	// 						}
+	// 						else{
+	// 							negativesUsed[currentPair.first] = 1 ; 
+	// 						}
+	// 						numberOfFLvisited += 1 ;
+	// 						inthisloop ++ ;
+	// 						printf("%s\n", "see selected Loop here");
+	// 						printFaceLoop(loopToInsert) ; 
+	// 						printf("%s\n", "finish selected Loop");
+	// 						}
+	// 						else{
+	// 						printf("%s\n", "cant add this ******************" );
+	// 						printFaceLoop(loopToInsert);
+
+	// 						}
+	// 					}
+						
+	// 				}
+	// 				k+=1;
+
+	// 			}
+	// 				// printf("%d\n",k );
+									
+	// 			bodyloops.push_back(currentBodyLoop) ;   
+	// 			break ;  
+	// 		}
+	// 	}
+
+	// 	// printf("%d\n",inthisloop );
+	// 	printf("%s\n", "----------------------------------------------------------");
+	// 	printf("%s\n", "----------------------------------------------------------");
+
+	// }
+	// printf("%d\n", numberOfFLvisited);

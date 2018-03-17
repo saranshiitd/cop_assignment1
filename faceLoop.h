@@ -11,6 +11,9 @@
 *		L{i} if L{i} does not include any loops and
 *		those basic loops included by L{i} directly if any 
 */
+
+basicLoopEdgeSet reversebasicLoopEdgeSet(basicLoopEdgeSet bles);
+
 class faceLoop{
 
 public:
@@ -35,8 +38,7 @@ public:
 
 	bool ifFaceLoopContains(edge3D edge) ;
 
-	faceLoop getReversedFaceLoop() ; 
-
+	 
 	// basicLoopEdgeSet reversebasicLoopEdgeSet(basicLoopEdgeSet bles) ; 
 
 };
