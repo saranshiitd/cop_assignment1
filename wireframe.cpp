@@ -138,7 +138,7 @@ string getAFace(vector<edge3D> eList, vector<vertex3D> vList){
 string wireFrame::getBody(){
 
 	string s;
-	for (int i = 0; i < bodyloops.size(); i++){
+	for (int i = 0; i < 1; i++){
 		bodyLoop bl = bodyloops.at(i);
 		for (int j = 0; j < bl.bodyloop.size(); j++){
 			// face loop on bodyloop
