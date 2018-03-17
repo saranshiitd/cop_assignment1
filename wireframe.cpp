@@ -67,6 +67,7 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 		}
 	}
 
+	procedurePEVR();
 	planes = generatePlanes();
 	generateFaceLoops();
 }
@@ -350,6 +351,207 @@ void wireFrame::resolveOverlap(){
 			   	addEdge({sortedVertices.at(i), sortedVertices.at(1)});
 			}
 		}
+	}
+}
+
+bool areCollinear(edge3D e1, edge3D e2){
+
+	float vector1[] = {e1.v1.a-e1.v2.a,e1.v1.b-e1.v2.b,e1.v1.c-e1.v2.c} ;
+	float vector2[] = {e2.v1.a-e2.v2.a,e2.v1.b-e2.v2.b,e2.v1.c-e2.v2.c} ;
+	float* crossv1v2 = crossProduct(vector1 , vector2) ;
+	float magnitudeCross = magnitude(crossv1v2) ;
+	return (magnitudeCross < 0.01) ;
+
+}
+
+bool areNotCollinear(edge3D e1, edge3D e2, edge3D e3){
+	return !(areCollinear(e1,e2) || areCollinear(e2,e3) || areCollinear(e1,e3));
+}
+ 
+bool areAllNOnCollinear(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	return !(areCollinear(e1,e2) || areCollinear(e1,e3) || areCollinear(e1,e4) || areCollinear(e2,e3) || areCollinear(e2,e4) || areCollinear(e3,e4));
+}
+
+bool twoOfThreeAreCollinear(edge3D e1, edge3D e2, edge3D e3){
+	return (areCollinear(e1,e2) || areCollinear(e2,e3) || areCollinear(e1,e3));
+}
+
+bool twoPairsAreCollinear(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	return (areCollinear(e1,e2) && areCollinear(e3,e4)) || (areCollinear(e1,e3) && areCollinear(e2,e4))
+			|| (areCollinear(e1,e4) && areCollinear(e2,e3));
+}
+
+bool onlyTwoareCollinear(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	bool b;
+	b= (areCollinear(e1,e2) && !areCollinear(e1,e3) && !areCollinear(e1,e4));
+	b = b || (areCollinear(e1,e3) && !areCollinear(e1,e2) && !areCollinear(e1,e4));
+	b = b || (areCollinear(e1,e4) && !areCollinear(e1,e2) && !areCollinear(e1,e3));
+	b = b || (areCollinear(e2,e3) && !areCollinear(e2,e1) && !areCollinear(e2,e4));
+	b = b || (areCollinear(e2,e4) && !areCollinear(e2,e1) && !areCollinear(e1,e3));
+	b = b || (areCollinear(e3,e4) && !areCollinear(e3,e1) && !areCollinear(e3,e2));
+
+	return b;
+}
+
+bool are4Coplanar(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	return generalMethods::checkCoplanar(e1,e2,e3) && generalMethods::checkCoplanar(e1,e2,e4) ;
+}
+
+vector<edge3D> getNonCollinearEdge(edge3D e1, edge3D e2, edge3D e3){
+	vector<edge3D> tempEdges;
+	if(areCollinear(e1,e2)){
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+	}
+	else if(areCollinear(e2,e3)){
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+	}
+	else {
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e3);
+	}
+	return tempEdges;
+}
+
+vector<edge3D> getNonCollinearEdge4(edge3D e1, edge3D e2, edge3D e3, edge3D e4){
+	vector<edge3D> tempEdges;
+	if(areCollinear(e1,e2)){
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e4);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+	}
+	else if(areCollinear(e1,e3)){
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e4);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e3);
+	}
+	else if(areCollinear(e1,e4)){
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e4);
+	}
+	else if(areCollinear(e2,e3)){
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e4);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+	}
+	else if(areCollinear(e2,e4)){
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e4);
+	}
+	else {
+		tempEdges.push_back(e1);
+		tempEdges.push_back(e2);
+		tempEdges.push_back(e3);
+		tempEdges.push_back(e4);
+	}
+	
+	return tempEdges;
+}
+
+
+
+edge3D getRemovedVertexEdge(edge3D e1, edge3D e2, vertex3D v){
+	edge3D anEdge;
+	if(!(e1.v1 == v)){
+		anEdge.v1 = e1.v1;
+	}
+	else{
+		anEdge.v1 = e1.v2;
+	}
+	if(!(e2.v1 == v)){
+		anEdge.v2 = e2.v1;
+	}
+	else{
+		anEdge.v2 = e2.v2;
+	}
+	return anEdge;
+}
+void wireFrame::procedurePEVR(){
+
+	int flag = 1;
+	while(flag!=0)
+	{
+		flag = 0;
+		for (int i = 0; i < vertexList.size(); i++)
+		{
+			vertexEdgeList veListatV = adjEdgesAtVertex(vertexList.at(i));
+			
+			if(veListatV.e.size() == 0){
+				flag = 1;
+				removeVertex(vertexList.at(i));
+			}
+			else if(veListatV.e.size() == 1){
+				flag = 1;
+				removeVertex(vertexList.at(i));
+				removeEdge(veListatV.e.at(0));
+			}
+			else if(veListatV.e.size() == 2){
+				flag = 1;
+				if(areCollinear(veListatV.e.at(0), veListatV.e.at(1))){
+					removeEdge(veListatV.e.at(0));
+					removeEdge(veListatV.e.at(1));
+					removeVertex(veListatV.v);
+					addEdge(getRemovedVertexEdge(veListatV.e.at(0), veListatV.e.at(1), veListatV.v));
+				}
+				else{
+					removeEdge(veListatV.e.at(0));
+					removeEdge(veListatV.e.at(1));
+					removeVertex(veListatV.v);					
+				}
+			}
+			else if(veListatV.e.size() == 3){
+				edge3D e1,e2,e3;
+				e1= veListatV.e.at(0);
+				e2= veListatV.e.at(1);
+				e3= veListatV.e.at(2);
+				if(generalMethods::checkCoplanar(e1, e2, e3) && areNotCollinear(e1,e2,e3)){
+					flag =1;
+					removeVertex(veListatV.v);
+					removeEdges(veListatV.e);
+				}
+				else if(twoOfThreeAreCollinear(e1,e2,e3)){
+					flag=1;
+					vector<edge3D> tempEdges = getNonCollinearEdge(e1,e2,e3);
+					removeEdge(tempEdges.at(0));
+					removeVertex(veListatV.v);
+					addEdge(getRemovedVertexEdge(tempEdges.at(1), tempEdges.at(2), veListatV.v));
+				}
+			}
+			else{
+				flag =1;
+				edge3D e1,e2,e3,e4;
+				e1= veListatV.e.at(0);
+				e2= veListatV.e.at(1);
+				e3= veListatV.e.at(2);
+				e4= veListatV.e.at(3);	
+
+				if(are4Coplanar(e1,e2,e3,e4)){
+					if(onlyTwoareCollinear(e1,e2,e3,e4)){
+						vector<edge3D> tempEdges = getNonCollinearEdge4(e1,e2,e3,e4);
+						removeEdge(tempEdges.at(0));
+						removeEdge(tempEdges.at(1));
+						removeVertex(veListatV.v);
+						addEdge(getRemovedVertexEdge(tempEdges.at(2), tempEdges.at(3), veListatV.v));						
+					}
+					else if(twoPairsAreCollinear(e1,e2,e3,e4) || areAllNOnCollinear(e1,e2,e3,e4)){
+						removeVertex(veListatV.v);
+						removeEdges(veListatV.e);
+					}
+				}
+			}
+		}
+
 	}
 }
 
