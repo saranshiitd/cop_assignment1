@@ -44,18 +44,6 @@ basicLoopEdgeSet reversebasicLoopEdgeSet(basicLoopEdgeSet bles){
 	return temp;
 }
 
-faceLoop faceLoop::getReversedFaceLoop() {
-	faceLoop reversedFaceLoop ; 
-	reversedFaceLoop.normal = {-normal.x , -normal.y , -normal.z} ;
-	reversedFaceLoop.p = {-p.a , -p.b , - p.c , -p.d} ;
-	for (int i = 0; i < faceloop.size(); i++)
-	 {
-		basicLoopEdgeSet  tempLoopEdgeSet ; 
-	 	tempLoopEdgeSet = reversebasicLoopEdgeSet(faceloop[i]) ;
-	 	reversedFaceLoop.faceloop.push_back(tempLoopEdgeSet) ;  
-	 }
-	 return reversedFaceLoop ;  
-}
 /////// arranged according to (a,b,c) irrespective of d
 void faceLoop::arrange(){
 	// arrange every basic loop in the direction of 
@@ -69,7 +57,7 @@ void faceLoop::arrange(){
 
 		float loopDirection[] = {crossProduct(e1, e2)[0], crossProduct(e1, e2)[1], crossProduct(e1, e2)[2]};
 		float normalDirection[] = {normal.x, normal.y, normal.z};
-		if(dotProduct(loopDirection, normalDirection) < -0.01){
+		if(dotProduct(loopDirection, normalDirection) < 0.01){
 			faceloop.at(i) = reversebasicLoopEdgeSet(faceloop.at(i));
 		}
 
