@@ -67,6 +67,8 @@ struct edge2D{
 	{
 	    return ((v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden)) || ((v1 == n.v2) && (v2 == n.v1) && ( hidden == n.hidden));
 	}
+
+	
 };
 
 /**

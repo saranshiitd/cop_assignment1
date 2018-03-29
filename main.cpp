@@ -9,7 +9,7 @@
 #include <string>
 #include <fstream>
 using namespace std;
-
+#include "TwoDObj.h"
 /*
 ╭━━━╮╭━━━╮╭━━━╮
 ┃╭━╮┃┃╭━╮┃╰╮╭╮┃
@@ -184,5 +184,9 @@ int main(){
 
 	myfile.close();
 /*****************/
+
+
+    TwoDObj *twodObj = new TwoDObj(wireframe.vertexList, wireframe.edgeList ) ;
+	
 	return 0 ;
 }
