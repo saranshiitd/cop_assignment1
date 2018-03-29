@@ -245,4 +245,17 @@ struct planeVEL{  // plane vertexEdgeList
 
 } ; 
 
+
+
+// struct edge2D{
+// 	std::vector<vertex2D> vertices ; // pair of consecutive vertices will form either hidden or dark lines 
+// 	bool isStartHidden ; // if true then first pair formes hidden line 
+// 	edge2D(){} 
+// 	edge2D(std::vector<vertex2D> argVertices, bool argIsStartHidden){
+// 		vertices = argVertices ; 
+// 		isStartHidden = argIsStartHidden ; 
+// 	}
+// }
+
+
 #endif

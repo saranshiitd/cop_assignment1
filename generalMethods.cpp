@@ -460,4 +460,12 @@ namespace generalMethods{
 		}
 		return toReturn ; 
 	}
+
+	// float *matrixMultiplication(float *matrix1 , float* matrix2){
+		
+	// }
+	// float *matrixMultiplication(f){
+
+	// }
+
 }
