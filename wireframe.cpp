@@ -19,12 +19,20 @@ using namespace std;
 // vector<vertex3D> vertexList;
 // vector<edge3D> edgeList;
 
-/** convention
+/** old convention
 * top -->  (x, y, 0)
 * front -> (0, y, z)
 * side ->. (x, 0, z)
 */
 
+/** new convention
+* top -->  (x, y, 0)
+* front -> (x, 0, z)
+* side ->. (0, y, z)
+*/
+
+
+// using new convention
 void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
 			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS ){
 
@@ -41,7 +49,7 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 			// traverse the side vertices list
 			for (vector<vertex2D>::const_iterator k = v_listS.vertexList.begin(); k != v_listS.vertexList.end(); ++k){
 				// == operator is overloaded in structs
-				if (( i->a == k->a ) && ( i->b == j->a ) && ( j->b == k->b ) ){
+				if (( i->a == j->a ) && ( i->b == k->a ) && ( j->b == k->b ) ){
 					vertex3D tempVertex = {i->a, i->b, j->b};
 					wireFrame::addVertex(tempVertex);
 				}
@@ -57,8 +65,8 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 			if (!(i == j)){
 				// make 3 temp edges to check if they exist in real projections
 				edge2D topTempEdge =    { { i->a, i->b } , { j->a, j->b } };
-				edge2D frontTempEdge =  { { i->b, i->c } , { j->b, j->c } };
-				edge2D sideTempEdge =   { { i->a, i->c } , { j->a, j->c } };
+				edge2D frontTempEdge =  { { i->a, i->c } , { j->a, j->c } };
+				edge2D sideTempEdge =   { { i->b, i->c } , { j->b, j->c } };
 
 				if( e_listT.containsEdge(topTempEdge) && e_listF.containsEdge(frontTempEdge) && e_listS.containsEdge(sideTempEdge)){
 					wireFrame::addEdge (*i, *j);
@@ -71,6 +79,60 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 	planes = generatePlanes();
 	generateFaceLoops();
 }
+
+
+// using old convention
+// void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, VertexList2D v_listS,
+// 			EdgeList2D e_listF, EdgeList2D e_listT, EdgeList2D e_listS ){
+
+// 	/**
+// 	* choose a vertex from each projection and match its coordinates
+// 	* with those form other views --> if thet match --> a 3D vertex is found
+// 	*/
+
+// // generate all the 3D vertices
+// 	// travese the front-vertices list
+// 	for (vector<vertex2D>::const_iterator i = v_listT.vertexList.begin(); i != v_listT.vertexList.end(); ++i){
+// 		// traverse the top-vertices list
+// 		for (vector<vertex2D>::const_iterator j = v_listF.vertexList.begin(); j != v_listF.vertexList.end(); ++j){
+// 			// traverse the side vertices list
+// 			for (vector<vertex2D>::const_iterator k = v_listS.vertexList.begin(); k != v_listS.vertexList.end(); ++k){
+// 				// == operator is overloaded in structs
+// 				if (( i->a == k->a ) && ( i->b == j->a ) && ( j->b == k->b ) ){
+// 					vertex3D tempVertex = {i->a, i->b, j->b};
+// 					wireFrame::addVertex(tempVertex);
+// 				}
+
+// 			}
+// 		}
+// 	}
+
+// // generate all the 3D edges
+// 	for (vector<vertex3D>::const_iterator i = vertexList.begin(); i != vertexList.end(); ++i){
+// 		for (vector<vertex3D>::const_iterator j = vertexList.begin(); j != vertexList.end(); ++j){
+// 			// edges between different vertices
+// 			if (!(i == j)){
+// 				// make 3 temp edges to check if they exist in real projections
+// 				edge2D topTempEdge =    { { i->a, i->b } , { j->a, j->b } };
+// 				edge2D frontTempEdge =  { { i->b, i->c } , { j->b, j->c } };
+// 				edge2D sideTempEdge =   { { i->a, i->c } , { j->a, j->c } };
+
+// 				if( e_listT.containsEdge(topTempEdge) && e_listF.containsEdge(frontTempEdge) && e_listS.containsEdge(sideTempEdge)){
+// 					wireFrame::addEdge (*i, *j);
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	//procedurePEVR();
+// 	planes = generatePlanes();
+// 	generateFaceLoops();
+// }
+
+
+
+
+
 
 void wireFrame::reverseFaceLoops(){
 	for (int i = 0; i < faceloops.size(); i++){
