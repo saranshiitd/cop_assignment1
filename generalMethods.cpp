@@ -461,6 +461,15 @@ namespace generalMethods{
 		return toReturn ; 
 	}
 
+// <<<<<<< HEAD
+	// float *matrixMultiplication(float *matrix1 , float* matrix2){
+		
+	// }
+	// float *matrixMultiplication(f){
+
+	// }
+
+// =======
 
 	faceLoop getReversedFaceLoop(faceLoop faceloop) {
 		faceLoop reversedFaceLoop ; 
@@ -474,4 +483,5 @@ namespace generalMethods{
 		 }
 		 return reversedFaceLoop ;  
 		}
+// >>>>>>> 064717889af23a512448d93bdebfb86cfa8f73f6
 }

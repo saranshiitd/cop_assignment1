@@ -67,6 +67,8 @@ struct edge2D{
 	{
 	    return ((v1 == n.v1) && (v2 == n.v2) && ( hidden == n.hidden)) || ((v1 == n.v2) && (v2 == n.v1) && ( hidden == n.hidden));
 	}
+
+	
 };
 
 /**
@@ -244,5 +246,18 @@ struct planeVEL{  // plane vertexEdgeList
 	}
 
 } ; 
+
+
+
+// struct edge2D{
+// 	std::vector<vertex2D> vertices ; // pair of consecutive vertices will form either hidden or dark lines 
+// 	bool isStartHidden ; // if true then first pair formes hidden line 
+// 	edge2D(){} 
+// 	edge2D(std::vector<vertex2D> argVertices, bool argIsStartHidden){
+// 		vertices = argVertices ; 
+// 		isStartHidden = argIsStartHidden ; 
+// 	}
+// }
+
 
 #endif

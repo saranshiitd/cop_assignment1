@@ -20,9 +20,16 @@ public:
 	
 	vector<plane> planes;
 	vector<faceLoop> faceloops;
+// <<<<<<< HEAD
+// 	std::vector<bodyLoop> bodyloops ;
+// 	std::vector<edge2D> frontView ;
+// 	std::vector<edge2D> topView; 
+// 	std::vector<edge2D> sideView ;
+// =======
 	//std::vector<bodyLoop> bodyloops ;
 	bodyLoop body;
 
+// >>>>>>> 064717889af23a512448d93bdebfb86cfa8f73f6
 	//! generate wireframe form 3 vertices list --> front, top, side
 	//! and from three edges list --> front, top side
 	//! gernerate vertices, edges, faces and faceLoops
@@ -111,6 +118,7 @@ public:
 	void generateBodyLoops() ;
 	std::vector<int> getFaceLoopsContainingEdge(edge3D refEdge, faceLoop fl);
 
+
 	void reverseFaceLoops();
 private:
 		// sort all edges at a vertex in clockwise direction
@@ -129,7 +137,7 @@ private:
 	std::vector<pair<int , bool>> expandFaceLoop(faceLoop fl);
 	std::vector<pair<int , bool>> wireFexpandFaceLoop(faceLoop fl);
 
-	vector<edge3D> lreverseEdgeSet(vector<edge3D> bles);
+    vector<edge3D> reverseEdgeSet(vector<edge3D> bles);
 };
 
 

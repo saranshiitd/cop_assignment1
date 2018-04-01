@@ -1404,6 +1404,7 @@ void wireFrame::generateFaceLoops(){
 
 
 
+
 /////////////***************************////////////////
 // generate body loops written by saransh
 
