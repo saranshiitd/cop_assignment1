@@ -17,6 +17,9 @@ namespace generalMethods{
 * print methods
 */
 //////////////////////////////////////////////////////////////////////////////
+	void printVertex2D(vertex2D i){
+		cout<<i.a<<" "<<i.b<<" " ;
+	}
 	void printVertex(vertex3D i){
 		cout<<i.a<<" "<<i.b<<" "<<i.c ;
 	}

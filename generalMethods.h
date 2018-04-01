@@ -10,6 +10,7 @@
 namespace generalMethods{
 
 	//! print methods
+	void printVertex2D(vertex2D i);
 	void printVertex(vertex3D i);
 	void printVerticesList (vector<vertex3D> v);
 	void printEdge (edge3D i);

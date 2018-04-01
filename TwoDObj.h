@@ -1,5 +1,5 @@
 #ifndef TWOD_H
-#define TWOD_F 
+#define TWOD_H 
 #include <vector>
 #include "structs.h"
 

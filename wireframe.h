@@ -120,6 +120,7 @@ public:
 
 
 	void reverseFaceLoops();
+	void getFullBody();
 private:
 		// sort all edges at a vertex in clockwise direction
 	vertexEdgeList sortVEList(vertexEdgeList veList , plane p);

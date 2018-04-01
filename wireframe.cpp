@@ -75,9 +75,13 @@ void wireFrame::generateWireFrame(VertexList2D v_listF, VertexList2D v_listT, Ve
 		}
 	}
 
-	//procedurePEVR();
+}
+
+void wireFrame::getFullBody(){
+	procedurePEVR();
 	planes = generatePlanes();
 	generateFaceLoops();
+	generateBodyLoops();
 }
 
 
