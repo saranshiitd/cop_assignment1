@@ -1,3 +1,8 @@
+//#include "mainwindow.h"
+//#include <QApplication>
+#include <math.h>
+//#include <QtCore>
+//#include <QtWidgets>
 #include "wireframe.h"
 #include "EdgeList2D.h"
 #include "generalMethods.h"
@@ -7,25 +12,21 @@
 #include "bodyLoop.h"
 #include <iostream>
 #include <string>
-#include <stdio.h>
 #include <fstream>
-using namespace std;
 #include "TwoDObj.h"
-/*
-╭━━━╮╭━━━╮╭━━━╮
-┃╭━╮┃┃╭━╮┃╰╮╭╮┃
-┃┃╱╰╯┃┃╱┃┃╱┃┃┃┃
-┃┃╱╭╮┃╰━╯┃╱┃┃┃┃
-┃╰━╯┃┃╭━╮┃╭╯╰╯┃
-╰━━━╯╰╯╱╰╯╰━━━╯
-*/
+
+#define PI 3.1415926536
+#define SIZE 200
+#define FACTOR 100
+
+const float STEP = 2*PI/SIZE;
+
+//using namespace Qt;
 
 
-// TODO------------------->
-// make all basic Loops on a plane in the direction of plane
+int main(int argc, char *argv[])
+{
 
-
-int main(){
 
     int from32 = 0;
       cout << "Which conversion do you want\n"<< "1. From 2D to 3D reconstruction.\n" << "2. From 3D to 2D projections\n";
@@ -141,7 +142,6 @@ int main(){
             string body = wireframe.getBody();
             myfile << body;
 
-
             myfile.close();
             /*****************/
     }
@@ -249,90 +249,91 @@ int main(){
         // end of while
         }
 
-        wireframe.getFullBody();
-        TwoDObj *twodObj = new TwoDObj(wireframe.vertexList, wireframe.edgeList ,  wireframe.getfaces() ) ;
-        cout<<"calling getviews" << endl ;
-        float angles[] = {0.0 , 0.0 , 1.0 } ;
-        twodObj->applyRotation(angles);
-        std::vector< std::vector<edge2D> > views = twodObj->getViews() ;
-        std::vector<edge2D> topViewEdges = views[0] ;
-        std::vector<edge2D> frontViewEdges = views[1] ;
-        std::vector<edge2D> sideViewEdges = views[2] ;
-        std::vector<edge2D> isometricView = views[3] ;
-        std::vector<edge2D> topViewHidden = views[4] ;
-        std::vector<edge2D> frontViewHidden = views[5] ;
-        std::vector<edge2D> sideViewHidden = views[6] ;
-        float* firstPoint ;
-        float* secondPoint ;
-        QApplication a(argc, argv);
-        QLabel l;
-        QPicture pi;
-        QPainter p(&pi);
-        edge2D currentEdge ;
-        p.setRenderHint(QPainter::Antialiasing);
-        p.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap));
-        p.scale(0.9,-0.9);
-    //    p.translate(-600,-600);
 
-        // p.drawLine(0, 0, 200, 200);
-        float x, y, prev_x=0, prev_y=0 ;
-        for(unsigned i = 0 ; i < frontViewHidden.size();i+=1){
-            currentEdge = frontViewHidden[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        for(unsigned i = 0 ; i < sideViewHidden.size();i+=1){
-            currentEdge = sideViewHidden[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        for(unsigned i = 0 ; i < topViewHidden.size();i+=1){
-            currentEdge = topViewHidden[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        p.setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
-        for(unsigned i = 0 ; i < topViewEdges.size();i+=1){
-            currentEdge = topViewEdges[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        for(unsigned i = 0 ; i < frontViewEdges.size();i+=1){
-            currentEdge = frontViewEdges[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        for(unsigned i = 0 ; i < sideViewEdges.size();i+=1){
-            currentEdge = sideViewEdges[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        for(unsigned i = 0 ; i < isometricView.size();i+=1){
-            currentEdge = isometricView[i] ;
-            firstPoint = currentEdge.v1.getCoordinates() ;
-            secondPoint = currentEdge.v2.getCoordinates() ;
-            p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
-        }
-        float* set = twodObj->getMinXY() ;
-        p.drawLine(400+set[1],-100+set[0],400+set[1],1000+set[0]);
-        p.drawLine(0+set[1],400+set[0],900+set[1],400+set[0]);
+    //     wireframe.generateFullBody();
+    //     TwoDObj *twodObj = new TwoDObj(wireframe.vertexList, wireframe.edgeList ,  wireframe.getfaces() ) ;
+    //     cout<<"calling getviews" << endl ;
+    //     float angles[] = {0.0 , 0.0 , 1.0 } ;
+    //     twodObj->applyRotation(angles);
+    //     std::vector< std::vector<edge2D> > views = twodObj->getViews() ;
+    //     std::vector<edge2D> topViewEdges = views[0] ;
+    //     std::vector<edge2D> frontViewEdges = views[1] ;
+    //     std::vector<edge2D> sideViewEdges = views[2] ;
+    //     std::vector<edge2D> isometricView = views[3] ;
+    //     std::vector<edge2D> topViewHidden = views[4] ;
+    //     std::vector<edge2D> frontViewHidden = views[5] ;
+    //     std::vector<edge2D> sideViewHidden = views[6] ;
+    //     float* firstPoint ;
+    //     float* secondPoint ;
+    //     QApplication a(argc, argv);
+    //     QLabel l;
+    //     QPicture pi;
+    //     QPainter p(&pi);
+    //     edge2D currentEdge ;
+    //     p.setRenderHint(QPainter::Antialiasing);
+    //     p.setPen(QPen(Qt::black, 1, Qt::SolidLine, Qt::RoundCap));
+    //     p.scale(0.9,-0.9);
+    // //    p.translate(-600,-600);
+
+    //     // p.drawLine(0, 0, 200, 200);
+    //     float x, y, prev_x=0, prev_y=0 ;
+    //     for(unsigned i = 0 ; i < frontViewHidden.size();i+=1){
+    //         currentEdge = frontViewHidden[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     for(unsigned i = 0 ; i < sideViewHidden.size();i+=1){
+    //         currentEdge = sideViewHidden[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     for(unsigned i = 0 ; i < topViewHidden.size();i+=1){
+    //         currentEdge = topViewHidden[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     p.setPen(QPen(Qt::black, 3, Qt::SolidLine, Qt::RoundCap));
+    //     for(unsigned i = 0 ; i < topViewEdges.size();i+=1){
+    //         currentEdge = topViewEdges[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     for(unsigned i = 0 ; i < frontViewEdges.size();i+=1){
+    //         currentEdge = frontViewEdges[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     for(unsigned i = 0 ; i < sideViewEdges.size();i+=1){
+    //         currentEdge = sideViewEdges[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     for(unsigned i = 0 ; i < isometricView.size();i+=1){
+    //         currentEdge = isometricView[i] ;
+    //         firstPoint = currentEdge.v1.getCoordinates() ;
+    //         secondPoint = currentEdge.v2.getCoordinates() ;
+    //         p.drawLine(firstPoint[0],firstPoint[1],secondPoint[0],secondPoint[1] );
+    //     }
+    //     float* set = twodObj->getMinXY() ;
+    //     p.drawLine(400+set[1],-100+set[0],400+set[1],1000+set[0]);
+    //     p.drawLine(0+set[1],400+set[0],900+set[1],400+set[0]);
 
 
-        p.end(); // Don't forget this line!
+    //     p.end(); // Don't forget this line!
 
-        l.setPicture(pi);
-        l.show();
-        QLabel l2 ;
-        l2.setPicture(pi);
-        l2.show();
-        return a.exec();
+    //     l.setPicture(pi);
+    //     l.show();
+    //     QLabel l2 ;
+    //     l2.setPicture(pi);
+    //     l2.show();
+    //     return a.exec();
         // end of 3d->2d
     }
-	return 0 ;
+    return 0 ;
 }
